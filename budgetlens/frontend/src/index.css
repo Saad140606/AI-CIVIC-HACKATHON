@@ -1,0 +1,173 @@
+@import "tailwindcss";
+
+/* =========================================================
+   BudgetLens Design Tokens (Tailwind v4 theme)
+   ========================================================= */
+@theme {
+  --color-bg: #0A1628;
+  --color-bg-secondary: #0D1E38;
+  --color-card: #0F2040;
+  --color-card-hover: #162950;
+  --color-card-border: #1E3A5F;
+  --color-accent: #00D4FF;
+  --color-accent-hover: #00B8D9;
+  --color-accent-dim: #00D4FF22;
+  --color-success: #00E676;
+  --color-danger: #FF5252;
+  --color-warning: #FFB300;
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: #8892A4;
+  --color-text-muted: #4A5568;
+
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-urdu: 'Noto Nastaliq Urdu', serif;
+}
+
+/* =========================================================
+   Global Reset & Base
+   ========================================================= */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+html[dir="rtl"] { font-family: 'Noto Nastaliq Urdu', serif; }
+
+body {
+  background-color: #0A1628;
+  color: #ffffff;
+  font-family: 'Inter', system-ui, sans-serif;
+  min-height: 100vh;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+/* =========================================================
+   Custom Scrollbar
+   ========================================================= */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #0A1628; }
+::-webkit-scrollbar-thumb { background: #1E3A5F; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #00D4FF44; }
+
+/* =========================================================
+   Utilities & Effects
+   ========================================================= */
+.text-gradient {
+  background: linear-gradient(135deg, #00D4FF, #0096FF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.glass {
+  background: rgba(15, 32, 64, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.accent-glow {
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+}
+
+.shadow-card {
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+}
+
+.shadow-accent {
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.25);
+}
+
+/* =========================================================
+   Budget Card
+   ========================================================= */
+.budget-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.budget-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0, 212, 255, 0.12);
+  border-color: rgba(0, 212, 255, 0.25);
+}
+
+/* =========================================================
+   Loading Skeleton
+   ========================================================= */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, #0F2040 25%, #162950 50%, #0F2040 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 8px;
+}
+
+/* =========================================================
+   Animations
+   ========================================================= */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 5px #00D4FF44; }
+  50% { box-shadow: 0 0 20px #00D4FF88, 0 0 40px #00D4FF22; }
+}
+
+.animate-fade-in { animation: fadeIn 0.5s ease-in-out; }
+.animate-slide-up { animation: slideUp 0.4s ease-out; }
+.animate-pulse-slow { animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+.animate-spin { animation: spin 1s linear infinite; }
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* =========================================================
+   Recharts Overrides
+   ========================================================= */
+.recharts-cartesian-axis-tick text { fill: #8892A4 !important; font-size: 11px !important; }
+.recharts-bar-rectangle { transition: opacity 0.2s ease; }
+
+/* =========================================================
+   Chat Input Focus
+   ========================================================= */
+.chat-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 212, 255, 0.35);
+}
+
+/* =========================================================
+   Hero Background Glow
+   ========================================================= */
+.hero-glow {
+  background: radial-gradient(ellipse at 50% 0%, rgba(0, 212, 255, 0.1) 0%, transparent 60%);
+}
+
+/* =========================================================
+   RTL overrides
+   ========================================================= */
+[dir="rtl"] .text-left { text-align: right; }
+
+/* =========================================================
+   Urdu font class
+   ========================================================= */
+.font-urdu { font-family: 'Noto Nastaliq Urdu', serif; }
+
+/* =========================================================
+   WakalaCheck Scrollable List
+   ========================================================= */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #1E3A5F #0A1628;
+}
+.custom-scrollbar::-webkit-scrollbar { width: 4px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: #1E3A5F; border-radius: 2px; }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #00D4FF44; }
