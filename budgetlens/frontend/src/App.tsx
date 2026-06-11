@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, NavLink, useLocation } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { LanguageProvider, useLanguage } from './context/LanguageContext';
 import Dashboard from './pages/Dashboard';
@@ -16,10 +16,23 @@ const queryClient = new QueryClient({
   },
 });
 
+const PageWrapper = ({ children, fullWidth = false }: { children: React.ReactNode; fullWidth?: boolean }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 15 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: -15 }}
+    transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+    className={fullWidth ? "flex-1 relative" : "flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 py-8 relative"}
+  >
+    {children}
+  </motion.div>
+);
+
 function AppContent() {
   const { t, lang } = useLanguage();
   const isUrdu = lang === 'ur';
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const location = useLocation();
 
   const navLinks = [
     { to: '/', label: t.nav.dashboard, icon: '🏠', end: true },
@@ -55,7 +68,7 @@ function AppContent() {
                 className={({ isActive }) =>
                   `flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
                     isActive
-                      ? 'bg-accent/10 text-accent border border-accent/20'
+                      ? 'bg-accent/10 text-accent border border-accent/20 shadow-sm'
                       : 'text-text-secondary hover:text-white hover:bg-card-hover'
                   }`
                 }
@@ -122,12 +135,14 @@ function AppContent() {
       </header>
 
       {/* Main content — WakalaCheck is full-width, others are max-width */}
-      <Routes>
-        <Route path="/" element={<main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 py-8 relative"><Dashboard /></main>} />
-        <Route path="/explorer" element={<main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 py-8 relative"><MinistryExplorer /></main>} />
-        <Route path="/compare" element={<main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 py-8 relative"><Compare /></main>} />
-        <Route path="/wakala" element={<WakalaCheck />} />
-      </Routes>
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
+          <Route path="/" element={<PageWrapper><Dashboard /></PageWrapper>} />
+          <Route path="/explorer" element={<PageWrapper><MinistryExplorer /></PageWrapper>} />
+          <Route path="/compare" element={<PageWrapper><Compare /></PageWrapper>} />
+          <Route path="/wakala" element={<PageWrapper fullWidth><WakalaCheck /></PageWrapper>} />
+        </Routes>
+      </AnimatePresence>
 
       {/* Footer */}
       <footer className="border-t border-card-border py-6 px-4">

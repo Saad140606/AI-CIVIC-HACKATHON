@@ -4,7 +4,22 @@ import { budgetApi, aiApi } from '../lib/api';
 import HeroStats from '../components/HeroStats';
 import MinistryCard from '../components/MinistryCard';
 import { useLanguage } from '../context/LanguageContext';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.04
+    }
+  }
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 15 },
+  show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 15 } }
+};
 
 export default function Dashboard() {
   const { t, lang } = useLanguage();
@@ -90,7 +105,7 @@ export default function Dashboard() {
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-64 bg-hero-glow pointer-events-none" />
 
       {/* Welcome Hero Banner */}
-      <div className="relative rounded-2xl overflow-hidden border border-[#1e3a5f]/40 p-6 md:p-8 bg-gradient-to-br from-[#0d1b2e] to-[#060d1a] shadow-xl">
+      <div className="relative rounded-2xl overflow-hidden border border-[#1e3a5f]/40 p-6 md:p-8 bg-gradient-to-br from-[#0d1b2e] to-[#060d1a] shadow-xl card-hover-physics">
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,rgba(0,180,216,0.15),transparent_70%)]" />
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-2">
@@ -110,7 +125,7 @@ export default function Dashboard() {
           <div className="shrink-0 flex gap-3">
             <a
               href="#allocations-sec"
-              className="px-4 py-2.5 rounded-xl font-bold text-xs bg-[#00b4d8] text-[#060d1a] hover:bg-[#00b4d8]/90 transition-all shadow-lg shadow-[#00b4d8]/20"
+              className="px-4 py-2.5 rounded-xl font-bold text-xs bg-[#00b4d8] text-[#060d1a] hover:bg-[#00b4d8]/90 transition-all shadow-lg shadow-[#00b4d8]/20 active:scale-95 duration-150"
             >
               📊 {isUrdu ? 'بجٹ تلاش کریں' : 'Explore Budget'}
             </a>
@@ -122,7 +137,7 @@ export default function Dashboard() {
       <HeroStats stats={data.heroStats} />
 
       {/* Budget Personalizer Widget */}
-      <div className="bg-[#0d1b2e] border border-[#1e3a5f]/60 rounded-2xl p-6 relative overflow-hidden">
+      <div className="bg-[#0d1b2e] border border-[#1e3a5f]/60 rounded-2xl p-6 relative overflow-hidden shadow-card">
         <div className="absolute inset-0 opacity-5 bg-[radial-gradient(circle_at_top_right,rgba(0,180,216,0.1),transparent_50%)]" />
         <div className="relative z-10 space-y-4">
           <div className="flex items-center gap-2">
@@ -147,7 +162,7 @@ export default function Dashboard() {
               <select
                 value={personalizerProvince}
                 onChange={e => setPersonalizerProvince(e.target.value)}
-                className="w-full bg-[#060d1a] border border-[#1e3a5f]/45 rounded-xl py-3 px-3 text-sm text-white focus:outline-none focus:border-[#00b4d8]/60"
+                className="w-full bg-[#060d1a] border border-[#1e3a5f]/45 rounded-xl py-3 px-3 text-sm text-white focus:outline-none focus:border-[#00b4d8]/60 premium-input"
               >
                 <option value="Punjab">{isUrdu ? 'پنجاب' : 'Punjab'}</option>
                 <option value="Sindh">{isUrdu ? 'سندھ' : 'Sindh'}</option>
@@ -164,7 +179,7 @@ export default function Dashboard() {
               <select
                 value={personalizerSector}
                 onChange={e => setPersonalizerSector(e.target.value)}
-                className="w-full bg-[#060d1a] border border-[#1e3a5f]/45 rounded-xl py-3 px-3 text-sm text-white focus:outline-none focus:border-[#00b4d8]/60"
+                className="w-full bg-[#060d1a] border border-[#1e3a5f]/45 rounded-xl py-3 px-3 text-sm text-white focus:outline-none focus:border-[#00b4d8]/60 premium-input"
               >
                 <option value="Education">{isUrdu ? 'تعلیم و تدریس' : 'Education'}</option>
                 <option value="Health">{isUrdu ? 'صحت عامہ' : 'Health'}</option>
@@ -177,7 +192,7 @@ export default function Dashboard() {
           <button
             onClick={handlePersonalize}
             disabled={personalizing}
-            className="w-full py-3 px-4 rounded-xl font-bold text-sm bg-gradient-to-r from-[#00b4d8] to-[#0077b6] text-white hover:opacity-95 transition-all flex items-center justify-center gap-2"
+            className="w-full py-3 px-4 rounded-xl font-bold text-sm bg-gradient-to-r from-[#00b4d8] to-[#0077b6] text-white hover:opacity-95 transition-all flex items-center justify-center gap-2 active:scale-[0.99]"
           >
             {personalizing ? (
               <>
@@ -192,23 +207,31 @@ export default function Dashboard() {
             )}
           </button>
 
-          {personalizerResult && (
-            <div className="p-4 rounded-xl border border-indigo-500/30 bg-indigo-500/5 space-y-3">
-              <div className="text-[10px] text-[#00b4d8] uppercase font-bold tracking-wider">
-                ✨ {isUrdu ? 'ذاتی اے آئی تجزیہ رپورٹ' : 'Personalized AI Breakdown'}
-              </div>
-              <div className="text-sm leading-relaxed space-y-3">
-                <div className="space-y-1">
-                  <div className="text-[9px] text-[#8892a4] uppercase tracking-wider font-bold">English</div>
-                  <p className="text-[#a0aec0] font-medium">{personalizerResult.english}</p>
+          <AnimatePresence>
+            {personalizerResult && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+                className="p-4 rounded-xl border border-indigo-500/30 bg-indigo-500/5 space-y-3 overflow-hidden shadow-sm glow-purple"
+              >
+                <div className="text-[10px] text-[#00b4d8] uppercase font-bold tracking-wider">
+                  ✨ {isUrdu ? 'ذاتی اے آئی تجزیہ رپورٹ' : 'Personalized AI Breakdown'}
                 </div>
-                <div className="space-y-1" dir="rtl">
-                  <div className="text-[9px] text-[#8892a4] uppercase tracking-wider text-left font-bold">اردو خلاصہ</div>
-                  <p className="text-[#a0aec0] font-medium font-urdu text-right">{personalizerResult.urdu}</p>
+                <div className="text-sm leading-relaxed space-y-3">
+                  <div className="space-y-1">
+                    <div className="text-[9px] text-[#8892a4] uppercase tracking-wider font-bold">English</div>
+                    <p className="text-[#a0aec0] font-medium">{personalizerResult.english}</p>
+                  </div>
+                  <div className="space-y-1" dir="rtl">
+                    <div className="text-[9px] text-[#8892a4] uppercase tracking-wider text-left font-bold">اردو خلاصہ</div>
+                    <p className="text-[#a0aec0] font-medium font-urdu text-right">{personalizerResult.urdu}</p>
+                  </div>
                 </div>
-              </div>
-            </div>
-          )}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
 
@@ -234,17 +257,23 @@ export default function Dashboard() {
       </motion.div>
 
       {/* Ministry cards grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="show"
+        className="grid grid-cols-1 lg:grid-cols-2 gap-4"
+      >
         {data.fy2526.map((ministry, idx) => (
-          <MinistryCard
-            key={ministry.ministry}
-            ministry={ministry}
-            rank={idx + 1}
-            changePercent={changeMap.get(ministry.ministry)}
-            year={isUrdu ? "مالی سال 2025-26 (تخمینی)" : "FY2025-26 (Estimated)"}
-          />
+          <motion.div key={ministry.ministry} variants={cardVariants} layout>
+            <MinistryCard
+              ministry={ministry}
+              rank={idx + 1}
+              changePercent={changeMap.get(ministry.ministry)}
+              year={isUrdu ? "مالی سال 2025-26 (تخمینی)" : "FY2025-26 (Estimated)"}
+            />
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </div>
   );
 }

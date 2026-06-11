@@ -59,25 +59,39 @@ export default function Compare() {
         </div>
 
         {/* Tab Switcher */}
-        <div className="flex bg-[#0d1b2e] border border-[#1e3a5f]/45 p-1 rounded-xl shrink-0 self-start">
+        <div className="flex bg-[#0d1b2e] border border-[#1e3a5f]/45 p-1 rounded-xl shrink-0 self-start relative">
           <button
             onClick={() => setActiveTab('sector')}
-            className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${
+            className={`relative z-10 px-4 py-2 rounded-lg text-xs font-bold transition-colors duration-200 ${
               activeTab === 'sector'
-                ? 'bg-accent text-bg'
+                ? 'text-[#060d1a] font-black'
                 : 'text-text-secondary hover:text-white'
             }`}
           >
+            {activeTab === 'sector' && (
+              <motion.div
+                layoutId="compareActiveTab"
+                className="absolute inset-0 bg-accent rounded-lg -z-10"
+                transition={{ type: "spring", stiffness: 380, damping: 30 }}
+              />
+            )}
             {isUrdu ? 'شعبہ جاتی AI موازنہ' : 'Sector AI Compare'}
           </button>
           <button
             onClick={() => setActiveTab('ministry')}
-            className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${
+            className={`relative z-10 px-4 py-2 rounded-lg text-xs font-bold transition-colors duration-200 ${
               activeTab === 'ministry'
-                ? 'bg-accent text-bg'
+                ? 'text-[#060d1a] font-black'
                 : 'text-text-secondary hover:text-white'
             }`}
           >
+            {activeTab === 'ministry' && (
+              <motion.div
+                layoutId="compareActiveTab"
+                className="absolute inset-0 bg-accent rounded-lg -z-10"
+                transition={{ type: "spring", stiffness: 380, damping: 30 }}
+              />
+            )}
             {isUrdu ? 'وزارت کا موازنہ' : 'Ministry Compare'}
           </button>
         </div>

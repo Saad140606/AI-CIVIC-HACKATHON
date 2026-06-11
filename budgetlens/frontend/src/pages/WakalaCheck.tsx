@@ -4,6 +4,7 @@ import { mnaApi, aiApi, type MNAProfile, type MNASearchResult, type MNARatingRes
 import { useLanguage } from '../context/LanguageContext';
 import ShareCard from '../components/ShareCard';
 import axios from 'axios';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // ─── Attendance Ring Component ────────────────────────────────────────────────
 export const AttendanceRing: React.FC<{ percent: number; size?: number }> = ({ percent, size = 80 }) => {
@@ -653,27 +654,7 @@ const WakalaCheck: React.FC = () => {
                     {isUrdu ? 'اپنے رکن قومی اسمبلی کو جانیں' : 'Know Your MNA'}
                   </span>
                 </h1>
-                <p className="text-sm text-[#8892a4] mt-1">
-                  {isUrdu
-                    ? '16ویں قومی اسمبلی کے اراکین کی حاضری، بل اور کارکردگی کا جائزہ'
-                    : '16th National Assembly — Attendance, bills & AI performance ratings for elected representatives'}
-                </p>
               </div>
-            </div>
-
-            {/* Hero stats */}
-            <div className="grid grid-cols-3 gap-3 mt-6">
-              {[
-                { label: isUrdu ? 'کل اراکین' : 'Total Members', value: '336', icon: '👤' },
-                { label: isUrdu ? 'اوسط حاضری' : 'Avg Attendance', value: '65%', icon: '📊' },
-                { label: isUrdu ? 'اسمبلی' : 'Assembly', value: isUrdu ? '16ویں' : '16th', icon: '🏛' },
-              ].map(stat => (
-                <div key={stat.label} className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-3 text-center">
-                  <div className="text-xl mb-1">{stat.icon}</div>
-                  <div className="text-xl font-black text-white">{stat.value}</div>
-                  <div className="text-[10px] text-[#8892a4] mt-0.5">{stat.label}</div>
-                </div>
-              ))}
             </div>
           </div>
         </div>
@@ -681,26 +662,46 @@ const WakalaCheck: React.FC = () => {
 
       {/* Sub-tab Navigation */}
       <div className="max-w-5xl mx-auto px-4 md:px-8 mt-6">
-        <div className="flex bg-[#0d1b2e] border border-[#1e3a5f]/40 p-1 rounded-xl w-fit">
+        <div className="flex bg-[#0d1b2e] border border-[#1e3a5f]/40 p-1 rounded-xl w-fit relative">
           <button
-            onClick={() => setActiveSubTab('profile')}
-            className={`px-5 py-2.5 rounded-lg text-sm font-bold transition-all flex items-center gap-1.5 ${
+            onClick={() => {
+              setActiveSubTab('profile');
+              setRating(null);
+            }}
+            className={`relative z-10 px-5 py-2.5 rounded-lg text-sm font-bold transition-colors duration-200 flex items-center gap-1.5 ${
               activeSubTab === 'profile'
-                ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg'
+                ? 'text-[#060d1a] font-black'
                 : 'text-[#8892a4] hover:text-white'
             }`}
           >
+            {activeSubTab === 'profile' && (
+              <motion.div
+                layoutId="wakalaActiveSubTab"
+                className="absolute inset-0 bg-accent rounded-lg -z-10"
+                transition={{ type: "spring", stiffness: 380, damping: 30 }}
+              />
+            )}
             <span>👤</span>
             <span>{isUrdu ? 'ارکان اسمبلی پروفائل' : 'MNA Profiles & Search'}</span>
           </button>
           <button
-            onClick={() => setActiveSubTab('leaderboard')}
-            className={`px-5 py-2.5 rounded-lg text-sm font-bold transition-all flex items-center gap-1.5 ${
+            onClick={() => {
+              setActiveSubTab('leaderboard');
+              setRating(null);
+            }}
+            className={`relative z-10 px-5 py-2.5 rounded-lg text-sm font-bold transition-colors duration-200 flex items-center gap-1.5 ${
               activeSubTab === 'leaderboard'
-                ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg'
+                ? 'text-[#060d1a] font-black'
                 : 'text-[#8892a4] hover:text-white'
             }`}
           >
+            {activeSubTab === 'leaderboard' && (
+              <motion.div
+                layoutId="wakalaActiveSubTab"
+                className="absolute inset-0 bg-accent rounded-lg -z-10"
+                transition={{ type: "spring", stiffness: 380, damping: 30 }}
+              />
+            )}
             <span>🏆</span>
             <span>{isUrdu ? 'پارلیمانی لیڈر بورڈ' : 'MNA Leaderboard'}</span>
           </button>
@@ -714,7 +715,7 @@ const WakalaCheck: React.FC = () => {
             {/* Left: Search & Filter Panel */}
             <div>
               {/* Constituency Selector Dropdowns */}
-              <div className="p-4 rounded-xl bg-[#0d1b2e] border border-[#1e3a5f]/60 mb-4 space-y-3">
+              <div className="p-4 rounded-xl bg-[#0d1b2e] border border-[#1e3a5f]/60 mb-4 space-y-3 shadow-card">
                 <div className="text-xs text-[#00b4d8] font-bold uppercase tracking-wider">
                   📍 {isUrdu ? 'حلقہ اور شہر کے لحاظ سے تلاش کریں' : 'Constituency Selector'}
                 </div>
@@ -729,7 +730,7 @@ const WakalaCheck: React.FC = () => {
                         setSelectedCity(e.target.value);
                         setSelectedConstituency('');
                       }}
-                      className="w-full bg-[#060d1a] border border-[#1e3a5f]/45 rounded-lg py-2 px-2 text-xs text-white focus:outline-none focus:border-[#00b4d8]/60"
+                      className="w-full bg-[#060d1a] border border-[#1e3a5f]/45 rounded-lg py-2 px-2 text-xs text-white focus:outline-none focus:border-[#00b4d8]/60 premium-input"
                     >
                       <option value="">{isUrdu ? 'تمام شہر' : 'All Cities'}</option>
                       {availableCities.map(c => (
@@ -755,7 +756,7 @@ const WakalaCheck: React.FC = () => {
                           setRating(null);
                         }
                       }}
-                      className="w-full bg-[#060d1a] border border-[#1e3a5f]/45 rounded-lg py-2 px-2 text-xs text-white focus:outline-none focus:border-[#00b4d8]/60 disabled:opacity-50"
+                      className="w-full bg-[#060d1a] border border-[#1e3a5f]/45 rounded-lg py-2 px-2 text-xs text-white focus:outline-none focus:border-[#00b4d8]/60 disabled:opacity-50 premium-input"
                     >
                       <option value="">{isUrdu ? 'منتخب کریں...' : 'Select...'}</option>
                       {constituenciesForCity.map(m => (
@@ -780,7 +781,7 @@ const WakalaCheck: React.FC = () => {
                   value={query}
                   onChange={e => setQuery(e.target.value)}
                   placeholder={isUrdu ? 'نام، حلقہ یا پارٹی تلاش کریں...' : 'Search by name, constituency, or party...'}
-                  className="w-full bg-[#0d1b2e] border border-[#1e3a5f]/60 rounded-xl py-3 pl-10 pr-4 text-sm text-white placeholder-[#5a6a7e] focus:outline-none focus:border-[#00b4d8]/60 focus:ring-1 focus:ring-[#00b4d8]/30"
+                  className="w-full bg-[#0d1b2e] border border-[#1e3a5f]/60 rounded-xl py-3 pl-10 pr-4 text-sm text-white focus:outline-none focus:border-[#00b4d8]/60 focus:ring-1 focus:ring-[#00b4d8]/30 premium-input"
                   dir={isUrdu ? 'rtl' : 'ltr'}
                 />
                 {searching && (
@@ -796,10 +797,10 @@ const WakalaCheck: React.FC = () => {
                   <button
                     key={p}
                     onClick={() => setProvince(p)}
-                    className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${
+                    className={`px-3 py-1 rounded-full text-xs font-medium transition-all duration-150 ${
                       province === p
-                        ? 'bg-[#00b4d8] text-white'
-                        : 'bg-[#0d1b2e] border border-[#1e3a5f]/40 text-[#8892a4] hover:border-[#00b4d8]/40'
+                        ? 'bg-[#00b4d8] text-[#060d1a] font-bold'
+                        : 'bg-[#0d1b2e] border border-[#1e3a5f]/40 text-[#8892a4] hover:border-[#00b4d8]/40 hover:text-white'
                     }`}
                   >
                     {p}
@@ -817,19 +818,22 @@ const WakalaCheck: React.FC = () => {
                     </div>
                   </div>
                 ) : (
-                  filteredMembers.map(member => (
-                    <MNAResultRow
-                      key={member.id}
-                      member={member}
-                      lang={lang}
-                      onClick={() => {
-                        setSelectedId(member.id);
-                        setRating(null);
-                        setSelectedCity('');
-                        setSelectedConstituency('');
-                      }}
-                    />
-                  ))
+                  <motion.div layout className="space-y-2">
+                    {filteredMembers.map(member => (
+                      <motion.div key={member.id} layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.2 }}>
+                        <MNAResultRow
+                          member={member}
+                          lang={lang}
+                          onClick={() => {
+                            setSelectedId(member.id);
+                            setRating(null);
+                            setSelectedCity('');
+                            setSelectedConstituency('');
+                          }}
+                        />
+                      </motion.div>
+                    ))}
+                  </motion.div>
                 )}
               </div>
 
@@ -866,7 +870,7 @@ const WakalaCheck: React.FC = () => {
                   isRating={rateMutation.isPending}
                 />
               ) : (
-                <div className="flex flex-col items-center justify-center h-64 bg-[#0d1b2e] rounded-2xl border border-[#1e3a5f]/40 text-center p-6 text-card-content">
+                <div className="flex flex-col items-center justify-center h-64 bg-[#0d1b2e] rounded-2xl border border-[#1e3a5f]/40 text-center p-6 text-card-content shadow-card">
                   <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-600/20 to-indigo-700/20 border border-purple-500/20 flex items-center justify-center text-3xl mb-4">
                     🏛️
                   </div>
@@ -882,7 +886,7 @@ const WakalaCheck: React.FC = () => {
               )}
 
               {/* AI Bill Summarizer Drag & Drop Widget */}
-              <div className="bg-[#0d1b2e] border border-[#1e3a5f]/60 rounded-2xl p-5">
+              <div className="bg-[#0d1b2e] border border-[#1e3a5f]/60 rounded-2xl p-5 shadow-card relative overflow-hidden">
                 <div className="flex items-center gap-2 mb-3">
                   <span className="text-xl">📄</span>
                   <div>
@@ -900,12 +904,13 @@ const WakalaCheck: React.FC = () => {
                   onDragOver={handleDrag}
                   onDragLeave={handleDrag}
                   onDrop={handleDrop}
-                  className={`border-2 border-dashed rounded-xl p-6 text-center transition-all ${
+                  className={`relative border-2 border-dashed rounded-xl p-6 text-center transition-all overflow-hidden ${
                     dragActive
                       ? 'border-[#00b4d8] bg-[#00b4d8]/5'
                       : 'border-[#1e3a5f]/60 bg-[#060d1a]/50 hover:border-[#00b4d8]/40'
                   }`}
                 >
+                  {billLoading && <div className="scanner-line" />}
                   <input
                     type="file"
                     id="bill-upload"
@@ -933,32 +938,40 @@ const WakalaCheck: React.FC = () => {
                   </div>
                 )}
 
-                {billSummary && (
-                  <div className="mt-4 p-4 rounded-xl border border-[#00b4d8]/30 bg-[#00b4d8]/5 space-y-3">
-                    <div className="flex items-center justify-between border-b border-[#1e3a5f]/30 pb-2">
-                      <span className="text-xs text-white font-bold">🤖 {isUrdu ? 'اے آئی خلاصہ رپورٹ' : 'AI Summary Report'}</span>
-                      <span className="text-[10px] text-[#8892a4] font-semibold truncate max-w-[150px]">{uploadedFileName}</span>
-                    </div>
-
-                    <div className="space-y-3 text-xs leading-relaxed">
-                      <div className="space-y-1">
-                        <div className="text-[9px] uppercase font-bold text-[#00b4d8] tracking-wider">English Summary</div>
-                        <p className="text-[#a0aec0] font-medium">{billSummary.english}</p>
+                <AnimatePresence>
+                  {billSummary && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="mt-4 p-4 rounded-xl border border-[#00b4d8]/30 bg-[#00b4d8]/5 space-y-3 overflow-hidden shadow-sm glow-cyan"
+                    >
+                      <div className="flex items-center justify-between border-b border-[#1e3a5f]/30 pb-2">
+                        <span className="text-xs text-white font-bold">🤖 {isUrdu ? 'اے آئی خلاصہ رپورٹ' : 'AI Summary Report'}</span>
+                        <span className="text-[10px] text-[#8892a4] font-semibold truncate max-w-[150px]">{uploadedFileName}</span>
                       </div>
 
-                      <div className="space-y-1" dir="rtl">
-                        <div className="text-[9px] uppercase font-bold text-[#00b4d8] tracking-wider text-left">اردو خلاصہ (Nastaliq)</div>
-                        <p className="text-[#a0aec0] font-medium font-urdu text-right">{billSummary.urdu}</p>
+                      <div className="space-y-3 text-xs leading-relaxed">
+                        <div className="space-y-1">
+                          <div className="text-[9px] uppercase font-bold text-[#00b4d8] tracking-wider">English Summary</div>
+                          <p className="text-[#a0aec0] font-medium">{billSummary.english}</p>
+                        </div>
+
+                        <div className="space-y-1" dir="rtl">
+                          <div className="text-[9px] uppercase font-bold text-[#00b4d8] tracking-wider text-left">اردو خلاصہ (Nastaliq)</div>
+                          <p className="text-[#a0aec0] font-medium font-urdu text-right">{billSummary.urdu}</p>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                )}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             </div>
           </div>
         ) : (
           /* Leaderboard Sub-tab */
-          <div className="bg-[#0d1b2e] border border-[#1e3a5f]/60 rounded-2xl p-6 overflow-hidden">
+          <div className="bg-[#0d1b2e] border border-[#1e3a5f]/60 rounded-2xl p-6 overflow-hidden shadow-card animate-fade-in">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
               <div>
                 <h3 className="text-lg font-bold text-white">
