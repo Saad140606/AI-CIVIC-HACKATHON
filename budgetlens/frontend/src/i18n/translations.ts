@@ -6,6 +6,7 @@ export const en = {
     dashboard: 'Dashboard',
     explorer: 'Ministry Explorer',
     compare: 'Compare Years',
+    billSummarizer: 'Bill Summarizer',
   },
   hero: {
     totalBudget: 'Total Budget FY2025-26',
@@ -33,7 +34,7 @@ export const en = {
     change: 'Change',
   },
   chat: {
-    placeholder: "Ask about Pakistan's budget or MNAs... (e.g. \"How much did education get?\")",
+    placeholder: "Ask budget or MNAs (e.g. 'sehat ka budget kitna hai', 'how much for education')",
     send: 'Send',
     title: 'Ask WakalaLens AI',
     poweredBy: 'Powered by Gemini AI',
@@ -60,6 +61,7 @@ export const ur = {
     dashboard: 'ڈیش بورڈ',
     explorer: 'وزارت ایکسپلورر',
     compare: 'سال موازنہ',
+    billSummarizer: 'بل خلاصہ ساز',
   },
   hero: {
     totalBudget: 'کل بجٹ مالی سال 2025-26',
@@ -83,11 +85,11 @@ export const ur = {
     selectMinistry: 'وزارت منتخب کریں',
     fy2324: 'مالی سال 2023-24',
     fy2425: 'مالی سال 2024-25',
-    fy2526: 'مالی سال 2025-26 (تخمینہ)',
+    fy2526: 'مالی سال 2025-26',
     change: 'تبدیلی',
   },
   chat: {
-    placeholder: 'بجٹ یا اراکین اسمبلی کے بارے میں پوچھیں... (مثلاً "تعلیم کو کتنا ملا؟")',
+    placeholder: 'بجٹ یا اراکین (مثلاً "taleem ka budget", "تعلیم کو کتنا ملا")',
     send: 'بھیجیں',
     title: 'وکالت لینس AI سے پوچھیں',
     poweredBy: 'Gemini AI کی مدد سے',
@@ -120,6 +122,7 @@ export interface Translations {
     dashboard: string;
     explorer: string;
     compare: string;
+    billSummarizer: string;
   };
   hero: {
     totalBudget: string;

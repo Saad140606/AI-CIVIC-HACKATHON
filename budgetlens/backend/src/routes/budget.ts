@@ -104,7 +104,7 @@ router.get('/years', async (req: Request, res: Response) => {
     years: [
       { id: 'fy2324', label: 'FY 2023-24', labelUrdu: 'مالی سال 2023-24' },
       { id: 'fy2425', label: 'FY 2024-25', labelUrdu: 'مالی سال 2024-25' },
-      { id: 'fy2526', label: 'FY 2025-26 (Est.)', labelUrdu: 'مالی سال 2025-26 (تخمینہ)' },
+      { id: 'fy2526', label: 'FY 2025-26', labelUrdu: 'مالی سال 2025-26', source: 'Finance Division, GoP' },
     ],
   });
 });

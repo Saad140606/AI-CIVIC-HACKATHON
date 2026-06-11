@@ -340,6 +340,17 @@ const MNAProfileCard: React.FC<{
           }}
         />
 
+        {/* Report Data Error */}
+        <div className="mt-3 pt-3 border-t border-[#1e3a5f]/30 flex justify-center">
+          <a
+            href={`mailto:transparency@budgetlens.pk?subject=Data Error Report: ${profile.name} (${profile.constituency})&body=Hello,%0A%0AI would like to report a data error on MNA Profile of ${profile.name} (${profile.constituency}).%0A%0AError details:%0A`}
+            className="text-[11px] text-[#7f8ea4] hover:text-[#ff5252] transition-colors flex items-center gap-1.5 font-semibold"
+          >
+            <span>🚩</span>
+            {isUrdu ? 'پروفائل ڈیٹا میں غلطی کی رپورٹ کریں' : 'Report Profile Data Error'}
+          </a>
+        </div>
+
         {/* Rating Result */}
         {rating && (
           <div className="mt-4 p-4 rounded-xl border border-indigo-500/30 bg-indigo-500/5">
@@ -789,6 +800,11 @@ const WakalaCheck: React.FC = () => {
                     <div className="w-4 h-4 border-2 border-[#00b4d8]/30 border-t-[#00b4d8] rounded-full animate-spin" />
                   </div>
                 )}
+              </div>
+
+              {/* Roman Urdu search hints */}
+              <div className="text-[10px] text-[#7f8ea4] px-1 mb-4">
+                💡 {isUrdu ? 'اشارہ: Roman Urdu میں بھی تلاش کر سکتے ہیں (جیسے "karachi"، "nawaz"، "bilawal")' : 'Try searching in Roman Urdu (e.g., "karachi", "nawaz", "bilawal")'}
               </div>
 
               {/* Province filter */}

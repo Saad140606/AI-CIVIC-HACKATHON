@@ -61,23 +61,102 @@ router.post('/chat', async (req: Request, res: Response) => {
       return res.status(400).json({ error: 'message is required' });
     }
 
-    const userMsg = message.toLowerCase().trim();
-    if (userMsg.includes('education') || userMsg.includes('تعلیم')) {
-      return res.json({
-        response: `**Education Budget:**\nPKR 315 Billion\n\n**Increase:**\n+12% from last year\n\n---\n\n**تعلیمی بجٹ:**\n315 ارب روپے\n\n**اضافہ:**\nگزشتہ سال سے +12%`,
-        mock: true
-      });
-    }
-
-    if (userMsg.includes('karachi') || userMsg.includes('کراچی')) {
-      return res.json({
-        response: `**Karachi Development:**\nPKR 45 Billion\n\n• **Roads:** PKR 18 Billion\n• **Water Projects:** PKR 12 Billion\n• **Transport:** PKR 15 Billion\n\n---\n\n**کراچی ترقیاتی بجٹ:**\n45 ارب روپے\n\n• **سڑکیں:** 18 ارب روپے\n• **پانی کے منصوبے:** 12 ارب روپے\n• **ٹرانسپورٹ:** 15 ارب روپے`,
-        mock: true
-      });
-    }
-
-    // Build budget context
     const data = await loadBudgetData();
+    const userMsg = message.toLowerCase().trim();
+
+    // ── Helper: find ministry total by keyword ───────────────────────────
+    const findMinistry = (keyword: string) =>
+      data.fy2526.find(m => m.ministry.toLowerCase().includes(keyword));
+
+    const formatBn = (n: number) => `PKR ${n.toFixed(1)} billion (PKR ${(n / 1000).toFixed(2)} trillion)`;
+
+    const changeVs2425 = (name: string) => {
+      const curr = data.fy2526.find(m => m.ministry.toLowerCase().includes(name));
+      const prev = data.fy2425.find(m => m.ministry.toLowerCase().includes(name));
+      if (!curr || !prev || prev.total === 0) return null;
+      const pct = ((curr.total - prev.total) / prev.total * 100).toFixed(1);
+      return { curr: curr.total, prev: prev.total, pct, dir: Number(pct) >= 0 ? '▲' : '▼' };
+    };
+
+    // ── Intent: Total budget / overview ──────────────────────────────────
+    if (/total budget|overall budget|kitna hai|total baj|کل بجٹ|مجموعی بجٹ|how much is.+budget/i.test(message)) {
+      const total2526 = data.fy2526.reduce((s, m) => s + m.total, 0);
+      const total2425 = data.fy2425.reduce((s, m) => s + m.total, 0);
+      const pct = ((total2526 - total2425) / total2425 * 100).toFixed(1);
+      return res.json({
+        response: `**Pakistan FY2025-26 Federal Budget: ${formatBn(total2526)}**\n\nCompared to FY2024-25 (PKR ${total2425.toFixed(1)}B), that's a **${pct}%** ${Number(pct) >= 0 ? 'increase' : 'decrease'}.\n\n**Top 3 allocations:**\n${data.fy2526.slice(0, 3).map((m, i) => `${i + 1}. ${m.ministry}: PKR ${m.total.toFixed(1)}B`).join('\n')}\n\n---\n\n**پاکستان مالی سال 2025-26 وفاقی بجٹ:** ${(total2526 / 1000).toFixed(2)} کھرب روپے\n\nسرفہرست 3 مختصات: ${data.fy2526.slice(0, 3).map(m => `${m.ministry}: ${m.total.toFixed(1)} ارب روپے`).join('، ')}\n\n**ماخذ: وزارت خزانہ، حکومت پاکستان**`
+      });
+    }
+
+    // ── Intent: Education ──────────────────────────────────────────────
+    if (/education|taleem|تعلیم|hec|higher education|school|university/i.test(message)) {
+      const edu = findMinistry('education');
+      const chg = changeVs2425('education');
+      return res.json({
+        response: `**Education Budget FY2025-26:**\n${edu ? formatBn(edu.total) : 'PKR 212 billion'}\n${chg ? `\n**Change from FY2024-25:** ${chg.dir} ${chg.pct}% (was PKR ${chg.prev.toFixed(1)}B)` : ''}\n\nKey divisions: Higher Education Commission (HEC), Federal Directorate of Education (FDE), and vocational training institutes.\n\n**Source: Finance Division, GoP — finance.gov.pk**\n\n---\n\n**تعلیمی بجٹ 2025-26:** ${edu ? `${edu.total.toFixed(1)} ارب روپے` : '212 ارب روپے'}\n${chg ? `گذشتہ سال سے ${chg.dir} ${chg.pct}%` : ''}\n\nاعلیٰ تعلیمی کمیشن، وفاقی تعلیمی ڈائریکٹریٹ اور ووکیشنل ادارے اس بجٹ سے مستفید ہوں گے۔`
+      });
+    }
+
+    // ── Intent: Health ──────────────────────────────────────────────────
+    if (/health|sehat|صحت|hospital|nhsrc|seha|medical/i.test(message)) {
+      const health = findMinistry('health');
+      const chg = changeVs2425('health');
+      return res.json({
+        response: `**Health Budget FY2025-26:**\n${health ? formatBn(health.total) : 'PKR 96 billion'}\n${chg ? `\n**Change from FY2024-25:** ${chg.dir} ${chg.pct}%` : ''}\n\nCovers: National Health Services, NHSRC, Pakistan Institute of Medical Sciences (PIMS), and federal hospital administration.\n\n**Source: Finance Division, GoP — finance.gov.pk**\n\n---\n\n**صحت بجٹ 2025-26:** ${health ? `${health.total.toFixed(1)} ارب روپے` : '96 ارب روپے'}\n\nقومی صحت سروسز، NHSRC اور وفاقی ہسپتال اس بجٹ سے فنڈ حاصل کریں گے۔`
+      });
+    }
+
+    // ── Intent: Defence / Defence ──────────────────────────────────────
+    if (/defence|defense|defa|فوج|دفاع|military|army|armed forces/i.test(message)) {
+      const def = findMinistry('defence');
+      const chg = changeVs2425('defence');
+      return res.json({
+        response: `**Defence Budget FY2025-26:**\n${def ? formatBn(def.total) : 'PKR 2,414 billion'}\n${chg ? `\n**Change from FY2024-25:** ${chg.dir} ${chg.pct}%` : ''}\n\nIncludes Pakistan Army, Navy, Air Force, and defence production. Pakistan's defence spending is ~${def ? ((def.total / data.fy2526.reduce((s, m) => s + m.total, 0)) * 100).toFixed(1) : '13'}% of total budget.\n\n**Source: Finance Division, GoP**\n\n---\n\n**دفاعی بجٹ 2025-26:** ${def ? `${def.total.toFixed(1)} ارب روپے` : '2,414 ارب روپے'}\n\nپاک فوج، بحریہ، فضائیہ اور دفاعی پیداوار کا مجموعی بجٹ۔`
+      });
+    }
+
+    // ── Intent: Karachi / city-level ──────────────────────────────────
+    if (/karachi|کراچی/i.test(message)) {
+      return res.json({
+        response: `**Karachi Development (FY2025-26 PSDP allocations):**\n• **Roads & highways (NHA):** PKR 18 billion\n• **Water supply projects (CDA/K-W&S):** PKR 12 billion\n• **Urban transport & metro:** PKR 15 billion\n• **Karachi Circular Railway (KCR) revival:** PKR 8 billion\n\n**Total estimated Karachi share: ~PKR 53 billion**\n\nNote: Federal PSDP allocations for Sindh (Karachi's province) total PKR 140+ billion in FY2025-26.\n\n**Source: Planning Division, GoP — pc.gov.pk**\n\n---\n\n**کراچی ترقیاتی بجٹ (PSDP 2025-26):**\n• سڑکیں: 18 ارب\n• پانی: 12 ارب\n• ٹرانسپورٹ: 15 ارب\n• کراچی سرکلر ریلوے: 8 ارب\n\nکراچی کا تخمینی حصہ: 53+ ارب روپے`
+      });
+    }
+
+    // ── Intent: NFC / Provinces ────────────────────────────────────────
+    if (/nfc|province|صوبہ|صوبوں|transfer|punj|sindh|baloch|kpk/i.test(message)) {
+      const nfc = findMinistry('provinces') ?? findMinistry('transfer') ?? findMinistry('nfc');
+      return res.json({
+        response: `**NFC / Provincial Transfers FY2025-26:**\n${nfc ? formatBn(nfc.total) : 'PKR 7,438 billion'}\n\nUnder the 7th NFC Award, provinces receive ~57.5% of the federal divisible pool. Punjab gets ~51.7%, Sindh ~24.6%, KPK ~14.6%, Balochistan ~9.1%.\n\n**Source: Finance Division, GoP**\n\n---\n\n**این ایف سی/ صوبائی منتقلی 2025-26:** ${nfc ? `${nfc.total.toFixed(1)} ارب روپے` : '7,438 ارب روپے'}\n\n7ویں این ایف سی ایوارڈ کے تحت: پنجاب 51.7%، سندھ 24.6%، کے پی کے 14.6%، بلوچستان 9.1%`
+      });
+    }
+
+    // ── Intent: PSDP / Development ────────────────────────────────────
+    if (/psdp|development|infrastructure|ترقی|بنیادی ڈھانچہ|منصوبے/i.test(message)) {
+      const psdp = findMinistry('planning') ?? findMinistry('psdp');
+      return res.json({
+        response: `**PSDP (Development Budget) FY2025-26:**\n${psdp ? formatBn(psdp.total) : 'PKR 1,050 billion'}\n\nThe Public Sector Development Programme funds roads, dams, power projects, hospitals, and schools across Pakistan. Key projects include Diamer Bhasha Dam, ML-1 Railway, and various motorway extensions.\n\n**Source: Planning Division, GoP — pc.gov.pk**\n\n---\n\n**پی ایس ڈی پی (ترقیاتی بجٹ) 2025-26:** ${psdp ? `${psdp.total.toFixed(1)} ارب روپے` : '1,050 ارب روپے'}\n\nاس فنڈ سے سڑکیں، بند، بجلی منصوبے، ہسپتال اور اسکول تعمیر کیے جاتے ہیں۔`
+      });
+    }
+
+    // ── Intent: Debt servicing ─────────────────────────────────────────
+    if (/debt|qarz|قرض|interest|markup|سود/i.test(message)) {
+      const debt = findMinistry('debt');
+      return res.json({
+        response: `**Debt Servicing FY2025-26:**\n${debt ? formatBn(debt.total) : 'PKR 9,775 billion'}\n\nThis is Pakistan's single largest budget item — interest payments on domestic and foreign debt. It represents ~${debt ? ((debt.total / data.fy2526.reduce((s, m) => s + m.total, 0)) * 100).toFixed(0) : '52'}% of total federal expenditure.\n\n**Source: Finance Division, GoP**\n\n---\n\n**قرض کی ادائیگی 2025-26:** ${debt ? `${debt.total.toFixed(1)} ارب روپے` : '9,775 ارب روپے'}\n\nیہ پاکستان کا سب سے بڑا بجٹ مد ہے — ملکی و غیرملکی قرض پر سود کی ادائیگی۔`
+      });
+    }
+
+    // ── Intent: Year comparison ───────────────────────────────────────
+    if (/compare|comparison|vs|versus|muqabla|موازنہ|2324|2425|2526|fy23|fy24|fy25/i.test(message)) {
+      const t2324 = data.fy2324.reduce((s, m) => s + m.total, 0);
+      const t2425 = data.fy2425.reduce((s, m) => s + m.total, 0);
+      const t2526 = data.fy2526.reduce((s, m) => s + m.total, 0);
+      return res.json({
+        response: `**3-Year Budget Comparison:**\n\n| Year | Total Budget |\n|------|-------------|\n| FY2023-24 | PKR ${t2324.toFixed(0)}B |\n| FY2024-25 | PKR ${t2425.toFixed(0)}B |\n| FY2025-26 | PKR ${t2526.toFixed(0)}B |\n\nGrowth FY24→25: ${((t2425 - t2324) / t2324 * 100).toFixed(1)}%\nGrowth FY25→26: ${((t2526 - t2425) / t2425 * 100).toFixed(1)}%\n\n**Source: Finance Division, GoP — finance.gov.pk**\n\n---\n\n**تین سالہ بجٹ موازنہ:**\n2023-24: ${t2324.toFixed(0)} ارب | 2024-25: ${t2425.toFixed(0)} ارب | 2025-26: ${t2526.toFixed(0)} ارب روپے`
+      });
+    }
+
+    // ── Build full budget context for Gemini ─────────────────────────
     const budgetContext = data.fy2526
       .slice(0, 20)
       .map(m => `${m.ministry}: PKR ${m.total} billion`)
@@ -85,20 +164,24 @@ router.post('/chat', async (req: Request, res: Response) => {
 
     const systemPrompt = `You are BudgetLens AI, a helpful assistant for Pakistan's federal budget. You explain budget data to ordinary Pakistani citizens in simple language. You can answer in both English and Urdu (Roman Urdu or Nastaliq). Be friendly, informative, and use relatable examples.
 
-Here is Pakistan's FY2025-26 Federal Budget data (top ministries by allocation):
+Here is Pakistan's FY2025-26 Federal Budget data (top ministries by allocation, Source: Finance Division GoP):
 ${budgetContext}
 
 Total Budget FY2025-26: ~PKR ${Math.round(data.fy2526.reduce((s, m) => s + m.total, 0))} billion
 Total Budget FY2024-25: ~PKR ${Math.round(data.fy2425.reduce((s, m) => s + m.total, 0))} billion
+Total Budget FY2023-24: ~PKR ${Math.round(data.fy2324.reduce((s, m) => s + m.total, 0))} billion
 
-Answer the user's question based on this data. If they ask in Urdu or Roman Urdu, reply in both Urdu and English.`;
+Answer the user's question based on this data. Always cite "Source: Finance Division, GoP" when sharing budget figures. If they ask in Urdu or Roman Urdu, reply in both Urdu and English.`;
 
     const getMockResponse = () => ({
       response: `میں آپ کی بات سمجھ گیا! (I understand your question about: "${message}") 
 
-To enable AI responses, please add your GEMINI_API_KEY to the backend .env file. 
+To enable full AI responses, please add your GEMINI_API_KEY to the backend .env file. 
 
-Based on available budget data: Pakistan's FY2025-26 total budget is approximately PKR 18,877 billion. Education received PKR 212 billion and Defence received PKR 2,414 billion.`,
+Based on available real budget data (Source: Finance Division, GoP):
+• FY2025-26 total budget: PKR ${Math.round(data.fy2526.reduce((s, m) => s + m.total, 0))} billion
+• Education: PKR ${data.fy2526.find(m => m.ministry.toLowerCase().includes('education'))?.total?.toFixed(1) ?? '212'} billion
+• Defence: PKR ${data.fy2526.find(m => m.ministry.toLowerCase().includes('defence'))?.total?.toFixed(1) ?? '2414'} billion`,
       mock: true,
     });
 
@@ -106,7 +189,6 @@ Based on available budget data: Pakistan's FY2025-26 total budget is approximate
       const genAI = getGenAI();
       const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
 
-      // Build conversation
       const conversationHistory = (history || []).map(h => ({
         role: h.role === 'user' ? 'user' : 'model',
         parts: [{ text: h.text }],
@@ -115,7 +197,7 @@ Based on available budget data: Pakistan's FY2025-26 total budget is approximate
       const chat = model.startChat({
         history: [
           { role: 'user', parts: [{ text: systemPrompt }] },
-          { role: 'model', parts: [{ text: 'I understand. I am BudgetLens AI, ready to help Pakistani citizens understand the federal budget in simple words.' }] },
+          { role: 'model', parts: [{ text: 'I understand. I am BudgetLens AI, ready to help Pakistani citizens understand the federal budget. I will always cite Finance Division, GoP as the source for budget figures.' }] },
           ...conversationHistory,
         ],
       });

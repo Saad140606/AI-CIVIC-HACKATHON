@@ -953,140 +953,74 @@ export async function getAllMNAs(): Promise<MNAProfile[]> {
     return mnaCache;
   }
 
-  // Populate default voting records and report card fields
-  mnaCache = SEED_MNA_DATA.map(m => {
-    if (m.id === '2001') {
-      return {
-        ...m,
-        nationalAverage: m.nationalAverage ?? 82,
-        salaryReceived: m.salaryReceived ?? 'Full Salary',
-        salaryReceivedUrdu: m.salaryReceivedUrdu ?? 'مکمل تنخواہ',
-        votingRecord: m.votingRecord ?? []
-      };
+  const BILLS: Array<{ billName: string; billNameUrdu: string; explanationEnglish: string; explanationUrdu: string }> = [
+    {
+      billName: 'Finance Act 2024',
+      billNameUrdu: 'مالیاتی ایکٹ 2024',
+      explanationEnglish: 'The Finance Act 2024 approved PKR 18.9 trillion federal budget, setting tax targets and ministry allocations for the fiscal year.',
+      explanationUrdu: 'مالیاتی ایکٹ 2024 نے 18.9 کھرب روپے کا وفاقی بجٹ منظور کیا، جس میں ٹیکس اہداف اور وزارتی مختصات طے کیے گئے۔'
+    },
+    {
+      billName: 'Digital Governance Bill',
+      billNameUrdu: 'ڈیجیٹل گورننس بل',
+      explanationEnglish: 'This bill digitizes government services so citizens can apply for certificates, passports, and documents online without visiting offices.',
+      explanationUrdu: 'یہ بل سرکاری خدمات کو آن لائن فراہم کرنے کے لیے بنایا گیا ہے، جس سے شہری دفتروں میں جائے بغیر دستاویزات حاصل کر سکتے ہیں۔'
+    },
+    {
+      billName: 'Education Reform Bill',
+      billNameUrdu: 'تعلیمی اصلاحات بل',
+      explanationEnglish: 'This bill requires all provinces to modernize school curriculum by 2026 and increase teacher training budgets.',
+      explanationUrdu: 'اس بل کے تحت تمام صوبوں کو 2026 تک اسکول کا نصاب جدید بنانا اور اساتذہ کی تربیت کے بجٹ میں اضافہ کرنا ہوگا۔'
+    },
+    {
+      billName: 'Cybercrime Amendment Bill',
+      billNameUrdu: 'سائبر کرائم ترمیمی بل',
+      explanationEnglish: 'This amendment tightens online fraud penalties up to 7 years imprisonment and creates a dedicated cyber-crime unit under FIA.',
+      explanationUrdu: 'اس ترمیم نے آن لائن دھوکہ دہی کی سزا 7 سال قید تک بڑھائی اور FIA کے تحت خصوصی سائبر کرائم یونٹ قائم کیا۔'
+    },
+    {
+      billName: 'Health Budget Increase Amendment',
+      billNameUrdu: 'صحت بجٹ اضافہ ترمیم',
+      explanationEnglish: 'This amendment proposed increasing public hospital budgets to expand free healthcare access for low-income citizens.',
+      explanationUrdu: 'اس ترمیم میں سرکاری ہسپتالوں کا بجٹ بڑھا کر کم آمدنی والے شہریوں کے لیے مفت صحت سہولیات وسیع کرنے کی تجویز دی گئی۔'
     }
+  ];
 
-    // Assign party-consistent voting records for the top key political leaders
-    let votingRecord: VotingRecordItem[] = [];
-    if (m.id === '1001' || m.id === '1004' || m.id === '1005' || m.id === '1006' || m.id === '1008' || m.id === '1010') {
-      // PML-N Government cabinet members (sponsored government bills, opposed opposition amendments)
-      votingRecord = [
-        {
-          billName: 'Digital Governance Bill',
-          billNameUrdu: 'ڈیجیٹل گورننس بل',
-          vote: 'YES',
-          voteUrdu: 'ہاں',
-          explanationEnglish: 'This bill aims to digitize government services so citizens can apply for certificates and documents online.',
-          explanationUrdu: 'یہ بل سرکاری خدمات کو آن لائن فراہم کرنے کے لیے بنایا گیا ہے۔'
-        },
-        {
-          billName: 'Education Reform Bill',
-          billNameUrdu: 'تعلیمی اصلاحات بل',
-          vote: 'YES',
-          voteUrdu: 'ہاں',
-          explanationEnglish: 'This bill requires provincial governments to modernize curriculum and improve primary school infrastructure.',
-          explanationUrdu: 'اس بل کے تحت صوبائی حکومتوں کو نصاب جدید بنانے اور پرائمری اسکولوں کے ڈھانچے کو بہتر بنانے کی ضرورت ہے۔'
-        },
-        {
-          billName: 'Health Budget Amendment',
-          billNameUrdu: 'صحت بجٹ ترمیم',
-          vote: 'NO',
-          voteUrdu: 'ناں',
-          explanationEnglish: 'This amendment proposed to increase funding for public hospitals by redirecting administrative expenses.',
-          explanationUrdu: 'اس ترمیم میں انتظامی اخراجات کو کم کر کے سرکاری ہسپتالوں کے فنڈز بڑھانے کی تجویز دی گئی تھی۔'
-        }
-      ];
-    } else if (m.id === '1002' || m.id === '1007') {
-      // PPP Coalition partners (support governance digitizing, but also support health budget increases)
-      votingRecord = [
-        {
-          billName: 'Digital Governance Bill',
-          billNameUrdu: 'ڈیجیٹل گورننس بل',
-          vote: 'YES',
-          voteUrdu: 'ہاں',
-          explanationEnglish: 'This bill aims to digitize government services so citizens can apply for certificates and documents online.',
-          explanationUrdu: 'یہ بل سرکاری خدمات کو آن لائن فراہم کرنے کے لیے بنایا گیا ہے۔'
-        },
-        {
-          billName: 'Education Reform Bill',
-          billNameUrdu: 'تعلیمی اصلاحات بل',
-          vote: 'YES',
-          voteUrdu: 'ہاں',
-          explanationEnglish: 'This bill requires provincial governments to modernize curriculum and improve primary school infrastructure.',
-          explanationUrdu: 'اس بل کے تحت صوبائی حکومتوں کو نصاب جدید بنانے اور پرائمری اسکولوں کے ڈھانچے کو بہتر بنانے کی ضرورت ہے۔'
-        },
-        {
-          billName: 'Health Budget Amendment',
-          billNameUrdu: 'صحت بجٹ ترمیم',
-          vote: 'YES',
-          voteUrdu: 'ہاں',
-          explanationEnglish: 'This amendment proposed to increase funding for public hospitals by redirecting administrative expenses.',
-          explanationUrdu: 'اس ترمیم میں انتظامی اخراجات کو کم کر کے سرکاری ہسپتالوں کے فنڈز بڑھانے کی تجویز دی گئی تھی۔'
-        }
-      ];
-    } else if (m.id === '1003' || m.id === '1009') {
-      // PTI Opposition members (vote NO on government bills, absent on educational reforms, vote YES on hospital amendments)
-      votingRecord = [
-        {
-          billName: 'Digital Governance Bill',
-          billNameUrdu: 'ڈیجیٹل گورننس بل',
-          vote: 'NO',
-          voteUrdu: 'ناں',
-          explanationEnglish: 'This bill aims to digitize government services so citizens can apply for certificates and documents online.',
-          explanationUrdu: 'یہ بل سرکاری خدمات کو آن لائن فراہم کرنے کے لیے بنایا گیا ہے۔'
-        },
-        {
-          billName: 'Education Reform Bill',
-          billNameUrdu: 'تعلیمی اصلاحات بل',
-          vote: 'ABSENT',
-          voteUrdu: 'غیر حاضر',
-          explanationEnglish: 'This bill requires provincial governments to modernize curriculum and improve primary school infrastructure.',
-          explanationUrdu: 'اس بل کے تحت صوبائی حکومتوں کو نصاب جدید بنانے اور پرائمری اسکولوں کے ڈھانچے کو بہتر بنانے کی ضرورت ہے۔'
-        },
-        {
-          billName: 'Health Budget Amendment',
-          billNameUrdu: 'صحت بجٹ ترمیم',
-          vote: 'YES',
-          voteUrdu: 'ہاں',
-          explanationEnglish: 'This amendment proposed to increase funding for public hospitals by redirecting administrative expenses.',
-          explanationUrdu: 'اس ترمیم میں انتظامی اخراجات کو کم کر کے سرکاری ہسپتالوں کے فنڈز بڑھانے کی تجویز دی گئی تھی۔'
-        }
-      ];
-    } else {
-      // Generic MNA defaults based on attendance
-      votingRecord = [
-        {
-          billName: 'Digital Governance Bill',
-          billNameUrdu: 'ڈیجیٹل گورننس بل',
-          vote: m.attendancePercent >= 75 ? 'YES' : m.attendancePercent >= 55 ? 'NO' : 'ABSENT',
-          voteUrdu: m.attendancePercent >= 75 ? 'ہاں' : m.attendancePercent >= 55 ? 'ناں' : 'غیر حاضر',
-          explanationEnglish: 'This bill aims to digitize government services so citizens can apply for certificates and documents online.',
-          explanationUrdu: 'یہ بل سرکاری خدمات کو آن لائن فراہم کرنے کے لیے بنایا گیا ہے۔'
-        },
-        {
-          billName: 'Education Reform Bill',
-          billNameUrdu: 'تعلیمی اصلاحات بل',
-          vote: m.attendancePercent >= 85 ? 'YES' : m.attendancePercent >= 60 ? 'ABSENT' : 'NO',
-          voteUrdu: m.attendancePercent >= 85 ? 'ہاں' : m.attendancePercent >= 60 ? 'غیر حاضر' : 'ناں',
-          explanationEnglish: 'This bill requires provincial governments to modernize curriculum and improve primary school infrastructure.',
-          explanationUrdu: 'اس بل کے تحت صوبائی حکومتوں کو نصاب جدید بنانے اور پرائمری اسکولوں کے ڈھانچے کو بہتر بنانے کی ضرورت ہے۔'
-        },
-        {
-          billName: 'Health Budget Amendment',
-          billNameUrdu: 'صحت بجٹ ترمیم',
-          vote: m.attendancePercent >= 70 ? 'YES' : 'NO',
-          voteUrdu: m.attendancePercent >= 70 ? 'ہاں' : 'ناں',
-          explanationEnglish: 'This amendment proposed to increase funding for public hospitals by redirecting administrative expenses.',
-          explanationUrdu: 'اس ترمیم میں انتظامی اخراجات کو کم کر کے سرکاری ہسپتالوں کے فنڈز بڑھانے کی تجویز دی گئی تھی۔'
-        }
-      ];
-    }
+  // Party-specific votes: [Finance Act, Digital Gov, Education, Cybercrime, Health]
+  const PARTY_VOTES: Record<string, Array<'YES' | 'NO' | 'ABSENT'>> = {
+    'PML-N':  ['YES', 'YES', 'YES', 'YES', 'NO'],
+    'PPP':    ['YES', 'YES', 'YES', 'NO',  'YES'],
+    'PTI':    ['NO',  'NO',  'ABSENT', 'NO', 'YES'],
+    'JUI-F':  ['YES', 'NO',  'YES', 'NO',  'YES'],
+    'MQM-P':  ['YES', 'YES', 'YES', 'YES', 'YES'],
+    'PML-Q':  ['YES', 'YES', 'NO',  'YES', 'YES'],
+    'BNP-M':  ['NO',  'NO',  'YES', 'NO',  'YES'],
+    'IND':    ['YES', 'NO',  'ABSENT', 'NO', 'YES'],
+  };
+
+  const toUrdu = (v: 'YES' | 'NO' | 'ABSENT'): 'ہاں' | 'ناں' | 'غیر حاضر' =>
+    v === 'YES' ? 'ہاں' : v === 'NO' ? 'ناں' : 'غیر حاضر';
+
+  mnaCache = SEED_MNA_DATA.map(m => {
+    // Use pre-filled votingRecord if already set in seed (e.g., MNA 2001)
+    const votes = m.votingRecord?.length
+      ? m.votingRecord
+      : BILLS.map((bill, i) => {
+          const partyVotes = PARTY_VOTES[m.party] ?? PARTY_VOTES['IND'];
+          const voteVal = partyVotes[i] ?? 'ABSENT';
+          return {
+            ...bill,
+            vote: voteVal as 'YES' | 'NO' | 'ABSENT',
+            voteUrdu: toUrdu(voteVal)
+          };
+        });
 
     return {
       ...m,
       nationalAverage: 82,
       salaryReceived: m.attendancePercent >= 60 ? 'Full Salary' : 'Deducted',
       salaryReceivedUrdu: m.attendancePercent >= 60 ? 'مکمل تنخواہ' : 'کٹوتی شدہ',
-      votingRecord
+      votingRecord: votes
     };
   });
 

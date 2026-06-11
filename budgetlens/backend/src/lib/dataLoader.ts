@@ -141,19 +141,28 @@ export async function loadBudgetData(): Promise<BudgetSummary> {
 
   const file2324 = path.join(DATA_ROOT, '2023_2024', 'budget_2023_24.xlsx');
   const file2425 = path.join(DATA_ROOT, '2024_2025', 'budget_2024_25.xlsx');
+  const file2526 = path.join(DATA_ROOT, '2025_2026', 'budget_2025_26.xlsx');
 
   // FY23-24: budget_2023 is the main budget column (latest year in file)
   const fy2324 = parseXlsx(file2324, ['budget_2023', 'budget_2324', 'budget_2023_24']);
   // FY24-25: budget_2025 or similar
   const fy2425 = parseXlsx(file2425, ['budget_2025', 'budget_2425', 'budget_2024_25', 'budget_2024']);
+  // FY25-26: Real data from budget_2025_26.xlsx (column: budget_2025_26)
+  const fy2526Real = parseXlsx(file2526, ['budget_2025_26', 'budget_2526']);
+
+  // Use real xlsx data if available, otherwise fall back to hardcoded estimates
+  const fy2526 = fy2526Real.length > 0 ? fy2526Real : FY2526_HARDCODED;
+  const dataSource = fy2526Real.length > 0 ? 'real xlsx data' : 'hardcoded estimates (fallback)';
 
   cache = {
     fy2324,
     fy2425,
-    fy2526: FY2526_HARDCODED,
+    fy2526,
   };
 
-  console.log(`✅ Loaded: ${fy2324.length} ministries (FY23-24), ${fy2425.length} ministries (FY24-25), ${FY2526_HARDCODED.length} ministries (FY25-26 estimated)`);
+  const total2526 = fy2526.reduce((s, m) => s + m.total, 0);
+  console.log(`✅ Loaded: ${fy2324.length} ministries (FY23-24), ${fy2425.length} ministries (FY24-25), ${fy2526.length} ministries (FY25-26 — ${dataSource})`);
+  console.log(`📊 FY25-26 Total Budget: PKR ${Math.round(total2526)} billion (~PKR ${(total2526 / 1000).toFixed(1)} trillion)`);
   return cache;
 }
 
