@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
+import ShareCard from '../components/ShareCard';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 
 // Pakistan income tax slabs FY2025-26 (Federal Budget)
@@ -492,7 +493,39 @@ export default function TaxCalculator() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6 }}
-              className="flex flex-col sm:flex-row gap-3 items-center justify-center pt-2"
+              className="flex flex-col sm:flex-row gap-3 items-center justify-between rounded-2xl border border-[#1a3050]/60 bg-[#0c1929] p-4"
+            >
+              <div>
+                <p className="text-sm font-semibold text-white">
+                  {isUrdu ? 'اپنا ٹیکس بریک ڈاؤن شیئر کریں' : 'Share My Tax Breakdown'}
+                </p>
+                <p className="text-xs text-[#7f8ea4] mt-1">
+                  {isUrdu
+                    ? '“میری ٹیکس کا 48% قرض ادائیگی پر جاتا ہے 😤” جیسی شیئرایبل اسٹیٹس بنانے کے لیے۔'
+                    : 'Make your tax story shareable with a polished image card.'}
+                </p>
+              </div>
+              <div className="w-full sm:w-auto">
+                <ShareCard
+                  lang={lang}
+                  taxData={{
+                    monthlyIncome: monthlyIncome,
+                    annualTax: calculations.totalMonthlyTax * 12,
+                    debtShare: calculations.breakdown.find(c => c.key === 'debt')!.myAnnualShare,
+                    defenceShare: calculations.breakdown.find(c => c.key === 'defence')!.myAnnualShare,
+                    nfcShare: calculations.breakdown.find(c => c.key === 'transfers')!.myAnnualShare,
+                    educationShare: calculations.breakdown.find(c => c.key === 'education')!.myAnnualShare,
+                    healthShare: calculations.breakdown.find(c => c.key === 'health')!.myAnnualShare,
+                  }}
+                />
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.65 }}
+              className="flex flex-col sm:flex-row gap-3 items-center justify-center pt-1"
             >
               <p className="text-xs text-[#3a4558]">
                 {isUrdu

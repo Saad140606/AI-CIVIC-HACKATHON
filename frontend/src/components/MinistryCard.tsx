@@ -127,7 +127,12 @@ export default function MinistryCard({ ministry, rank, changePercent, onClick, i
           {/* Content */}
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-2">
-              <h3 className="font-bold text-white text-sm leading-tight">{ministry.ministry}</h3>
+              <div className="flex flex-col gap-1.5">
+                <h3 className="font-bold text-white text-sm leading-tight">{ministry.ministry}</h3>
+                <div onClick={e => e.stopPropagation()} className="w-fit">
+                  <TransparencyScore ministry={ministry} allMinistries={allMinistries} prevYearTotal={undefined} />
+                </div>
+              </div>
               {changePercent !== undefined && (
                 <motion.span
                   initial={{ scale: 0.8, opacity: 0 }}
@@ -214,9 +219,6 @@ export default function MinistryCard({ ministry, rank, changePercent, onClick, i
             {ministry.divisions.length} Divisions
           </motion.button>
 
-          <div onClick={e => e.stopPropagation()}>
-            <TransparencyScore ministry={ministry} allMinistries={allMinistries} prevYearTotal={undefined} />
-          </div>
 
           <div onClick={e => e.stopPropagation()}>
             <ShareCard ministry={ministry} changePercent={changePercent} />

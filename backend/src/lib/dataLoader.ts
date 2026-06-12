@@ -35,7 +35,7 @@ export interface BudgetSummary {
 // Data cache
 let cache: BudgetSummary | null = null;
 
-const DATA_ROOT = path.resolve(__dirname, '../../../../');
+const DATA_ROOT = path.resolve(__dirname, '../../data');
 
 function findBudgetColumn(row: BudgetRow, candidates: string[]): string | undefined {
   for (const c of candidates) {
@@ -43,6 +43,91 @@ function findBudgetColumn(row: BudgetRow, candidates: string[]): string | undefi
   }
   // Fallback: find column starting with 'budget_' that is NOT 'revised'
   return Object.keys(row).find(k => k.startsWith('budget_') && !k.includes('revised') && !k.includes('posts'));
+}
+
+function normalizeMinistryAndDivision(rawMinistry: string, rawDivision: string): { ministry: string; division: string } {
+  const m = rawMinistry.replace(/\s+/g, ' ').trim().toUpperCase();
+  const d = rawDivision.replace(/\s+/g, ' ').trim().toUpperCase();
+
+  // 0. Exclude principal debt repayment
+  if (d.includes('REPAYMENT') || m.includes('REPAYMENT')) {
+    return { ministry: 'Exclude_Repayment', division: rawDivision };
+  }
+
+  // 1. Re-route specific high-profile divisions from Ministry of Finance (or others)
+  if (d.includes('DEBT') || d.includes('SERVICING OF DOMESTIC') || d.includes('REPAYMENT OF DOMESTIC') || d.includes('FOREIGN DEBT')) {
+    return { ministry: 'Debt Servicing', division: rawDivision };
+  }
+  if (d.includes('PENSION') || d.includes('SUPERANNUATION')) {
+    return { ministry: 'Superannuation & Pensions', division: rawDivision };
+  }
+  if (d.includes('NFC') || d.includes('TRANSFERS TO PROVINCES') || d.includes('PROVINCIAL TRANSFERS')) {
+    return { ministry: 'Transfers to Provinces', division: rawDivision };
+  }
+
+  // 2. Map standard ministry names to unify across years
+  let ministry = rawMinistry;
+  if (m === 'MINISTRY OF DEFENCE' || m.includes('DEFENCE AFFAIRS') || m === 'MINISTRY OF DEFENCE PRODUCTION') {
+    ministry = 'Ministry of Defence';
+  } else if (m === 'MINISTRY OF INTERIOR' || m.includes('INTERIOR AFFAIRS')) {
+    ministry = 'Ministry of Interior';
+  } else if (m === 'MINISTRY OF RAILWAYS' || m === 'RAILWAYS') {
+    ministry = 'Ministry of Railways';
+  } else if (m === 'MINISTRY OF ENERGY' || m.includes('POWER DIVISION') || m.includes('ENERGY (POWER')) {
+    ministry = 'Ministry of Energy';
+  } else if (m === 'MINISTRY OF COMMUNICATIONS' || m.includes('COMMUNICATIONS (NHA)')) {
+    ministry = 'Ministry of Communications';
+  } else if (m === 'MINISTRY OF FINANCE AND REVENUE' || m.includes('FINANCE DIVISION') || m === 'MINISTRY OF FINANCE') {
+    ministry = 'Ministry of Finance';
+  } else if (m === 'MINISTRY OF WATER RESOURCES' || m === 'WATER RESOURCES') {
+    ministry = 'Ministry of Water Resources';
+  } else if (m === 'MINISTRY OF COMMERCE' || m.includes('COMMERCE DIVISION')) {
+    ministry = 'Ministry of Commerce';
+  } else if (m === 'MINISTRY OF FOREIGN AFFAIRS' || m === 'FOREIGN AFFAIRS') {
+    ministry = 'Ministry of Foreign Affairs';
+  } else if (m === 'MINISTRY OF INDUSTRIES AND PRODUCTION' || m.includes('INDUSTRIES AND PRODUCTION') || m === 'MINISTRY OF INDUSTRIES') {
+    ministry = 'Ministry of Industries';
+  } else if (m === 'MINISTRY OF SCIENCE AND TECHNOLOGY' || m === 'SCIENCE AND TECHNOLOGY') {
+    ministry = 'Ministry of Science';
+  } else if (m === 'MINISTRY OF PRIVATIZATION' || m.includes('PRIVATISATION')) {
+    ministry = 'Ministry of Privatization';
+  } else if (m.includes('NARCOTICS CONTROL') || m === 'MINISTRY OF NARCOTICS') {
+    ministry = 'Ministry of Narcotics';
+  } else if (m.includes('CLIMATE CHANGE') || m === 'MINISTRY OF CLIMATE CHANGE') {
+    ministry = 'Ministry of Climate Change';
+  } else if (m === 'MINISTRY OF HUMAN RIGHTS' || m === 'HUMAN RIGHTS') {
+    ministry = 'Ministry of Human Rights';
+  } else if (m.includes('PLANNING') || m.includes('PSDP')) {
+    if (m === 'PSDP CAPITAL' || m === 'PSDP FEDERAL') {
+      ministry = rawMinistry;
+    } else {
+      ministry = 'Ministry of Planning';
+    }
+  } else if (m.includes('HEALTH') || m.includes('NHSRC')) {
+    ministry = 'Ministry of National Health';
+  } else if (m.includes('EDUCATION') || m.includes('FEDERAL EDUCATION')) {
+    ministry = 'Ministry of Education';
+  } else if (m.includes('FOOD SECURITY') || m.includes('AGRICULTURE')) {
+    ministry = 'Ministry of Agriculture';
+  } else if (m.includes('OVERSEAS') || m.includes('OPHRD')) {
+    ministry = 'Ministry of Overseas';
+  } else if (m.includes('INFORMATION TECHNOLOGY') || m.includes('IT & TELECOM')) {
+    ministry = 'Ministry of IT & Telecom';
+  } else if (m.includes('POVERTY ALLEVIATION')) {
+    ministry = 'Ministry of Poverty Alleviation';
+  } else if (m.includes('RELIGIOUS AFFAIRS')) {
+    ministry = 'Ministry of Religious Affairs';
+  } else if (m.includes('MARITIME')) {
+    ministry = 'Ministry of Maritime';
+  } else if (m.includes('INFORMATION AND BROADCASTING') || m.includes('INFORMATION DIVISION') || m === 'MINISTRY OF INFORMATION') {
+    ministry = 'Ministry of Information';
+  } else if (m.includes('AVIATION')) {
+    ministry = 'Ministry of Aviation';
+  } else if (m.includes('HERITAGE') || m.includes('CULTURE')) {
+    ministry = 'Ministry of Heritage';
+  }
+
+  return { ministry, division: rawDivision };
 }
 
 function parseXlsx(filePath: string, budgetCandidates: string[], scaleFactor: number = 1): MinistryTotal[] {
@@ -60,8 +145,14 @@ function parseXlsx(filePath: string, budgetCandidates: string[], scaleFactor: nu
   const ministryMap = new Map<string, Map<string, number>>();
 
   for (const row of rows) {
-    const ministry = (row['ministry_name'] as string)?.trim() || 'Unknown';
-    const division = (row['division_name'] as string)?.trim() || ministry;
+    const rawMinistry = (row['ministry_name'] as string)?.trim() || 'Unknown';
+    const rawDivision = (row['division_name'] as string)?.trim() || rawMinistry;
+
+    const { ministry, division } = normalizeMinistryAndDivision(rawMinistry, rawDivision);
+
+    if (ministry === 'Exclude_Repayment') {
+      continue;
+    }
 
     // Detect budget column once from first row pattern
     let amount = 0;

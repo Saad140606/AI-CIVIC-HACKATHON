@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { mnaApi, aiApi, type MNAProfile, type MNASearchResult, type MNARatingResult } from '../lib/api';
 import { useLanguage } from '../context/LanguageContext';
@@ -450,8 +450,10 @@ const PROVINCES = ['All', 'Punjab', 'Sindh', 'KPK', 'Balochistan', 'Federal'];
 const WakalaCheck: React.FC = () => {
   const { lang } = useLanguage();
   const isUrdu = lang === 'ur';
+  const profileRef = useRef<HTMLDivElement>(null);
 
   const [query, setQuery] = useState('');
+  const [constituencyInput, setConstituencyInput] = useState('');
   const [province, setProvince] = useState('All');
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [rating, setRating] = useState<MNARatingResult | null>(null);
@@ -493,6 +495,24 @@ const WakalaCheck: React.FC = () => {
   });
 
   const allMembers = allMNAsData?.members || [];
+
+  useEffect(() => {
+    if (!constituencyInput.trim()) return;
+
+    const normalized = constituencyInput.trim().toLowerCase();
+    const match = allMembers.find(member =>
+      member.constituency.toLowerCase().includes(normalized) ||
+      member.constituencyUrdu?.toLowerCase().includes(normalized) ||
+      member.name.toLowerCase().includes(normalized) ||
+      member.nameUrdu?.toLowerCase().includes(normalized)
+    );
+
+    if (match) {
+      setSelectedId(match.id);
+      setRating(null);
+      setActiveSubTab('profile');
+    }
+  }, [allMembers, constituencyInput]);
 
   const filteredMembers = (searchData?.members || []).filter(m =>
     province === 'All' || m.province === province
@@ -722,9 +742,116 @@ const WakalaCheck: React.FC = () => {
       {/* Content */}
       <div className="max-w-5xl mx-auto px-4 md:px-8 py-6">
         {activeSubTab === 'profile' ? (
-          <div className="grid grid-cols-1 lg:grid-cols-[360px_1fr] gap-6">
-            {/* Left: Search & Filter Panel */}
-            <div>
+          <div className="space-y-6">
+            {/* Hero constituency lookup */}
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="p-6 rounded-3xl bg-gradient-to-br from-[#120726]/90 via-[#0a1628]/95 to-[#050c18] border border-[#7c3aed]/40 shadow-[0_12px_40px_rgba(124,58,237,0.15)] relative overflow-hidden"
+            >
+              {/* Background design accents */}
+              <div className="absolute top-0 right-0 w-32 h-32 bg-[#7c3aed]/10 rounded-full blur-3xl pointer-events-none" />
+              <div className="absolute bottom-0 left-0 w-48 h-48 bg-[#00b4d8]/5 rounded-full blur-3xl pointer-events-none" />
+
+              <div className="text-center max-w-2xl mx-auto space-y-3">
+                <span className="text-[10px] tracking-widest uppercase font-black px-3 py-1.5 rounded-full bg-[#7c3aed]/10 text-[#c084fc] border border-[#7c3aed]/25">
+                  🇵🇰 {isUrdu ? 'پبلک سروس ٹرانسیپرینسی' : 'Accountability & Data'}
+                </span>
+                <h2 className="text-xl md:text-2xl font-black text-white leading-tight">
+                  {isUrdu ? 'اپنے رکن قومی اسمبلی (MNA) کو فوری تلاش کریں' : 'Find Your Member of National Assembly (MNA)'}
+                </h2>
+                <p className="text-xs text-[#8892a4] max-w-md mx-auto">
+                  {isUrdu
+                    ? 'اپنا حلقہ (مثلاً NA-242) یا اپنے حلقے کے رکن کا نام لکھیں اور ان کی کارکردگی کا ڈیٹا اور حاضری چیک کریں'
+                    : 'Type your constituency (e.g., NA-242) or MNA name. Get instant access to attendance records, bills sponsored, and AI-powered performance ratings.'}
+                </p>
+
+                {/* Big Search Input with Autocomplete */}
+                <div className="relative mt-5 max-w-xl mx-auto">
+                  <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none text-xl">
+                    🔍
+                  </div>
+                  <input
+                    type="text"
+                    value={constituencyInput}
+                    onChange={(e) => setConstituencyInput(e.target.value)}
+                    placeholder={isUrdu ? 'اپنا حلقہ درج کریں (مثلاً NA-242 کراچی)' : 'Enter your constituency (e.g. NA-242 Karachi)'}
+                    className="w-full bg-[#060d1a]/90 border border-[#7c3aed]/30 hover:border-[#7c3aed]/60 focus:border-[#7c3aed] rounded-2xl py-4 pl-12 pr-4 text-base text-white placeholder:text-[#3a4558] focus:outline-none focus:ring-2 focus:ring-[#7c3aed]/20 shadow-[inset_0_2px_4px_rgba(0,0,0,0.6)] transition-all"
+                  />
+                  
+                  {/* Clear search button */}
+                  {constituencyInput && (
+                    <button
+                      onClick={() => setConstituencyInput('')}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-[#5a6a7e] hover:text-white px-2 py-1 rounded bg-white/5 transition-colors"
+                    >
+                      {isUrdu ? 'صاف کریں' : 'Clear'}
+                    </button>
+                  )}
+
+                  {/* Autocomplete Dropdown List */}
+                  {constituencyInput.trim() && (
+                    <div className="absolute z-50 left-0 right-0 mt-2 rounded-2xl border border-[#1e3a5f]/60 bg-[#0d1b2e] shadow-[0_15px_50px_rgba(0,0,0,0.8)] overflow-hidden max-h-60 overflow-y-auto custom-scrollbar">
+                      {(() => {
+                        const matches = allMembers.filter(m =>
+                          m.constituency.toLowerCase().includes(constituencyInput.trim().toLowerCase()) ||
+                          m.name.toLowerCase().includes(constituencyInput.trim().toLowerCase()) ||
+                          (m.nameUrdu && m.nameUrdu.includes(constituencyInput.trim())) ||
+                          (m.constituencyUrdu && m.constituencyUrdu.includes(constituencyInput.trim()))
+                        );
+                        if (matches.length === 0) {
+                          return (
+                            <div className="p-4 text-xs text-[#7f8ea4] text-center">
+                              ❌ {isUrdu ? 'کوئی حلقہ یا رکن نہیں ملا' : 'No matching MNA or constituency found'}
+                            </div>
+                          );
+                        }
+                        return matches.map(m => (
+                          <button
+                            key={m.id}
+                            type="button"
+                            onClick={() => {
+                              setSelectedId(m.id);
+                              setRating(null);
+                              setConstituencyInput('');
+                              setTimeout(() => {
+                                profileRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                              }, 150);
+                            }}
+                            className="w-full text-left p-3 hover:bg-[#1a3050]/40 border-b border-[#1e3a5f]/20 transition-all flex items-center justify-between gap-3 text-xs"
+                          >
+                            <div className="flex items-center gap-2.5 min-w-0">
+                              <div
+                                className="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center font-bold text-white text-[11px]"
+                                style={{ background: `linear-gradient(135deg, ${m.partyColor}88, ${m.partyColor})` }}
+                              >
+                                {m.name.split(' ').map(w => w[0]).join('').slice(0, 2)}
+                              </div>
+                              <div className="truncate">
+                                <p className="font-bold text-white truncate">{isUrdu ? m.nameUrdu || m.name : m.name}</p>
+                                <p className="text-[10px] text-[#00b4d8] truncate">{isUrdu ? m.constituencyUrdu || m.constituency : m.constituency}</p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2 flex-shrink-0">
+                              <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-white/5 text-[#8892a4]" style={{ border: `1px solid ${m.partyColor}44`, color: m.partyColor }}>
+                                {m.party}
+                              </span>
+                              <span className={`font-bold ${m.attendancePercent >= 75 ? 'text-emerald-400' : m.attendancePercent >= 50 ? 'text-amber-400' : 'text-red-400'}`}>
+                                {m.attendancePercent}% {isUrdu ? 'حاضری' : 'Att.'}
+                              </span>
+                            </div>
+                          </button>
+                        ));
+                      })()}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-[360px_1fr] gap-6">
+              {/* Left: Search & Filter Panel */}
+              <div>
               {/* Constituency Selector Dropdowns */}
               <div className="p-4 rounded-xl bg-[#0d1b2e] border border-[#1e3a5f]/60 mb-4 space-y-3 shadow-card">
                 <div className="text-xs text-[#00b4d8] font-bold uppercase tracking-wider">
@@ -765,6 +892,9 @@ const WakalaCheck: React.FC = () => {
                         if (mnaId) {
                           setSelectedId(mnaId);
                           setRating(null);
+                          setTimeout(() => {
+                            profileRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                          }, 150);
                         }
                       }}
                       className="w-full bg-[#060d1a] border border-[#1e3a5f]/45 rounded-lg py-2 px-2 text-xs text-white focus:outline-none focus:border-[#00b4d8]/60 disabled:opacity-50 premium-input"
@@ -845,6 +975,9 @@ const WakalaCheck: React.FC = () => {
                             setRating(null);
                             setSelectedCity('');
                             setSelectedConstituency('');
+                            setTimeout(() => {
+                              profileRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            }, 150);
                           }}
                         />
                       </motion.div>
@@ -867,7 +1000,7 @@ const WakalaCheck: React.FC = () => {
             </div>
 
             {/* Right: Profile & Bill Upload Panel */}
-            <div className="space-y-6">
+            <div ref={profileRef} className="space-y-6">
               {loadingProfile ? (
                 <div className="flex items-center justify-center h-64 bg-[#0d1b2e] rounded-2xl border border-[#1e3a5f]/40">
                   <div className="text-center">
@@ -985,7 +1118,8 @@ const WakalaCheck: React.FC = () => {
               </div>
             </div>
           </div>
-        ) : (
+        </div>
+      ) : (
           /* Leaderboard Sub-tab */
           <div className="bg-[#0d1b2e] border border-[#1e3a5f]/60 rounded-2xl p-6 overflow-hidden shadow-card animate-fade-in">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
@@ -1050,6 +1184,9 @@ const WakalaCheck: React.FC = () => {
                           setSelectedId(m.id);
                           setRating(null);
                           setActiveSubTab('profile');
+                          setTimeout(() => {
+                            profileRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                          }, 150);
                         }}
                         className="hover:bg-[#1e3a5f]/20 cursor-pointer transition-colors text-sm"
                       >

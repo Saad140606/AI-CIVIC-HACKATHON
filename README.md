@@ -1,200 +1,178 @@
-# 🇵🇰 WakalaLens Pakistan — AI Civic Budget Intelligence Platform
+# 🇵🇰 WakalaLens Pakistan
 
-> **AI FOR CIVIC INNOVATION HACKATHON 2025 Submission**
-> _Open data + AI to make Pakistan's federal budget understandable for every citizen_
+> AI for Civic Innovation Hackathon 2025 submission
+>
+> A bilingual budget intelligence app that turns Pakistan’s public finance data into plain-language insights for citizens, journalists, and researchers.
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript)](https://www.typescriptlang.org/)
-[![React](https://img.shields.io/badge/React-18-61DAFB?logo=react)](https://react.dev/)
-[![Vite](https://img.shields.io/badge/Vite-5-646CFF?logo=vite)](https://vitejs.dev/)
+[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite)](https://vitejs.dev/)
 [![Express](https://img.shields.io/badge/Express-4-black?logo=express)](https://expressjs.com/)
 [![Gemini](https://img.shields.io/badge/AI-Gemini%201.5%20Flash-4285F4?logo=google)](https://ai.google.dev/)
-[![Groq](https://img.shields.io/badge/Fallback-Groq%20LLaMA3-F54B26)](https://groq.com/)
 
 ---
 
-## 🎯 Problem Statement
+## 🎯 What this project does
 
-Pakistan's federal budget is released as hundreds of pages of dense PDFs. Ordinary citizens — farmers, teachers, shopkeepers — cannot understand how PKR 17 trillion in public money is allocated, which MNA voted for what, or how the budget affects them personally.
+WakalaLens Pakistan combines official budget data, parliamentary accountability data, and AI narration to answer questions such as:
 
-**WakalaLens Pakistan** solves this with an open-data AI platform that translates government budget data into plain English and Urdu.
+- How much is the federal government spending on each ministry?
+- Which ministries grew or shrank the most from FY2023-24 to FY2025-26?
+- How does a constituency or MNA profile connect to budget priorities?
+- How can tax and budget information be explained in simple English or Urdu?
 
----
+The app is split into two main parts:
 
-## ✨ Key Features
-
-### 📊 Budget Intelligence Dashboard
-- **Real FY2025-26 budget data** parsed directly from the official Ministry of Finance Excel files (43 ministries, PKR 17.0 trillion total)
-- 3-year comparison: FY2023-24 → FY2024-25 → FY2025-26
-- Year-over-year change indicators per ministry
-- Export to CSV for researchers and journalists
-
-### 🤖 AI Budget Assistant (Bilingual)
-- Ask questions in **English, Urdu, or Roman Urdu**
-- AI-powered responses with real budget figures cited from Finance Division, GoP
-- **Dual AI engine**: Google Gemini 1.5 Flash (primary) → Groq LLaMA3-70B (automatic fallback)
-- Intent-routing for 10+ budget topic keywords without wasting API calls
-
-### 🏛️ WakalaCheck — MNA Accountability
-- 31 members of the 16th National Assembly with attendance, bills, and questions data
-- **AI Performance Rating** (Grade A–F with English + Urdu assessment)
-- Parliamentary voting records on 5 key bills (Finance Act, Education Reform, Cybercrime, etc.)
-- Province and constituency filters + city-level constituency selector
-- **MNA Leaderboard** sortable by attendance, bills sponsored, questions raised
-- Source: National Assembly of Pakistan — [na.gov.pk](https://na.gov.pk)
-
-### 📄 AI Legislative Bill Summarizer
-- Drag-and-drop PDF upload of any National Assembly bill
-- AI extracts and summarizes in 3 plain-language sentences in English + Urdu
-- Powered by Gemini → Groq fallback chain
-
-### ⚖️ Budget Comparator
-- Side-by-side ministry comparison across all 3 budget years
-- Sector-level YoY change chart (Education, Health, Defence, Railways, etc.)
-- Real figures computed from actual budget data
-
-### 💡 Personalized Budget Insights
-- Select your province + sector of interest
-- AI explains how the FY2025-26 budget affects you specifically
+- Backend API: budget parsing, MNA data, and AI routes
+- Frontend app: dashboard, explorer, compare, WakalaCheck, tax calculator, and bill summarizer
 
 ---
 
-## 🛠️ Tech Stack
+## ✨ Highlights
 
-| Layer | Technology |
-|-------|-----------|
-| Frontend | React 18, TypeScript, Vite 5 |
-| Styling | Vanilla CSS + custom design system (glassmorphism, dark mode) |
-| Animations | Framer Motion |
-| Charts | Recharts |
-| State | TanStack Query v5 |
-| Backend | Node.js, Express 4, TypeScript |
-| AI Primary | Google Gemini 1.5 Flash |
-| AI Fallback | Groq LLaMA3-70B-8192 |
-| PDF Parsing | pdf-parse |
-| Budget Data | xlsx (official MoF Excel files) |
+- Real FY2023-24, FY2024-25, FY2025-26 budget data from the official Ministry of Finance Excel files
+- AI-assisted explanations in English and Urdu using Gemini + Groq fallback
+- MNA accountability flow with constituency and member lookup
+- Bill summarizer for legislative PDFs
+- Tax calculator and shareable summary cards for civic communication
 
 ---
 
-## 📁 Data Sources
+## 📸 Screenshots
 
-| Source | URL | Usage |
-|--------|-----|-------|
-| Ministry of Finance, GoP | [finance.gov.pk](https://www.finance.gov.pk) | Budget Excel files FY2023-24, FY2024-25, FY2025-26 |
-| National Assembly of Pakistan | [na.gov.pk](https://na.gov.pk) | MNA profiles, attendance, voting records |
-| Planning Division, GoP | [pc.gov.pk](https://www.pc.gov.pk) | PSDP allocations data |
+The repository includes sample visuals under the figures folder:
+
+- ![Overview](budgetlens/frontend/public/figures/screenshot_2020.png)
+- ![Dashboard view](budgetlens/frontend/public/figures/screenshot_2021.png)
+- ![Budget comparison](budgetlens/frontend/public/figures/screenshot_2022.png)
 
 ---
 
-## 🚀 Quick Start
+## 🧩 Current app structure
+
+```text
+Pakistan-national-budgets/
+└── budgetlens/
+    ├── backend/
+    │   ├── data/
+    │   │   ├── 2023_2024/
+    │   │   ├── 2024_2025/
+    │   │   └── 2025_2026/
+    │   └── src/
+    └── frontend/
+        ├── public/
+        │   └── figures/    # screenshots used in demos and presentation
+        └── src/
+```
+
+Inside the app folder:
+
+```text
+budgetlens/backend/
+├── src/
+│   ├── index.ts
+│   ├── routes/
+│   │   ├── ai.ts
+│   │   ├── budget.ts
+│   │   └── mna.ts
+│   └── lib/
+│       ├── dataLoader.ts
+│       └── naScraper.ts
+└── package.json
+
+budgetlens/frontend/
+├── src/
+│   ├── App.tsx
+│   ├── components/
+│   ├── context/
+│   ├── i18n/
+│   ├── lib/
+│   └── pages/
+└── package.json
+```
+
+---
+
+## 🚀 Run locally
 
 ### Prerequisites
+
 - Node.js 18+
 - npm 9+
-- Google Gemini API key (free at [aistudio.google.com](https://aistudio.google.com/app/apikey))
-- Groq API key (free tier at [console.groq.com](https://console.groq.com/keys))
+- Gemini API key
+- Groq API key (optional fallback)
 
-### 1. Clone & Install
+### 1) Install dependencies
 
 ```bash
-git clone https://github.com/Saad140606/AI-CIVIC-HACKATHON
-cd Pakistan-national-budgets/budgetlens
+cd budgetlens/backend
+npm install
 
-# Install backend dependencies
-cd backend && npm install
-
-# Install frontend dependencies
-cd ../frontend && npm install
+cd ../frontend
+npm install
 ```
 
-### 2. Configure Environment
+### 2) Configure environment
 
 ```bash
-cd backend
+cd ../backend
 cp .env.example .env
-# Edit .env and fill in your API keys:
-# GEMINI_API_KEY=your_key_here
-# GROQ_API_KEY=your_key_here
 ```
 
-### 3. Run Development Servers
+Fill in the keys in the backend `.env` file:
 
-**Terminal 1 — Backend (port 3001):**
+```env
+GEMINI_API_KEY=your_key_here
+GROQ_API_KEY=your_key_here
+```
+
+### 3) Start the app
+
+Terminal 1 — backend
+
 ```bash
 cd budgetlens/backend
 npm run dev
 ```
 
-**Terminal 2 — Frontend (port 5173):**
+Terminal 2 — frontend
+
 ```bash
 cd budgetlens/frontend
 npm run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173)
+Open the frontend at:
 
----
-
-## 🗂️ Project Structure
-
-```
-budgetlens/
-├── backend/
-│   ├── src/
-│   │   ├── index.ts              # Express app entry point
-│   │   ├── routes/
-│   │   │   ├── ai.ts             # AI endpoints (Gemini→Groq fallback)
-│   │   │   ├── budget.ts         # Budget data endpoints
-│   │   │   └── mna.ts            # MNA data endpoints
-│   │   └── lib/
-│   │       ├── dataLoader.ts     # Excel budget data parser
-│   │       └── naScraper.ts      # MNA data (16th NA seed + auto voting records)
-│   └── .env.example              # Environment variable template
-├── frontend/
-│   └── src/
-│       ├── pages/
-│       │   ├── Dashboard.tsx     # Main budget overview
-│       │   ├── MinistryExplorer.tsx  # Detailed ministry drill-down
-│       │   ├── Compare.tsx       # Year-over-year comparison
-│       │   └── WakalaCheck.tsx   # MNA accountability platform
-│       └── components/
-│           ├── ChatBar.tsx       # Floating AI chat interface
-│           └── HeroStats.tsx     # Key budget statistics banner
-└── data/
-    ├── budget_2023_24.xlsx
-    ├── budget_2024_25.xlsx
-    └── budget_2025_26.xlsx       # Real FY25-26 budget data
+```text
+http://localhost:5173
 ```
 
 ---
 
-## 🔒 Security
+## 📊 Data sources
 
-- API keys are stored in `.env` (git-ignored — never committed)
-- Use `.env.example` as a template only
-- AI fallback chain ensures the app works even if one provider is down
+| Source | Purpose |
+|---|---|
+| Ministry of Finance, Government of Pakistan | FY2023-24, FY2024-25, FY2025-26 budget figures |
+| National Assembly of Pakistan | MNA profiles, attendance, and parliamentary accountability data |
+| Government of Pakistan open budget documents | Supporting civic finance context |
 
 ---
 
-## 📊 Budget Data Notes
+## 🔐 Security note
 
-All budget figures are in **PKR Billions**. The FY2025-26 Excel file stores values in **PKR Millions**, which is automatically converted by the data loader (`× 1,000,000 ÷ 1,000,000,000` = `÷ 1,000`).
-
-**FY2025-26 Summary:**
-- Total Federal Budget: **~PKR 17.0 trillion** (PKR 16,995 billion)
-- Largest allocation: Debt Servicing (~52% of total)
-- 43 ministries/divisions tracked
+API keys are stored in the backend `.env` file and should not be committed to version control.
 
 ---
 
 ## 👥 Team
 
-Built for the **AI for Civic Innovation Hackathon 2025** by students passionate about government transparency and open data in Pakistan.
-Saad Najam - Student at FAST NUCES KARACHI
-Nabeel Ali - Student at FAST NUCES KARACHI
+Built for the **AI for Civic Innovation Hackathon 2025** by the Pakistan National Budgets team, including Saad Najam and Nabeel Ali from FAST NUCES Karachi.
+
 ---
 
 ## 📜 License
 
-MIT License — open for civic use, research, and education.
+MIT License — intended for civic use, research, and education.
 
-Data sourced from Government of Pakistan official publications. All budget figures are public domain.
