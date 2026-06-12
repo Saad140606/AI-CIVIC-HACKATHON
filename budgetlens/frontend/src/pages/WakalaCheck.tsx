@@ -27,7 +27,7 @@ export const AttendanceRing: React.FC<{ percent: number; size?: number }> = ({ p
         x="50%" y="50%" dominantBaseline="middle" textAnchor="middle"
         fill={color} fontSize={size * 0.22} fontWeight="bold"
         style={{ transform: `rotate(90deg) translate(0, -${size}px)`, transformOrigin: 'center' }}
-      />
+      >{percent}%</text>
     </svg>
   );
 };

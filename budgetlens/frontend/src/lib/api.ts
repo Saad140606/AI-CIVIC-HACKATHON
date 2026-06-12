@@ -66,6 +66,11 @@ export const aiApi = {
     strengths: string[]; weaknesses: string[];
     recommendation: string; full?: string; mock?: boolean;
   }>('/ai/rate-mna', params).then(r => r.data),
+  summarizeBill: (fileBase64: string) =>
+    api.post<{ english: string; urdu: string; full?: string; mock?: boolean }>(
+      '/ai/summarize-bill',
+      { fileBase64 }
+    ).then(r => r.data),
 };
 
 // MNA Types

@@ -1,60 +1,199 @@
-# Pakistan Budgets
+# 🇵🇰 WakalaLens Pakistan — AI Civic Budget Intelligence Platform
 
-The interactive visualizations can be viewed here: 
+> **AI FOR CIVIC INNOVATION HACKATHON 2025 Submission**
+> _Open data + AI to make Pakistan's federal budget understandable for every citizen_
 
-*  [2024-25](https://public.flourish.studio/visualisation/18741763/) 
-*  [2023-24](https://public.flourish.studio/visualisation/14291446/) 
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-18-61DAFB?logo=react)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite-5-646CFF?logo=vite)](https://vitejs.dev/)
+[![Express](https://img.shields.io/badge/Express-4-black?logo=express)](https://expressjs.com/)
+[![Gemini](https://img.shields.io/badge/AI-Gemini%201.5%20Flash-4285F4?logo=google)](https://ai.google.dev/)
+[![Groq](https://img.shields.io/badge/Fallback-Groq%20LLaMA3-F54B26)](https://groq.com/)
 
+---
 
-and the partial data files can be downloaded here:
+## 🎯 Problem Statement
 
-*   [2024-25](./2024_2025)
-*   [2023-24](./2023_2024)
+Pakistan's federal budget is released as hundreds of pages of dense PDFs. Ordinary citizens — farmers, teachers, shopkeepers — cannot understand how PKR 17 trillion in public money is allocated, which MNA voted for what, or how the budget affects them personally.
 
+**WakalaLens Pakistan** solves this with an open-data AI platform that translates government budget data into plain English and Urdu.
 
-## Background
+---
 
-This repository scrapes data from federal budgets that are released as PDFs by the [Ministry of Finance, Government of Pakistan](https://www.finance.gov.pk/)
+## ✨ Key Features
 
-Individual budget files are in their respective folders. 
+### 📊 Budget Intelligence Dashboard
+- **Real FY2025-26 budget data** parsed directly from the official Ministry of Finance Excel files (43 ministries, PKR 17.0 trillion total)
+- 3-year comparison: FY2023-24 → FY2024-25 → FY2025-26
+- Year-over-year change indicators per ministry
+- Export to CSV for researchers and journalists
 
-Note that numbers are added up from the lowest `ID6` category. If the lowest category is missing in the published budgets, then this will be automatically missing from the tables. These entries are relatively few though and are updated as the budget files are revised. 
+### 🤖 AI Budget Assistant (Bilingual)
+- Ask questions in **English, Urdu, or Roman Urdu**
+- AI-powered responses with real budget figures cited from Finance Division, GoP
+- **Dual AI engine**: Google Gemini 1.5 Flash (primary) → Groq LLaMA3-70B (automatic fallback)
+- Intent-routing for 10+ budget topic keywords without wasting API calls
 
-Also note that actual spending can be different than the allocated amount. This can be checked in budget files which also provide allocation and revised numbers for *(N-1)* fiscal year.
+### 🏛️ WakalaCheck — MNA Accountability
+- 31 members of the 16th National Assembly with attendance, bills, and questions data
+- **AI Performance Rating** (Grade A–F with English + Urdu assessment)
+- Parliamentary voting records on 5 key bills (Finance Act, Education Reform, Cybercrime, etc.)
+- Province and constituency filters + city-level constituency selector
+- **MNA Leaderboard** sortable by attendance, bills sponsored, questions raised
+- Source: National Assembly of Pakistan — [na.gov.pk](https://na.gov.pk)
 
-*Disclaimer*: The files are generated using pattern recognition scripts which had to be fine tuned over several iterations. The files can contain errors. If you come across data issues, then please report them as soon as possible. This is a hobby project to improve my data scraping skills. Therefore, if you intend to use this data for research and policy work, please double check the original source files. Also note that budget files are intermittently updated so the data might only reflect the version downloaded at the time of scraping the data. A full cleaning is possible but this requires a proper fully-funded project. 
+### 📄 AI Legislative Bill Summarizer
+- Drag-and-drop PDF upload of any National Assembly bill
+- AI extracts and summarizes in 3 plain-language sentences in English + Urdu
+- Powered by Gemini → Groq fallback chain
 
+### ⚖️ Budget Comparator
+- Side-by-side ministry comparison across all 3 budget years
+- Sector-level YoY change chart (Education, Health, Defence, Railways, etc.)
+- Real figures computed from actual budget data
 
+### 💡 Personalized Budget Insights
+- Select your province + sector of interest
+- AI explains how the FY2025-26 budget affects you specifically
 
+---
 
-## Description of the variables
+## 🛠️ Tech Stack
 
-| Variable | Type | Description | 
-| --- | --- | --- |
-| `fund` | num | Name of the fund e.g. current expenditure, capital expenditure, consolidated funds etc. | 
-| `ministry_name` | str | Ministry name | 
-| `division_name` | str | Name of the division | 
-| `ID1_name` | str | Name of the first level  | 
-| `ID2_name` | str | Name of the second level   | 
-| `ID3_name` | str | Name of the third level   | 
-| `ID4_name` | str | Name of the fourth level   | 
-| `ID5_name` | str | Name of the fifth level   | 
-| `ID6_name` | str | Name of the sixth (lowest) level   | 
-| `posts_<N-1>` | num | The number of posts (jobs) in year **N-1**.  | 
-| `posts_<N>` | num | The number of posts (jobs) in year **N**.  | 
-| `budget_<N-1>` | num | The value in PKR of item `ID6` in fiscal year **N-1**. | 
-| `budget_<N-1>_revised` | num | The value in PKR of item `ID6` revised in fiscal year **N-1**. | 
-| `budget_<N>` | num | The value in PKR of item `ID6` in fiscal year **N**. | 
+| Layer | Technology |
+|-------|-----------|
+| Frontend | React 18, TypeScript, Vite 5 |
+| Styling | Vanilla CSS + custom design system (glassmorphism, dark mode) |
+| Animations | Framer Motion |
+| Charts | Recharts |
+| State | TanStack Query v5 |
+| Backend | Node.js, Express 4, TypeScript |
+| AI Primary | Google Gemini 1.5 Flash |
+| AI Fallback | Groq LLaMA3-70B-8192 |
+| PDF Parsing | pdf-parse |
+| Budget Data | xlsx (official MoF Excel files) |
 
+---
 
+## 📁 Data Sources
 
+| Source | URL | Usage |
+|--------|-----|-------|
+| Ministry of Finance, GoP | [finance.gov.pk](https://www.finance.gov.pk) | Budget Excel files FY2023-24, FY2024-25, FY2025-26 |
+| National Assembly of Pakistan | [na.gov.pk](https://na.gov.pk) | MNA profiles, attendance, voting records |
+| Planning Division, GoP | [pc.gov.pk](https://www.pc.gov.pk) | PSDP allocations data |
 
-## Change log
-* 22 Jul 2024: Homogenization of ministry and division names in the FY2024 file. Name misalignments were resulting in wrong and/or multiple ministry-division mappings.
-* 20 Jul 2024: Budgets for FY2023 and FY2024 added. Previous years removed due to a cleaning issue. Might be added later.
-* 03 Jul 2022: Budget for the year 2022-2023 added.
-* 07 Jul 2021: Budget for the year 2020-2021 added. Fund categories added. Minor fixes to categories. In order to merge the different budget years, a careful look at the sub-categories are needed. Especially if the category IDs are changing over time. 
-* 06 Jul 2021: The format of the budgets have changed after they were approved in the Assembly. They no longer contain information on the previous year. I have redone 2021-22 budgets and have added the names of the ministries and the Demand for grant categories. This should give a better overall picture. The visualization for 2021-22 budget has also been upgraded. 2020-21 files have been removed for now and will be added back once the files are updated.
-* 28 Jun 2021: Documentation added for the tables in the markdown. Page description improved considerably.
-* 26 Jun 2021: Budget for 2021-2022 is scrapped from PDFs. The scripts are improved to weed out the errors in data matching. Some `1D6` categories were being skipped since the columns were messed up. The other main issues was that entries with single columns were not being assigned to the correct column. While most fit a generic pattern, not all might end up in the correct column. This was the bulk of the fine tuning. These should be extremely few and should ONLY matter if analyzing the data at the highest level of disaggregation, i.e. `ID6`. Please report these if you find them.
-* Jul 2020: Budget for 2020-2021 is scrapped from PDFs. The core scripts are put in place to sort and order the table entries. 
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Node.js 18+
+- npm 9+
+- Google Gemini API key (free at [aistudio.google.com](https://aistudio.google.com/app/apikey))
+- Groq API key (free tier at [console.groq.com](https://console.groq.com/keys))
+
+### 1. Clone & Install
+
+```bash
+git clone https://github.com/Saad140606/AI-CIVIC-HACKATHON
+cd Pakistan-national-budgets/budgetlens
+
+# Install backend dependencies
+cd backend && npm install
+
+# Install frontend dependencies
+cd ../frontend && npm install
+```
+
+### 2. Configure Environment
+
+```bash
+cd backend
+cp .env.example .env
+# Edit .env and fill in your API keys:
+# GEMINI_API_KEY=your_key_here
+# GROQ_API_KEY=your_key_here
+```
+
+### 3. Run Development Servers
+
+**Terminal 1 — Backend (port 3001):**
+```bash
+cd budgetlens/backend
+npm run dev
+```
+
+**Terminal 2 — Frontend (port 5173):**
+```bash
+cd budgetlens/frontend
+npm run dev
+```
+
+Open [http://localhost:5173](http://localhost:5173)
+
+---
+
+## 🗂️ Project Structure
+
+```
+budgetlens/
+├── backend/
+│   ├── src/
+│   │   ├── index.ts              # Express app entry point
+│   │   ├── routes/
+│   │   │   ├── ai.ts             # AI endpoints (Gemini→Groq fallback)
+│   │   │   ├── budget.ts         # Budget data endpoints
+│   │   │   └── mna.ts            # MNA data endpoints
+│   │   └── lib/
+│   │       ├── dataLoader.ts     # Excel budget data parser
+│   │       └── naScraper.ts      # MNA data (16th NA seed + auto voting records)
+│   └── .env.example              # Environment variable template
+├── frontend/
+│   └── src/
+│       ├── pages/
+│       │   ├── Dashboard.tsx     # Main budget overview
+│       │   ├── MinistryExplorer.tsx  # Detailed ministry drill-down
+│       │   ├── Compare.tsx       # Year-over-year comparison
+│       │   └── WakalaCheck.tsx   # MNA accountability platform
+│       └── components/
+│           ├── ChatBar.tsx       # Floating AI chat interface
+│           └── HeroStats.tsx     # Key budget statistics banner
+└── data/
+    ├── budget_2023_24.xlsx
+    ├── budget_2024_25.xlsx
+    └── budget_2025_26.xlsx       # Real FY25-26 budget data
+```
+
+---
+
+## 🔒 Security
+
+- API keys are stored in `.env` (git-ignored — never committed)
+- Use `.env.example` as a template only
+- AI fallback chain ensures the app works even if one provider is down
+
+---
+
+## 📊 Budget Data Notes
+
+All budget figures are in **PKR Billions**. The FY2025-26 Excel file stores values in **PKR Millions**, which is automatically converted by the data loader (`× 1,000,000 ÷ 1,000,000,000` = `÷ 1,000`).
+
+**FY2025-26 Summary:**
+- Total Federal Budget: **~PKR 17.0 trillion** (PKR 16,995 billion)
+- Largest allocation: Debt Servicing (~52% of total)
+- 43 ministries/divisions tracked
+
+---
+
+## 👥 Team
+
+Built for the **AI for Civic Innovation Hackathon 2025** by students passionate about government transparency and open data in Pakistan.
+
+---
+
+## 📜 License
+
+MIT License — open for civic use, research, and education.
+
+Data sourced from Government of Pakistan official publications. All budget figures are public domain.

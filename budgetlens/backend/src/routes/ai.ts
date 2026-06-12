@@ -1,9 +1,12 @@
 import { Router, Request, Response } from 'express';
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import Groq from 'groq-sdk';
 import { loadBudgetData } from '../lib/dataLoader';
 import * as pdfParse from 'pdf-parse';
 
 const router = Router();
+
+// ── AI provider helpers ───────────────────────────────────────────────────────
 
 function getGenAI() {
   const apiKey = process.env.GEMINI_API_KEY;
@@ -13,7 +16,102 @@ function getGenAI() {
   return new GoogleGenerativeAI(apiKey);
 }
 
-// POST /api/ai/explain
+function getGroq() {
+  const apiKey = process.env.GROQ_API_KEY;
+  if (!apiKey || apiKey === 'your_groq_api_key_here') {
+    throw new Error('GROQ_API_KEY not configured');
+  }
+  return new Groq({ apiKey });
+}
+
+/**
+ * Try Gemini → fall back to Groq → throw if both fail.
+ * Returns { text, provider } so callers know which succeeded.
+ */
+async function generateText(prompt: string): Promise<{ text: string; provider: 'gemini' | 'groq' }> {
+  // ── 1. Try Gemini ────────────────────────────────────────────────────────
+  try {
+    const genAI = getGenAI();
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const result = await model.generateContent(prompt);
+    return { text: result.response.text(), provider: 'gemini' };
+  } catch (geminiErr: any) {
+    console.warn('⚠️  Gemini failed, trying Groq:', geminiErr.message);
+  }
+
+  // ── 2. Try Groq ──────────────────────────────────────────────────────────
+  try {
+    const groq = getGroq();
+    const completion = await groq.chat.completions.create({
+      model: 'llama3-70b-8192',
+      messages: [{ role: 'user', content: prompt }],
+      max_tokens: 1024,
+      temperature: 0.7,
+    });
+    const text = completion.choices[0]?.message?.content || '';
+    return { text, provider: 'groq' };
+  } catch (groqErr: any) {
+    console.warn('⚠️  Groq also failed:', groqErr.message);
+    throw new Error(`Both Gemini and Groq failed. Gemini: ${(groqErr as any)?.message}`);
+  }
+}
+
+/**
+ * Multi-turn chat: Gemini first, then Groq (which doesn't support multi-turn
+ * natively so we flatten history into a single prompt).
+ */
+async function chatText(
+  systemPrompt: string,
+  history: Array<{ role: string; text: string }>,
+  userMessage: string
+): Promise<{ text: string; provider: 'gemini' | 'groq' }> {
+  // ── 1. Try Gemini ────────────────────────────────────────────────────────
+  try {
+    const genAI = getGenAI();
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const conversationHistory = history.map(h => ({
+      role: h.role === 'user' ? 'user' : 'model',
+      parts: [{ text: h.text }],
+    }));
+    const chat = model.startChat({
+      history: [
+        { role: 'user', parts: [{ text: systemPrompt }] },
+        { role: 'model', parts: [{ text: 'I understand. I am BudgetLens AI, ready to help Pakistani citizens understand the federal budget. I will always cite Finance Division, GoP as the source for budget figures.' }] },
+        ...conversationHistory,
+      ],
+    });
+    const result = await chat.sendMessage(userMessage);
+    return { text: result.response.text(), provider: 'gemini' };
+  } catch (geminiErr: any) {
+    console.warn('⚠️  Gemini chat failed, trying Groq:', geminiErr.message);
+  }
+
+  // ── 2. Try Groq (flatten to single prompt) ───────────────────────────────
+  try {
+    const groq = getGroq();
+    const messages: Groq.Chat.ChatCompletionMessageParam[] = [
+      { role: 'system', content: systemPrompt },
+      ...history.map(h => ({
+        role: (h.role === 'user' ? 'user' : 'assistant') as 'user' | 'assistant',
+        content: h.text,
+      })),
+      { role: 'user', content: userMessage },
+    ];
+    const completion = await groq.chat.completions.create({
+      model: 'llama3-70b-8192',
+      messages,
+      max_tokens: 1024,
+      temperature: 0.7,
+    });
+    const text = completion.choices[0]?.message?.content || '';
+    return { text, provider: 'groq' };
+  } catch (groqErr: any) {
+    console.warn('⚠️  Groq chat also failed:', groqErr.message);
+    throw new Error('Both Gemini and Groq failed for chat');
+  }
+}
+
+// ── POST /api/ai/explain ──────────────────────────────────────────────────────
 router.post('/explain', async (req: Request, res: Response) => {
   try {
     const { ministry, budget, year } = req.body as { ministry: string; budget: number; year: string };
@@ -22,7 +120,7 @@ router.post('/explain', async (req: Request, res: Response) => {
       return res.status(400).json({ error: 'ministry is required' });
     }
 
-    const prompt = `Explain what the "${ministry}" does and what a PKR ${budget} billion budget allocation in ${year || 'Pakistan\'s federal budget'} means for ordinary Pakistani citizens. Answer in exactly 3 sentences in English, then provide the same 3-sentence explanation in Urdu (Roman Urdu or Nastaliq script). Be specific and relatable with real-world examples.`;
+    const prompt = `Explain what the "${ministry}" does and what a PKR ${budget} billion budget allocation in ${year || "Pakistan's federal budget"} means for ordinary Pakistani citizens. Answer in exactly 3 sentences in English, then provide the same 3-sentence explanation in Urdu (Roman Urdu or Nastaliq script). Be specific and relatable with real-world examples.`;
 
     const getMockResponse = () => ({
       english: `The ${ministry} is a key government department responsible for managing important national affairs. With PKR ${budget} billion allocated, this ministry can fund critical public services and infrastructure projects. This investment directly impacts the daily lives of millions of Pakistani citizens through improved services and facilities.`,
@@ -31,19 +129,13 @@ router.post('/explain', async (req: Request, res: Response) => {
     });
 
     try {
-      const genAI = getGenAI();
-      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
-      const result = await model.generateContent(prompt);
-      const text = result.response.text();
-
-      // Split English and Urdu portions
+      const { text } = await generateText(prompt);
       const parts = text.split(/(?=[\u0600-\u06FF]|اردو:|Urdu:|---)/i);
       const english = parts[0]?.trim() || text;
       const urdu = parts[1]?.trim() || '';
-
       return res.json({ english, urdu, full: text });
     } catch (err: any) {
-      console.warn('AI explain failed, falling back to mock:', err.message);
+      console.warn('AI explain: both providers failed, using mock:', err.message);
       return res.json(getMockResponse());
     }
   } catch (err: any) {
@@ -52,7 +144,7 @@ router.post('/explain', async (req: Request, res: Response) => {
   }
 });
 
-// POST /api/ai/chat
+// ── POST /api/ai/chat ─────────────────────────────────────────────────────────
 router.post('/chat', async (req: Request, res: Response) => {
   try {
     const { message, history } = req.body as { message: string; history?: Array<{ role: string; text: string }> };
@@ -62,9 +154,8 @@ router.post('/chat', async (req: Request, res: Response) => {
     }
 
     const data = await loadBudgetData();
-    const userMsg = message.toLowerCase().trim();
 
-    // ── Helper: find ministry total by keyword ───────────────────────────
+    // ── Helper: find ministry total by keyword ────────────────────────────
     const findMinistry = (keyword: string) =>
       data.fy2526.find(m => m.ministry.toLowerCase().includes(keyword));
 
@@ -88,7 +179,7 @@ router.post('/chat', async (req: Request, res: Response) => {
       });
     }
 
-    // ── Intent: Education ──────────────────────────────────────────────
+    // ── Intent: Education ────────────────────────────────────────────────
     if (/education|taleem|تعلیم|hec|higher education|school|university/i.test(message)) {
       const edu = findMinistry('education');
       const chg = changeVs2425('education');
@@ -97,7 +188,7 @@ router.post('/chat', async (req: Request, res: Response) => {
       });
     }
 
-    // ── Intent: Health ──────────────────────────────────────────────────
+    // ── Intent: Health ────────────────────────────────────────────────────
     if (/health|sehat|صحت|hospital|nhsrc|seha|medical/i.test(message)) {
       const health = findMinistry('health');
       const chg = changeVs2425('health');
@@ -106,7 +197,7 @@ router.post('/chat', async (req: Request, res: Response) => {
       });
     }
 
-    // ── Intent: Defence / Defence ──────────────────────────────────────
+    // ── Intent: Defence ───────────────────────────────────────────────────
     if (/defence|defense|defa|فوج|دفاع|military|army|armed forces/i.test(message)) {
       const def = findMinistry('defence');
       const chg = changeVs2425('defence');
@@ -115,14 +206,14 @@ router.post('/chat', async (req: Request, res: Response) => {
       });
     }
 
-    // ── Intent: Karachi / city-level ──────────────────────────────────
+    // ── Intent: Karachi ───────────────────────────────────────────────────
     if (/karachi|کراچی/i.test(message)) {
       return res.json({
         response: `**Karachi Development (FY2025-26 PSDP allocations):**\n• **Roads & highways (NHA):** PKR 18 billion\n• **Water supply projects (CDA/K-W&S):** PKR 12 billion\n• **Urban transport & metro:** PKR 15 billion\n• **Karachi Circular Railway (KCR) revival:** PKR 8 billion\n\n**Total estimated Karachi share: ~PKR 53 billion**\n\nNote: Federal PSDP allocations for Sindh (Karachi's province) total PKR 140+ billion in FY2025-26.\n\n**Source: Planning Division, GoP — pc.gov.pk**\n\n---\n\n**کراچی ترقیاتی بجٹ (PSDP 2025-26):**\n• سڑکیں: 18 ارب\n• پانی: 12 ارب\n• ٹرانسپورٹ: 15 ارب\n• کراچی سرکلر ریلوے: 8 ارب\n\nکراچی کا تخمینی حصہ: 53+ ارب روپے`
       });
     }
 
-    // ── Intent: NFC / Provinces ────────────────────────────────────────
+    // ── Intent: NFC / Provinces ───────────────────────────────────────────
     if (/nfc|province|صوبہ|صوبوں|transfer|punj|sindh|baloch|kpk/i.test(message)) {
       const nfc = findMinistry('provinces') ?? findMinistry('transfer') ?? findMinistry('nfc');
       return res.json({
@@ -130,7 +221,7 @@ router.post('/chat', async (req: Request, res: Response) => {
       });
     }
 
-    // ── Intent: PSDP / Development ────────────────────────────────────
+    // ── Intent: PSDP ─────────────────────────────────────────────────────
     if (/psdp|development|infrastructure|ترقی|بنیادی ڈھانچہ|منصوبے/i.test(message)) {
       const psdp = findMinistry('planning') ?? findMinistry('psdp');
       return res.json({
@@ -138,7 +229,7 @@ router.post('/chat', async (req: Request, res: Response) => {
       });
     }
 
-    // ── Intent: Debt servicing ─────────────────────────────────────────
+    // ── Intent: Debt servicing ────────────────────────────────────────────
     if (/debt|qarz|قرض|interest|markup|سود/i.test(message)) {
       const debt = findMinistry('debt');
       return res.json({
@@ -146,7 +237,7 @@ router.post('/chat', async (req: Request, res: Response) => {
       });
     }
 
-    // ── Intent: Year comparison ───────────────────────────────────────
+    // ── Intent: Year comparison ───────────────────────────────────────────
     if (/compare|comparison|vs|versus|muqabla|موازنہ|2324|2425|2526|fy23|fy24|fy25/i.test(message)) {
       const t2324 = data.fy2324.reduce((s, m) => s + m.total, 0);
       const t2425 = data.fy2425.reduce((s, m) => s + m.total, 0);
@@ -156,10 +247,10 @@ router.post('/chat', async (req: Request, res: Response) => {
       });
     }
 
-    // ── Build full budget context for Gemini ─────────────────────────
+    // ── Build full budget context for AI ─────────────────────────────────
     const budgetContext = data.fy2526
       .slice(0, 20)
-      .map(m => `${m.ministry}: PKR ${m.total} billion`)
+      .map(m => `${m.ministry}: PKR ${m.total.toFixed(1)} billion`)
       .join('\n');
 
     const systemPrompt = `You are BudgetLens AI, a helpful assistant for Pakistan's federal budget. You explain budget data to ordinary Pakistani citizens in simple language. You can answer in both English and Urdu (Roman Urdu or Nastaliq). Be friendly, informative, and use relatable examples.
@@ -176,38 +267,20 @@ Answer the user's question based on this data. Always cite "Source: Finance Divi
     const getMockResponse = () => ({
       response: `میں آپ کی بات سمجھ گیا! (I understand your question about: "${message}") 
 
-To enable full AI responses, please add your GEMINI_API_KEY to the backend .env file. 
-
 Based on available real budget data (Source: Finance Division, GoP):
 • FY2025-26 total budget: PKR ${Math.round(data.fy2526.reduce((s, m) => s + m.total, 0))} billion
 • Education: PKR ${data.fy2526.find(m => m.ministry.toLowerCase().includes('education'))?.total?.toFixed(1) ?? '212'} billion
-• Defence: PKR ${data.fy2526.find(m => m.ministry.toLowerCase().includes('defence'))?.total?.toFixed(1) ?? '2414'} billion`,
+• Defence: PKR ${data.fy2526.find(m => m.ministry.toLowerCase().includes('defence'))?.total?.toFixed(1) ?? '2414'} billion
+
+To enable richer AI responses, configure GEMINI_API_KEY or GROQ_API_KEY in backend/.env`,
       mock: true,
     });
 
     try {
-      const genAI = getGenAI();
-      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
-
-      const conversationHistory = (history || []).map(h => ({
-        role: h.role === 'user' ? 'user' : 'model',
-        parts: [{ text: h.text }],
-      }));
-
-      const chat = model.startChat({
-        history: [
-          { role: 'user', parts: [{ text: systemPrompt }] },
-          { role: 'model', parts: [{ text: 'I understand. I am BudgetLens AI, ready to help Pakistani citizens understand the federal budget. I will always cite Finance Division, GoP as the source for budget figures.' }] },
-          ...conversationHistory,
-        ],
-      });
-
-      const result = await chat.sendMessage(message);
-      const response = result.response.text();
-
-      return res.json({ response });
+      const { text } = await chatText(systemPrompt, history || [], message);
+      return res.json({ response: text });
     } catch (err: any) {
-      console.warn('AI chat failed, falling back to mock:', err.message);
+      console.warn('AI chat: both providers failed, using mock:', err.message);
       return res.json(getMockResponse());
     }
   } catch (err: any) {
@@ -216,18 +289,20 @@ Based on available real budget data (Source: Finance Division, GoP):
   }
 });
 
-// POST /api/ai/rate-mna
+// ── POST /api/ai/rate-mna ─────────────────────────────────────────────────────
 router.post('/rate-mna', async (req: Request, res: Response) => {
   try {
-    const { mnaName, mnaNameUrdu, constituency, party, attendancePercent,
+    const {
+      mnaName, mnaNameUrdu, constituency, party, attendancePercent,
       sessionsAttended, totalSessions, billsSponsored, billsPassed,
-      questionsRaised, role, terms } = req.body as {
-        mnaName: string; mnaNameUrdu?: string; constituency?: string;
-        party?: string; attendancePercent: number;
-        sessionsAttended?: number; totalSessions?: number;
-        billsSponsored?: number; billsPassed?: number;
-        questionsRaised?: number; role?: string; terms?: number;
-      };
+      questionsRaised, role, terms
+    } = req.body as {
+      mnaName: string; mnaNameUrdu?: string; constituency?: string;
+      party?: string; attendancePercent: number;
+      sessionsAttended?: number; totalSessions?: number;
+      billsSponsored?: number; billsPassed?: number;
+      questionsRaised?: number; role?: string; terms?: number;
+    };
 
     if (!mnaName || attendancePercent === undefined) {
       return res.status(400).json({ error: 'mnaName and attendancePercent are required' });
@@ -268,7 +343,7 @@ RECOMMENDATION: [one sentence]`;
       const grade = attendancePercent >= 80 ? 'A' : attendancePercent >= 65 ? 'B' : attendancePercent >= 50 ? 'C' : 'D';
       return {
         grade,
-        english: `${mnaName} has an attendance record of ${attendancePercent}%, which is ${attendancePercent >= 70 ? 'above' : 'below'} the assembly average. With ${billsSponsored || 0} bills sponsored and ${questionsRaised || 0} questions raised, their legislative engagement ${(questionsRaised || 0) > 20 ? 'demonstrates active participation' : 'shows room for improvement'}. Overall, their performance ${attendancePercent >= 65 ? 'represents a reasonable level of public service' : 'falls short of citizens\' expectations for their elected representative'}.`,
+        english: `${mnaName} has an attendance record of ${attendancePercent}%, which is ${attendancePercent >= 70 ? 'above' : 'below'} the assembly average. With ${billsSponsored || 0} bills sponsored and ${questionsRaised || 0} questions raised, their legislative engagement ${(questionsRaised || 0) > 20 ? 'demonstrates active participation' : 'shows room for improvement'}. Overall, their performance ${attendancePercent >= 65 ? 'represents a reasonable level of public service' : "falls short of citizens' expectations for their elected representative"}.`,
         urdu: `${mnaName} کی حاضری ${attendancePercent}% ہے، جو اسمبلی اوسط سے ${attendancePercent >= 70 ? 'زیادہ' : 'کم'} ہے۔ ${billsSponsored || 0} بل پیش کیے اور ${questionsRaised || 0} سوالات اٹھائے، ان کی قانون سازی ${(questionsRaised || 0) > 20 ? 'سرگرم شرکت ظاہر کرتی ہے' : 'میں بہتری کی گنجائش ہے'}۔ مجموعی طور پر ان کی کارکردگی ${attendancePercent >= 65 ? 'قابل قبول سطح کی عوامی خدمت کی نمائندگی کرتی ہے' : 'عوام کی توقعات پر پوری نہیں اترتی'}.`,
         strengths: attendancePercent >= 70 ? ['Regular assembly attendance', 'Active in legislative process'] : ['Has prior legislative experience', 'Constituency representation'],
         weaknesses: attendancePercent < 70 ? ['Below-average attendance record', 'Limited bill sponsorship'] : ['Could raise more questions', 'Bill pass rate needs improvement'],
@@ -278,12 +353,8 @@ RECOMMENDATION: [one sentence]`;
     };
 
     try {
-      const genAI = getGenAI();
-      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
-      const result = await model.generateContent(prompt);
-      const text = result.response.text();
+      const { text } = await generateText(prompt);
 
-      // Parse the structured response
       const gradeMatch = text.match(/GRADE:\s*([A-F][+\-]?)/i);
       const englishMatch = text.match(/ENGLISH:\s*([\s\S]*?)(?=URDU:|$)/i);
       const urduMatch = text.match(/URDU:\s*([\s\S]*?)(?=STRENGTHS:|$)/i);
@@ -311,7 +382,7 @@ RECOMMENDATION: [one sentence]`;
         full: text,
       });
     } catch (err: any) {
-      console.warn('AI rate-mna failed, falling back to mock:', err.message);
+      console.warn('AI rate-mna: both providers failed, using mock:', err.message);
       return res.json(getMockResponse());
     }
   } catch (err: any) {
@@ -320,7 +391,7 @@ RECOMMENDATION: [one sentence]`;
   }
 });
 
-// POST /api/ai/summarize-bill
+// ── POST /api/ai/summarize-bill ───────────────────────────────────────────────
 router.post('/summarize-bill', async (req: Request, res: Response) => {
   try {
     const { fileBase64 } = req.body as { fileBase64: string };
@@ -338,23 +409,17 @@ router.post('/summarize-bill', async (req: Request, res: Response) => {
 Bill text:
 ${text.slice(0, 8000)}`;
 
-    let genAI;
     try {
-      genAI = getGenAI();
-      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
-      const result = await model.generateContent(prompt);
-      const resText = result.response.text();
-
+      const { text: resText } = await generateText(prompt);
       const parts = resText.split(/(?=[\u0600-\u06FF]|اردو:|Urdu:|---)/i);
       const english = parts[0]?.trim() || resText;
       const urdu = parts[1]?.trim() || '';
-
       return res.json({ english, urdu, full: resText });
     } catch (err: any) {
-      console.warn('AI bill summary failed, falling back to mock:', err.message);
+      console.warn('AI bill summary: both providers failed, using mock:', err.message);
       return res.json({
-        english: "This bill proposes to establish a national framework for public service digitalization and governance improvements. It outlines key regulations to protect citizen privacy while enabling online access to government services. This will reduce administrative delays and make document applications easier for the public.",
-        urdu: "یہ بل سرکاری خدمات کو آن لائن فراہم کرنے کے لیے بنایا گیا ہے۔ اس کا مقصد شہریوں کے لیے شناختی دستاویزات اور سرٹیفکیٹ آن لائن حاصل کرنے کے طریقہ کار کو آسان بنانا ہے۔ یہ بل سرکاری دفاتر کے چکروں اور طویل تاخیر کو ختم کرنے میں مددگار ثابت ہوگا۔",
+        english: 'This bill proposes to establish a national framework for public service digitalization and governance improvements. It outlines key regulations to protect citizen privacy while enabling online access to government services. This will reduce administrative delays and make document applications easier for the public.',
+        urdu: 'یہ بل سرکاری خدمات کو آن لائن فراہم کرنے کے لیے بنایا گیا ہے۔ اس کا مقصد شہریوں کے لیے شناختی دستاویزات اور سرٹیفکیٹ آن لائن حاصل کرنے کے طریقہ کار کو آسان بنانا ہے۔ یہ بل سرکاری دفاتر کے چکروں اور طویل تاخیر کو ختم کرنے میں مددگار ثابت ہوگا۔',
         mock: true,
       });
     }

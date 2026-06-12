@@ -56,11 +56,16 @@ export interface MNASearchResult {
   name: string;
   nameUrdu: string;
   constituency: string;
+  constituencyUrdu?: string;
   party: string;
+  partyUrdu?: string;
   partyColor: string;
   province: string;
   attendancePercent: number;
   role?: string;
+  billsSponsored?: number;
+  billsPassed?: number;
+  questionsRaised?: number;
 }
 
 // ─── Comprehensive 16th National Assembly Seed Data ───────────────────────────
@@ -1054,11 +1059,16 @@ function toSearchResult(m: MNAProfile): MNASearchResult {
     name: m.name,
     nameUrdu: m.nameUrdu,
     constituency: m.constituency,
+    constituencyUrdu: m.constituencyUrdu,
     party: m.party,
+    partyUrdu: m.partyUrdu,
     partyColor: m.partyColor,
     province: m.province,
     attendancePercent: m.attendancePercent,
     role: m.role,
+    billsSponsored: m.billsSponsored,
+    billsPassed: m.billsPassed,
+    questionsRaised: m.questionsRaised,
   };
 }
 

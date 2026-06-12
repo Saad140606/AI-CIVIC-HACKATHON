@@ -129,7 +129,7 @@ function AppContent() {
                 <div className="w-2 h-2 rounded-full bg-[#00e676]" />
                 <div className="absolute inset-0 rounded-full bg-[#00e676] animate-pulse-slow opacity-50" />
               </div>
-              <span className="text-xs text-[#00e676] font-bold tracking-wide">LIVE</span>
+              <span className="text-xs text-[#00e676] font-bold tracking-wide">FY25-26</span>
             </motion.div>
 
             {/* Pakistan flag badge */}
