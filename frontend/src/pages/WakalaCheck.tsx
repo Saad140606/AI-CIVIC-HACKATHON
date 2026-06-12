@@ -747,7 +747,7 @@ const WakalaCheck: React.FC = () => {
             <motion.div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="p-6 rounded-3xl bg-gradient-to-br from-[#120726]/90 via-[#0a1628]/95 to-[#050c18] border border-[#7c3aed]/40 shadow-[0_12px_40px_rgba(124,58,237,0.15)] relative overflow-hidden"
+              className="p-6 rounded-3xl bg-gradient-to-br from-[#120726]/90 via-[#0a1628]/95 to-[#050c18] border border-[#7c3aed]/40 shadow-[0_12px_40px_rgba(124,58,237,0.15)] relative z-20"
             >
               {/* Background design accents */}
               <div className="absolute top-0 right-0 w-32 h-32 bg-[#7c3aed]/10 rounded-full blur-3xl pointer-events-none" />
@@ -768,7 +768,7 @@ const WakalaCheck: React.FC = () => {
 
                 {/* Big Search Input with Autocomplete */}
                 <div className="relative mt-5 max-w-xl mx-auto">
-                  <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none text-xl">
+                  <div className={`absolute inset-y-0 ${isUrdu ? 'right-4' : 'left-4'} flex items-center pointer-events-none text-xl`}>
                     🔍
                   </div>
                   <input
@@ -776,75 +776,83 @@ const WakalaCheck: React.FC = () => {
                     value={constituencyInput}
                     onChange={(e) => setConstituencyInput(e.target.value)}
                     placeholder={isUrdu ? 'اپنا حلقہ درج کریں (مثلاً NA-242 کراچی)' : 'Enter your constituency (e.g. NA-242 Karachi)'}
-                    className="w-full bg-[#060d1a]/90 border border-[#7c3aed]/30 hover:border-[#7c3aed]/60 focus:border-[#7c3aed] rounded-2xl py-4 pl-12 pr-4 text-base text-white placeholder:text-[#3a4558] focus:outline-none focus:ring-2 focus:ring-[#7c3aed]/20 shadow-[inset_0_2px_4px_rgba(0,0,0,0.6)] transition-all"
+                    className={`w-full bg-[#060d1a]/90 border border-[#7c3aed]/30 hover:border-[#7c3aed]/60 focus:border-[#7c3aed] rounded-2xl py-4 text-base text-white placeholder:text-[#3a4558] focus:outline-none focus:ring-2 focus:ring-[#7c3aed]/20 shadow-[inset_0_2px_4px_rgba(0,0,0,0.6)] transition-all ${isUrdu ? 'pr-12 pl-4' : 'pl-12 pr-4'}`}
                   />
                   
                   {/* Clear search button */}
                   {constituencyInput && (
                     <button
                       onClick={() => setConstituencyInput('')}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-[#5a6a7e] hover:text-white px-2 py-1 rounded bg-white/5 transition-colors"
+                      className={`absolute top-1/2 -translate-y-1/2 text-xs text-[#5a6a7e] hover:text-white px-2 py-1 rounded bg-white/5 transition-colors ${isUrdu ? 'left-4' : 'right-4'}`}
                     >
                       {isUrdu ? 'صاف کریں' : 'Clear'}
                     </button>
                   )}
 
                   {/* Autocomplete Dropdown List */}
-                  {constituencyInput.trim() && (
-                    <div className="absolute z-50 left-0 right-0 mt-2 rounded-2xl border border-[#1e3a5f]/60 bg-[#0d1b2e] shadow-[0_15px_50px_rgba(0,0,0,0.8)] overflow-hidden max-h-60 overflow-y-auto custom-scrollbar">
-                      {(() => {
-                        const matches = allMembers.filter(m =>
-                          m.constituency.toLowerCase().includes(constituencyInput.trim().toLowerCase()) ||
-                          m.name.toLowerCase().includes(constituencyInput.trim().toLowerCase()) ||
-                          (m.nameUrdu && m.nameUrdu.includes(constituencyInput.trim())) ||
-                          (m.constituencyUrdu && m.constituencyUrdu.includes(constituencyInput.trim()))
-                        );
-                        if (matches.length === 0) {
-                          return (
-                            <div className="p-4 text-xs text-[#7f8ea4] text-center">
-                              ❌ {isUrdu ? 'کوئی حلقہ یا رکن نہیں ملا' : 'No matching MNA or constituency found'}
-                            </div>
+                  <AnimatePresence>
+                    {constituencyInput.trim() && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.15 }}
+                        className="absolute z-50 left-0 right-0 mt-2 rounded-2xl border border-[#1e3a5f]/60 bg-[#0d1b2e] shadow-[0_15px_50px_rgba(0,0,0,0.8)] overflow-hidden max-h-60 overflow-y-auto custom-scrollbar"
+                      >
+                        {(() => {
+                          const matches = allMembers.filter(m =>
+                            m.constituency.toLowerCase().includes(constituencyInput.trim().toLowerCase()) ||
+                            m.name.toLowerCase().includes(constituencyInput.trim().toLowerCase()) ||
+                            (m.nameUrdu && m.nameUrdu.includes(constituencyInput.trim())) ||
+                            (m.constituencyUrdu && m.constituencyUrdu.includes(constituencyInput.trim()))
                           );
-                        }
-                        return matches.map(m => (
-                          <button
-                            key={m.id}
-                            type="button"
-                            onClick={() => {
-                              setSelectedId(m.id);
-                              setRating(null);
-                              setConstituencyInput('');
-                              setTimeout(() => {
-                                profileRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                              }, 150);
-                            }}
-                            className="w-full text-left p-3 hover:bg-[#1a3050]/40 border-b border-[#1e3a5f]/20 transition-all flex items-center justify-between gap-3 text-xs"
-                          >
-                            <div className="flex items-center gap-2.5 min-w-0">
-                              <div
-                                className="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center font-bold text-white text-[11px]"
-                                style={{ background: `linear-gradient(135deg, ${m.partyColor}88, ${m.partyColor})` }}
-                              >
-                                {m.name.split(' ').map(w => w[0]).join('').slice(0, 2)}
+                          if (matches.length === 0) {
+                            return (
+                              <div className="p-4 text-xs text-[#7f8ea4] text-center">
+                                ❌ {isUrdu ? 'کوئی حلقہ یا رکن نہیں ملا' : 'No matching MNA or constituency found'}
                               </div>
-                              <div className="truncate">
-                                <p className="font-bold text-white truncate">{isUrdu ? m.nameUrdu || m.name : m.name}</p>
-                                <p className="text-[10px] text-[#00b4d8] truncate">{isUrdu ? m.constituencyUrdu || m.constituency : m.constituency}</p>
+                            );
+                          }
+                          return matches.map(m => (
+                            <button
+                              key={m.id}
+                              type="button"
+                              onClick={() => {
+                                setSelectedId(m.id);
+                                setRating(null);
+                                setConstituencyInput('');
+                                setTimeout(() => {
+                                  profileRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                }, 150);
+                              }}
+                              className="w-full text-left p-3 hover:bg-[#1a3050]/40 border-b border-[#1e3a5f]/20 transition-all flex items-center justify-between gap-3 text-xs"
+                            >
+                              <div className="flex items-center gap-2.5 min-w-0">
+                                <div
+                                  className="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center font-bold text-white text-[11px]"
+                                  style={{ background: `linear-gradient(135deg, ${m.partyColor}88, ${m.partyColor})` }}
+                                >
+                                  {m.name.split(' ').map(w => w[0]).join('').slice(0, 2)}
+                                </div>
+                                <div className="truncate">
+                                  <p className="font-bold text-white truncate">{isUrdu ? m.nameUrdu || m.name : m.name}</p>
+                                  <p className="text-[10px] text-[#00b4d8] truncate">{isUrdu ? m.constituencyUrdu || m.constituency : m.constituency}</p>
+                                </div>
                               </div>
-                            </div>
-                            <div className="flex items-center gap-2 flex-shrink-0">
-                              <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-white/5 text-[#8892a4]" style={{ border: `1px solid ${m.partyColor}44`, color: m.partyColor }}>
-                                {m.party}
-                              </span>
-                              <span className={`font-bold ${m.attendancePercent >= 75 ? 'text-emerald-400' : m.attendancePercent >= 50 ? 'text-amber-400' : 'text-red-400'}`}>
-                                {m.attendancePercent}% {isUrdu ? 'حاضری' : 'Att.'}
-                              </span>
-                            </div>
-                          </button>
-                        ));
-                      })()}
-                    </div>
-                  )}
+                              <div className="flex items-center gap-2 flex-shrink-0">
+                                <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-white/5 text-[#8892a4]" style={{ border: `1px solid ${m.partyColor}44`, color: m.partyColor }}>
+                                  {m.party}
+                                </span>
+                                <span className={`font-bold ${m.attendancePercent >= 75 ? 'text-emerald-400' : m.attendancePercent >= 50 ? 'text-amber-400' : 'text-red-400'}`}>
+                                  {m.attendancePercent}% {isUrdu ? 'حاضری' : 'Att.'}
+                                </span>
+                              </div>
+                            </button>
+                          ));
+                        })()}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               </div>
             </motion.div>
@@ -857,9 +865,9 @@ const WakalaCheck: React.FC = () => {
                 <div className="text-xs text-[#00b4d8] font-bold uppercase tracking-wider">
                   📍 {isUrdu ? 'حلقہ اور شہر کے لحاظ سے تلاش کریں' : 'Constituency Selector'}
                 </div>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-[10px] text-[#8892a4] mb-1 font-semibold">
+                    <label className="block text-[11px] text-[#8892a4] mb-1.5 font-semibold">
                       {isUrdu ? 'شہر منتخب کریں' : 'Select City'}
                     </label>
                     <select
@@ -868,7 +876,7 @@ const WakalaCheck: React.FC = () => {
                         setSelectedCity(e.target.value);
                         setSelectedConstituency('');
                       }}
-                      className="w-full bg-[#060d1a] border border-[#1e3a5f]/45 rounded-lg py-2 px-2 text-xs text-white focus:outline-none focus:border-[#00b4d8]/60 premium-input"
+                      className="w-full bg-[#060d1a] border border-[#1e3a5f]/45 text-sm text-white focus:outline-none focus:border-[#00b4d8]/60 premium-input"
                     >
                       <option value="">{isUrdu ? 'تمام شہر' : 'All Cities'}</option>
                       {availableCities.map(c => (
@@ -880,7 +888,7 @@ const WakalaCheck: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block text-[10px] text-[#8892a4] mb-1 font-semibold">
+                    <label className="block text-[11px] text-[#8892a4] mb-1.5 font-semibold">
                       {isUrdu ? 'حلقہ منتخب کریں' : 'Select Constituency'}
                     </label>
                     <select
@@ -897,7 +905,7 @@ const WakalaCheck: React.FC = () => {
                           }, 150);
                         }
                       }}
-                      className="w-full bg-[#060d1a] border border-[#1e3a5f]/45 rounded-lg py-2 px-2 text-xs text-white focus:outline-none focus:border-[#00b4d8]/60 disabled:opacity-50 premium-input"
+                      className="w-full bg-[#060d1a] border border-[#1e3a5f]/45 text-sm text-white focus:outline-none focus:border-[#00b4d8]/60 disabled:opacity-50 premium-input"
                     >
                       <option value="">{isUrdu ? 'منتخب کریں...' : 'Select...'}</option>
                       {constituenciesForCity.map(m => (
@@ -912,7 +920,7 @@ const WakalaCheck: React.FC = () => {
 
               {/* Search input */}
               <div className="relative mb-3">
-                <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+                <div className={`absolute inset-y-0 ${isUrdu ? 'right-3' : 'left-3'} flex items-center pointer-events-none`}>
                   <svg className="w-4 h-4 text-[#5a6a7e]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
@@ -922,7 +930,7 @@ const WakalaCheck: React.FC = () => {
                   value={query}
                   onChange={e => setQuery(e.target.value)}
                   placeholder={isUrdu ? 'نام، حلقہ یا پارٹی تلاش کریں...' : 'Search by name, constituency, or party...'}
-                  className="w-full bg-[#0d1b2e] border border-[#1e3a5f]/60 rounded-xl py-3 pl-10 pr-4 text-sm text-white focus:outline-none focus:border-[#00b4d8]/60 focus:ring-1 focus:ring-[#00b4d8]/30 premium-input"
+                  className={`w-full bg-[#0d1b2e] border border-[#1e3a5f]/60 rounded-xl text-sm text-white focus:outline-none focus:border-[#00b4d8]/60 focus:ring-1 focus:ring-[#00b4d8]/30 premium-input ${isUrdu ? 'pr-10 pl-4' : 'pl-10 pr-4'}`}
                   dir={isUrdu ? 'rtl' : 'ltr'}
                 />
                 {searching && (

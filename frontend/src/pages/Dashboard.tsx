@@ -428,7 +428,7 @@ export default function Dashboard() {
               <select
                 value={personalizerProvince}
                 onChange={e => setPersonalizerProvince(e.target.value)}
-                className="w-full rounded-xl py-3 px-4 text-sm text-white premium-input"
+                className="w-full text-sm text-white premium-input"
               >
                 <option value="Punjab">{isUrdu ? 'پنجاب' : 'Punjab'}</option>
                 <option value="Sindh">{isUrdu ? 'سندھ' : 'Sindh'}</option>
@@ -444,7 +444,7 @@ export default function Dashboard() {
               <select
                 value={personalizerSector}
                 onChange={e => setPersonalizerSector(e.target.value)}
-                className="w-full rounded-xl py-3 px-4 text-sm text-white premium-input"
+                className="w-full text-sm text-white premium-input"
               >
                 <option value="Education">{isUrdu ? 'تعلیم' : 'Education'}</option>
                 <option value="Health">{isUrdu ? 'صحت' : 'Health'}</option>

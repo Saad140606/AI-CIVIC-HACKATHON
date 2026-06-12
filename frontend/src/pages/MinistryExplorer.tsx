@@ -143,7 +143,7 @@ export default function MinistryExplorer() {
           value={search}
           onChange={e => setSearch(e.target.value)}
           placeholder="Search ministries..."
-          className="w-full pl-11 pr-4 py-3.5 rounded-xl text-white placeholder:text-[#3a4558] text-sm premium-input"
+          className="w-full pl-11 pr-4 text-white placeholder:text-[#3a4558] text-sm premium-input"
         />
         <AnimatePresence>
           {search && (

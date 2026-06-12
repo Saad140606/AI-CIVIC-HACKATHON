@@ -28,7 +28,7 @@
 /* =========================================================
    Global Reset & Base
    ========================================================= */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; }
 
 html { scroll-behavior: smooth; }
 html[dir="rtl"] { font-family: 'Noto Nastaliq Urdu', serif; }
@@ -63,6 +63,8 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   position: relative;
+  margin: 0;
+  padding: 0;
 }
 
 /* Animated background orbs */
@@ -222,9 +224,14 @@ body::after {
    Input Components
    ========================================================= */
 .premium-input {
-  background: rgba(8, 15, 30, 0.7);
+  background: rgba(8, 15, 30, 0.75);
   border: 1px solid rgba(26, 48, 80, 0.7);
   color: white;
+  border-radius: 12px;
+  padding: 10px 16px;
+  font-size: 14px;
+  line-height: 1.5;
+  min-height: 44px;
   transition: all 0.25s ease;
 }
 .premium-input:focus {
@@ -241,13 +248,27 @@ select {
   appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237f8ea4' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  background-position: right 12px center;
-  padding-right: 32px;
+  background-position: right 14px center;
+  padding-right: 36px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 16px;
+  border-radius: 12px;
+  min-height: 44px;
+  font-size: 14px;
+  line-height: 1.5;
+  cursor: pointer;
+}
+[dir="rtl"] select.premium-input,
+[dir="rtl"] select {
+  background-position: left 14px center;
+  padding-left: 36px;
+  padding-right: 16px;
 }
 select option {
-  background: #0c1929;
+  background: #080f1e;
   color: white;
-  padding: 8px 12px;
+  padding: 12px 16px;
 }
 select:focus {
   outline: none;
