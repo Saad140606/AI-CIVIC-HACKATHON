@@ -189,7 +189,8 @@ All budget figures are in **PKR Billions**. The FY2025-26 Excel file stores valu
 ## 👥 Team
 
 Built for the **AI for Civic Innovation Hackathon 2025** by students passionate about government transparency and open data in Pakistan.
-
+Saad Najam - Student at FAST NUCES KARACHI
+Nabeel Ali - Student at FAST NUCES KARACHI
 ---
 
 ## 📜 License
