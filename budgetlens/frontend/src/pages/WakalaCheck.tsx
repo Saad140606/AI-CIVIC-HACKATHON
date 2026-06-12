@@ -886,7 +886,7 @@ const WakalaCheck: React.FC = () => {
                   isRating={rateMutation.isPending}
                 />
               ) : (
-                <div className="flex flex-col items-center justify-center h-64 bg-[#0d1b2e] rounded-2xl border border-[#1e3a5f]/40 text-center p-6 text-card-content shadow-card">
+                <div className="flex flex-col items-center justify-center h-64 bg-[#0d1b2e] rounded-2xl border border-[#1e3a5f]/40 text-center p-6 shadow-card">
                   <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-600/20 to-indigo-700/20 border border-purple-500/20 flex items-center justify-center text-3xl mb-4">
                     🏛️
                   </div>

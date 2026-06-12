@@ -7,6 +7,7 @@ import MinistryExplorer from './pages/MinistryExplorer';
 import Compare from './pages/Compare';
 import WakalaCheck from './pages/WakalaCheck';
 import BillSummarizer from './pages/BillSummarizer';
+import TaxCalculator from './pages/TaxCalculator';
 import ChatBar from './components/ChatBar';
 import LanguageToggle from './components/LanguageToggle';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -47,6 +48,7 @@ function AppContent() {
     { to: '/explorer', label: t.nav.explorer, icon: '📊', end: false, id: 'nav-explorer' },
     { to: '/compare', label: t.nav.compare, icon: '⚖️', end: false, id: 'nav-compare' },
     { to: '/wakala', label: lang === 'ur' ? 'وکالت چیک' : 'WakalaCheck', icon: '🏛️', end: false, id: 'nav-wakala' },
+    { to: '/tax', label: lang === 'ur' ? 'ٹیکس کیلکولیٹر' : 'Tax Calc', icon: '🧮', end: false, id: 'nav-tax' },
     { to: '/bill-summarizer', label: t.nav.billSummarizer, icon: '📄', end: false, id: 'nav-bill-summarizer' },
   ];
 
@@ -213,6 +215,7 @@ function AppContent() {
           <Route path="/explorer" element={<PageWrapper><MinistryExplorer /></PageWrapper>} />
           <Route path="/compare" element={<PageWrapper><Compare /></PageWrapper>} />
           <Route path="/wakala" element={<PageWrapper fullWidth><WakalaCheck /></PageWrapper>} />
+          <Route path="/tax" element={<PageWrapper><TaxCalculator /></PageWrapper>} />
           <Route path="/bill-summarizer" element={<PageWrapper><BillSummarizer /></PageWrapper>} />
         </Routes>
       </AnimatePresence>
@@ -240,7 +243,7 @@ function AppContent() {
               </a>
             </span>
             <span className="text-[#1a3050]">•</span>
-            <span>AI: Google Gemini Flash</span>
+            <span>AI: Gemini Flash + Groq LLaMA3</span>
             <span className="text-[#1a3050]">•</span>
             <span>Built for Pakistan 🇵🇰</span>
           </div>

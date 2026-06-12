@@ -4,6 +4,7 @@ import type { MinistryTotal } from '../lib/api';
 import { formatBillions, getChangeColor, getChangeArrow, formatChangePercent } from '../lib/utils';
 import AIExplainButton from './AIExplainButton';
 import ShareCard from './ShareCard';
+import TransparencyScore from './TransparencyScore';
 import { useLanguage } from '../context/LanguageContext';
 
 interface Props {
@@ -13,6 +14,7 @@ interface Props {
   onClick?: () => void;
   isSelected?: boolean;
   year?: string;
+  allMinistries?: MinistryTotal[];
 }
 
 // Ministry rank colors
@@ -48,7 +50,7 @@ function getMinistryIcon(name: string): string {
   return '🏢';
 }
 
-export default function MinistryCard({ ministry, rank, changePercent, onClick, isSelected, year = 'FY2025-26' }: Props) {
+export default function MinistryCard({ ministry, rank, changePercent, onClick, isSelected, year = 'FY2025-26', allMinistries }: Props) {
   const { lang } = useLanguage();
   const [showDivisions, setShowDivisions] = useState(false);
   const changeColor = changePercent !== undefined ? getChangeColor(changePercent) : undefined;
@@ -211,6 +213,10 @@ export default function MinistryCard({ ministry, rank, changePercent, onClick, i
             </motion.span>
             {ministry.divisions.length} Divisions
           </motion.button>
+
+          <div onClick={e => e.stopPropagation()}>
+            <TransparencyScore ministry={ministry} allMinistries={allMinistries} prevYearTotal={undefined} />
+          </div>
 
           <div onClick={e => e.stopPropagation()}>
             <ShareCard ministry={ministry} changePercent={changePercent} />

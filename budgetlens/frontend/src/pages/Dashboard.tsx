@@ -3,6 +3,8 @@ import { useQuery } from '@tanstack/react-query';
 import { budgetApi, aiApi } from '../lib/api';
 import HeroStats from '../components/HeroStats';
 import MinistryCard from '../components/MinistryCard';
+import ProvinceMap from '../components/ProvinceMap';
+import DebtClock from '../components/DebtClock';
 import { useLanguage } from '../context/LanguageContext';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -324,11 +326,58 @@ export default function Dashboard() {
       <HeroStats stats={data.heroStats} />
 
       {/* Data Source Citation Badge */}
-      <div className="flex justify-center md:justify-start -mt-4 mb-6 px-1">
+      <div className="flex justify-center md:justify-start -mt-4 mb-2 px-1">
         <span className="text-[10px] px-3 py-1.5 rounded-full font-bold flex items-center gap-1.5 bg-[#0c1929] border border-[#1a3050]/60 text-[#7f8ea4]">
           📋 {isUrdu ? 'ماخذ: وزارت خزانہ، حکومت پاکستان — finance.gov.pk' : 'Source: Ministry of Finance, GoP — finance.gov.pk'}
         </span>
       </div>
+
+      {/* ─── Quick Actions ───────────────────────────────────────────── */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.25 }}
+        className="grid grid-cols-2 sm:grid-cols-4 gap-3"
+      >
+        {[
+          { href: '/tax', icon: '🧮', label: isUrdu ? 'ٹیکس کیلکولیٹر' : 'Tax Calculator', color: '#00d4ff', desc: isUrdu ? 'آپ کا ٹیکس کہاں جاتا ہے' : 'Where your taxes go' },
+          { href: '/wakala', icon: '🏛️', label: isUrdu ? 'وکالت چیک' : 'WakalaCheck', color: '#a855f7', desc: isUrdu ? 'اپنا MNA چیک کریں' : 'Check your MNA' },
+          { href: '/compare', icon: '⚖️', label: isUrdu ? 'بجٹ موازنہ' : 'Budget Compare', color: '#f59e0b', desc: isUrdu ? '3 سال کا موازنہ' : '3-year comparison' },
+          { href: '/bill-summarizer', icon: '📄', label: isUrdu ? 'بل خلاصہ' : 'Bill Summarizer', color: '#00e676', desc: isUrdu ? 'بل اردو میں سمجھیں' : 'Understand any bill' },
+        ].map((item, i) => (
+          <motion.a
+            key={item.href}
+            href={item.href}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 + i * 0.07 }}
+            whileHover={{ y: -4, scale: 1.02 }}
+            whileTap={{ scale: 0.97 }}
+            className="relative rounded-xl p-4 flex flex-col items-start gap-2 overflow-hidden group"
+            style={{
+              background: `linear-gradient(135deg, ${item.color}08, ${item.color}04)`,
+              border: `1px solid ${item.color}20`,
+              textDecoration: 'none',
+              transition: 'all 0.3s ease',
+            }}
+          >
+            <div className="absolute top-0 right-0 w-16 h-16 rounded-full blur-2xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity"
+              style={{ background: `radial-gradient(circle, ${item.color}20 0%, transparent 70%)` }}
+            />
+            <span className="text-2xl">{item.icon}</span>
+            <div>
+              <p className="text-xs font-black text-white">{item.label}</p>
+              <p className="text-[10px] mt-0.5" style={{ color: item.color }}>{item.desc}</p>
+            </div>
+          </motion.a>
+        ))}
+      </motion.div>
+
+      {/* ─── Province Budget Map ──────────────────────────────────────── */}
+      <ProvinceMap isUrdu={isUrdu} />
+
+      {/* ─── National Debt Clock ─────────────────────────────────────── */}
+      <DebtClock isUrdu={isUrdu} />
 
       {/* ─── Budget Personalizer Widget ──────────────────────────────── */}
       <motion.div
@@ -523,6 +572,7 @@ export default function Dashboard() {
             {isUrdu ? 'سرکاری بجٹ' : 'Official Budget'}
           </span>
         </div>
+
       </motion.div>
 
       {/* ─── Ministry Cards Grid ─────────────────────────────────────── */}
@@ -539,6 +589,7 @@ export default function Dashboard() {
               rank={idx + 1}
               changePercent={changeMap.get(ministry.ministry)}
               year={isUrdu ? 'مالی سال 2025-26' : 'FY2025-26'}
+              allMinistries={data.fy2526}
             />
           </motion.div>
         ))}

@@ -56,11 +56,19 @@ export default function BillSummarizer() {
     setResult(null);
 
     try {
-      const formData = new FormData();
-      formData.append('bill', file);
-      const res = await api.post<SummaryResult>('/ai/summarize-bill', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
+      // Convert file to base64 — backend expects { fileBase64: string }
+      const fileBase64 = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const result = reader.result as string;
+          // Strip the data URL prefix (e.g. "data:application/pdf;base64,")
+          resolve(result.split(',')[1]);
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
       });
+
+      const res = await api.post<SummaryResult>('/ai/summarize-bill', { fileBase64 });
       setResult(res.data);
     } catch (err: any) {
       // Provide a rich fallback if the backend returns an error
@@ -87,6 +95,7 @@ export default function BillSummarizer() {
       setLoading(false);
     }
   };
+
 
   return (
     <div className="space-y-6 max-w-3xl mx-auto">

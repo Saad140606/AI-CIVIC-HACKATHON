@@ -6,7 +6,8 @@ import { useLanguage } from '../context/LanguageContext';
 import { motion } from 'framer-motion';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid,
-  ResponsiveContainer, Cell, LabelList
+  ResponsiveContainer, Cell, LabelList,
+  LineChart, Line, Tooltip, Legend
 } from 'recharts';
 
 // ── CSV Export helper ─────────────────────────────────────────────────────────
@@ -305,7 +306,89 @@ export default function Compare() {
         </motion.div>
       )}
 
+      {/* ── 3-Year Budget Trend Line Chart (only in sector tab) */}
+      {activeTab === 'sector' && data && (
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="rounded-2xl p-5"
+          style={{
+            background: 'linear-gradient(135deg, #0c1929, #080f1e)',
+            border: '1px solid rgba(0, 212, 255, 0.15)',
+            boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
+          }}
+        >
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h3 className="text-base font-bold text-white">
+                {isUrdu ? 'بجٹ رجحان — 3 سالہ لکیری چارٹ' : '3-Year Budget Trend — Top Ministries'}
+              </h3>
+              <p className="text-xs text-[#7f8ea4] mt-0.5">
+                {isUrdu ? 'حقیقی xlsx ڈیٹا پر مبنی' : 'Real xlsx data · FY2023-24, FY2024-25, FY2025-26'}
+              </p>
+            </div>
+            <span className="text-[10px] px-2.5 py-1 rounded-full font-bold"
+              style={{ background: 'rgba(0,230,118,0.08)', border: '1px solid rgba(0,230,118,0.2)', color: '#00e676' }}>
+              📊 Live Data
+            </span>
+          </div>
+          {(() => {
+            // Build top-5 ministries by FY2526 budget
+            const top5 = [...(data.fy2526 || [])].sort((a, b) => b.total - a.total).slice(0, 5);
+            const lineColors = ['#00d4ff', '#a855f7', '#f59e0b', '#00e676', '#ef4444'];
+            const chartData = [
+              { year: 'FY23-24', yearUrdu: 'مالی سال 23-24' },
+              { year: 'FY24-25', yearUrdu: 'مالی سال 24-25' },
+              { year: 'FY25-26', yearUrdu: 'مالی سال 25-26' },
+            ].map((yr, i) => {
+              const yrData = i === 0 ? data.fy2324 : i === 1 ? data.fy2425 : data.fy2526;
+              const row: Record<string, string | number> = { year: isUrdu ? yr.yearUrdu : yr.year };
+              top5.forEach(m => {
+                const entry = yrData?.find(e => e.ministry === m.ministry);
+                row[m.ministry.substring(0, 18)] = entry ? parseFloat(entry.total.toFixed(1)) : 0;
+              });
+              return row;
+            });
+            return (
+              <div style={{ height: 280 }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={chartData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(26,48,80,0.4)" />
+                    <XAxis dataKey="year" tick={{ fill: '#7f8ea4', fontSize: 11 }} tickLine={false} axisLine={false} />
+                    <YAxis tick={{ fill: '#7f8ea4', fontSize: 10 }} tickLine={false} axisLine={false} tickFormatter={v => `${v}B`} />
+                    <Tooltip
+                      contentStyle={{
+                        background: '#0c1929', border: '1px solid rgba(26,48,80,0.8)',
+                        borderRadius: '12px', color: '#fff', fontSize: 12,
+                      }}
+                      formatter={(v: number) => [`PKR ${v.toFixed(1)}B`]}
+                    />
+                    <Legend
+                      wrapperStyle={{ fontSize: 11, color: '#7f8ea4', paddingTop: 8 }}
+                      formatter={(v) => v.length > 20 ? v.substring(0, 20) + '…' : v}
+                    />
+                    {top5.map((m, i) => (
+                      <Line
+                        key={m.ministry}
+                        type="monotone"
+                        dataKey={m.ministry.substring(0, 18)}
+                        stroke={lineColors[i]}
+                        strokeWidth={2.5}
+                        dot={{ fill: lineColors[i], strokeWidth: 2, r: 4 }}
+                        activeDot={{ r: 6, stroke: lineColors[i], strokeWidth: 2, fill: '#0c1929' }}
+                      />
+                    ))}
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            );
+          })()}
+        </motion.div>
+      )}
+
       {/* Tab 2: Ministry Detailed Compare */}
+
       {activeTab === 'ministry' && (
         <motion.div
           initial={{ opacity: 0, y: 15 }}
