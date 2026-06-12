@@ -214,7 +214,7 @@ export default function ShareCard({ ministry, changePercent, mna, taxData, lang 
         >
           {/* Logo */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 24, justifyContent: isUrdu ? 'flex-end' : 'flex-start' }}>
-            <div style={{ width: 36, height: 36, borderRadius: 8, background: '#7c3aed22', border: '1px solid #7c3aed44', display: 'flex', alignItems: 'center', justifycontent: 'center', fontSize: 18 }}>
+            <div style={{ width: 36, height: 36, borderRadius: 8, background: '#7c3aed22', border: '1px solid #7c3aed44', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18 }}>
               🧮
             </div>
             <div style={{ textAlign: isUrdu ? 'right' : 'left' }}>

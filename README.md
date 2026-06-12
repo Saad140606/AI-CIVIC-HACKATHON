@@ -1,168 +1,148 @@
-# 🇵🇰 WakalaLens Pakistan
+# 🇵🇰 WakalaLens Pakistan (وکالت لینس)
 
-> AI for Civic Innovation Hackathon 2025 submission
->
-> A bilingual budget intelligence app that turns Pakistan’s public finance data into plain-language insights for citizens, journalists, and researchers.
-
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript)](https://www.typescriptlang.org/)
-[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react)](https://react.dev/)
-[![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite)](https://vitejs.dev/)
-[![Express](https://img.shields.io/badge/Express-4-black?logo=express)](https://expressjs.com/)
-[![Gemini](https://img.shields.io/badge/AI-Gemini%201.5%20Flash-4285F4?logo=google)](https://ai.google.dev/)
+> **Submission for the AI for Civic Innovation Hackathon 2025**  
+> A cutting-edge, bilingual budget intelligence and democratic accountability platform that turns Pakistan’s raw public finance spreadsheets and legislative records into plain-language, visual insights for citizens, journalists, and researchers.
 
 ---
 
-## 🎯 What this project does
+## 🎯 The Civic Problem & Our Solution
 
-WakalaLens Pakistan combines official budget data, parliamentary accountability data, and AI narration to answer questions such as:
+Public finance documents in Pakistan are historically released as massive, complex Excel sheets or scanned PDFs. They are highly inaccessible to the average citizen, hiding crucial data on how public funds are allocated. Similarly, legislative performance (MNA attendance, bills sponsored) is scattered across poorly indexable portal tables.
 
-- How much is the federal government spending on each ministry?
-- Which ministries grew or shrank the most from FY2023-24 to FY2025-26?
-- How does a constituency or MNA profile connect to budget priorities?
-- How can tax and budget information be explained in simple English or Urdu?
-
-The app is split into two main parts:
-
-- Backend API: budget parsing, MNA data, and AI routes
-- Frontend app: dashboard, explorer, compare, WakalaCheck, tax calculator, and bill summarizer
+**WakalaLens Pakistan** bridges this gap by combining official raw finance datasets with advanced AI reasoning, clean charts, and interactive calculators:
+1. **Demystifying Budget Jargon:** Translating dry ministry figures into simple, contextual English and Urdu.
+2. **Citizen-First Tax Transparency:** Instantly visualizing exactly where every rupee of your income tax goes.
+3. **MNA Performance Tracking:** Giving voters a direct look at the attendance, legislative activity, and AI-rated grades of their elected representatives.
 
 ---
 
-## ✨ Highlights
+## ✨ Features
 
-- Real FY2023-24, FY2024-25, FY2025-26 budget data from the official Ministry of Finance Excel files
-- AI-assisted explanations in English and Urdu using Gemini + Groq fallback
-- MNA accountability flow with constituency and member lookup
-- Bill summarizer for legislative PDFs
-- Tax calculator and shareable summary cards for civic communication
+### 1. 🏛️ Constituency ➔ MNA Hero Lookup
+Right at the top of the **WakalaCheck** page, a prominent autocomplete lookup allows users to type in their constituency (e.g. `NA-242 Karachi`) or the name of an MNA. Selecting a profile instantly scrolls to and displays their official metrics:
+- **Attendance Rate:** Visualized with intuitive color-coded rings (Green for ≥75%, Amber for ≥50%, Red for low attendance).
+- **Legislation Activity:** Number of bills sponsored and questions raised.
+- **Official Salary Status:** A clear indicator of the official salary received during their term.
+- **AI Performance Grade:** Gemini-powered grade based on overall parliamentary presence and productivity.
+
+### 2. 📊 3-Year Budget Trend Explorer
+Select any federal ministry and analyze their budget trajectory from **FY2023-24 to FY2025-26**. 
+- **Normalized Data:** Names are mapped systematically to ensure consistent multi-year comparison despite administrative name changes.
+- **Debt Exclusions:** Excludes massive domestic debt principal roll-overs (`REPAYMENT OF DOMESTIC DEBT`) to highlight true operating budgets and net interest costs (Debt Servicing).
+
+### 3. 🔍 Ministry Transparency Score (T-Grade)
+Every ministry is automatically analyzed and graded on a **Transparency Index (0-100)**. The score is computed using:
+- **Data Granularity:** Number of active, listed divisions.
+- **Budget Stability:** Yearly fluctuation variance (high jumps/cuts flag warnings).
+- **Division Breakdown:** Whether funds are sub-allocated or lumped.
+- **Budget Proportion:** Size relative to the total federal budget.
+
+### 4. 🧮 Viral Tax Calculator & Share Card
+Citizens can input their monthly salary to see their estimated income tax alongside indirect tax estimates.
+- **Personal Allocation Breakdown:** See precisely how many PKR of your tax funds Debt Servicing (48.4%), NFC Transfers to Provinces (21.8%), Defence (15%), PSDP Development (6.2%), and Health/Education (<2%).
+- **Equivalent Impact:** Translates your tax contribution into relatable items (e.g. "funds 12 public school days per month").
+- **Share Card Generator:** Download a high-quality, customized report card image directly to share on social media. (e.g. *“48.4% of my taxes go straight to Debt Servicing! 😤 #WakalaLens”*).
+
+### 5. 📄 AI Legislative Bill Summarizer
+A drag-and-drop zone allows citizens to upload complex legislative bill PDFs. The backend parses the PDF and runs it through Gemini AI to output clean, bulleted summaries in both **English** and **Nastaliq Urdu**.
+
+### 6. 🤖 Interactive Budget Chatbot
+An embedded, context-aware chatbot lets users ask questions in natural language (e.g. *"How much did the Ministry of IT receive?"* or *"Who is the MNA for NA-246?"*). It queries live database caches and responds using Gemini 1.5 Flash (with Groq API fallback).
+
+---
+
+## 🛠️ Technology Stack
+
+### Frontend
+- **React 19** & **TypeScript**
+- **Tailwind CSS** (curated HSL palettes, glassmorphic dark mode layout)
+- **Framer Motion** (smooth micro-animations, slide transitions)
+- **Recharts** (responsive area, line, and pie charts)
+- **Vite** (bundler)
+- **Vite PWA** (offline asset caching with custom service worker)
+- **Html2canvas** (dynamic image generation for social sharing)
+
+### Backend
+- **Node.js** & **Express**
+- **TypeScript** & **ts-node-dev**
+- **XLSX Parser** (extracting raw budget cells directly)
+- **Cheerio** (scraping NA member rosters and statistics)
+- **PDF-Parse** (parsing legislative PDF documents)
+- **Google Gemini 1.5 Flash** (primary AI summarization, rating, and chat)
+- **Groq SDK** (high-speed fallback AI models)
 
 ---
 
 ## 📸 Screenshots
 
-The repository includes sample visuals under the figures folder:
+Interactive views from the platform (located in `frontend/public/figures/`):
 
-- ![Overview](budgetlens/frontend/public/figures/screenshot_2020.png)
-- ![Dashboard view](budgetlens/frontend/public/figures/screenshot_2021.png)
-- ![Budget comparison](budgetlens/frontend/public/figures/screenshot_2022.png)
-
----
-
-## 🧩 Current app structure
-
-```text
-Pakistan-national-budgets/
-└── budgetlens/
-    ├── backend/
-    │   ├── data/
-    │   │   ├── 2023_2024/
-    │   │   ├── 2024_2025/
-    │   │   └── 2025_2026/
-    │   └── src/
-    └── frontend/
-        ├── public/
-        │   └── figures/    # screenshots used in demos and presentation
-        └── src/
-```
-
-Inside the app folder:
-
-```text
-budgetlens/backend/
-├── src/
-│   ├── index.ts
-│   ├── routes/
-│   │   ├── ai.ts
-│   │   ├── budget.ts
-│   │   └── mna.ts
-│   └── lib/
-│       ├── dataLoader.ts
-│       └── naScraper.ts
-└── package.json
-
-budgetlens/frontend/
-├── src/
-│   ├── App.tsx
-│   ├── components/
-│   ├── context/
-│   ├── i18n/
-│   ├── lib/
-│   └── pages/
-└── package.json
-```
+| Page | Preview |
+|---|---|
+| **Democratic Accountability (WakalaCheck)** | ![WakalaCheck](frontend/public/figures/screenshot_2020.png) |
+| **Bilingual Budget Dashboard** | ![Dashboard](frontend/public/figures/screenshot_2021.png) |
+| **3-Year Trend Comparison** | ![Compare Trend](frontend/public/figures/screenshot_2022.png) |
 
 ---
 
-## 🚀 Run locally
+## 🚀 How to Run Locally
 
 ### Prerequisites
-
 - Node.js 18+
 - npm 9+
-- Gemini API key
-- Groq API key (optional fallback)
+- Gemini API key (from Google AI Studio)
+- Groq API key (optional)
 
-### 1) Install dependencies
-
+### 1. Clone the Repository
 ```bash
-cd budgetlens/backend
-npm install
-
-cd ../frontend
-npm install
+git clone https://github.com/Saad140606/AI-CIVIC-HACKATHON.git
+cd AI-CIVIC-HACKATHON
 ```
 
-### 2) Configure environment
-
+### 2. Configure Backend Environment
+Copy the env example inside the `backend` folder:
 ```bash
-cd ../backend
+cd backend
 cp .env.example .env
 ```
-
-Fill in the keys in the backend `.env` file:
-
+Open `.env` and fill in your keys:
 ```env
-GEMINI_API_KEY=your_key_here
-GROQ_API_KEY=your_key_here
+PORT=3001
+GEMINI_API_KEY=your_gemini_api_key
+GROQ_API_KEY=your_groq_api_key_here
+NODE_ENV=development
 ```
 
-### 3) Start the app
+### 3. Install Dependencies & Start Services
 
-Terminal 1 — backend
+We run the frontend and backend in separate terminals:
 
+#### Terminal 1: API Backend
 ```bash
-cd budgetlens/backend
+cd backend
+npm install
 npm run dev
 ```
+*Expected log:* `🚀 WakalaLens Pakistan API running on http://localhost:3001`
 
-Terminal 2 — frontend
-
+#### Terminal 2: Web Frontend
 ```bash
-cd budgetlens/frontend
+cd frontend
+npm install
 npm run dev
 ```
+*Expected log:* `Local: http://localhost:5173/`
 
-Open the frontend at:
-
-```text
-http://localhost:5173
-```
+Open **http://localhost:5173** in your browser.
 
 ---
 
-## 📊 Data sources
+## 📊 Data Sources & Transparency
 
-| Source | Purpose |
-|---|---|
-| Ministry of Finance, Government of Pakistan | FY2023-24, FY2024-25, FY2025-26 budget figures |
-| National Assembly of Pakistan | MNA profiles, attendance, and parliamentary accountability data |
-| Government of Pakistan open budget documents | Supporting civic finance context |
-
----
-
-## 🔐 Security note
-
-API keys are stored in the backend `.env` file and should not be committed to version control.
+| Source | Link | Purpose |
+|---|---|---|
+| **Ministry of Finance (GoP)** | [finance.gov.pk](https://www.finance.gov.pk) | Official Federal Budget Books (FY23-24, FY24-25, FY25-26 Excel sheets) |
+| **National Assembly of Pakistan** | [na.gov.pk](https://na.gov.pk) | Member rosters, attendance records, division details, and bill copies |
 
 ---
 
@@ -173,6 +153,4 @@ Built for the **AI for Civic Innovation Hackathon 2025** by the Pakistan Nationa
 ---
 
 ## 📜 License
-
-MIT License — intended for civic use, research, and education.
-
+MIT License. Created for public transparency, education, and civic research.
