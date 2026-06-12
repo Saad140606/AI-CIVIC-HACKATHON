@@ -362,7 +362,10 @@ export default function Compare() {
                         background: '#0c1929', border: '1px solid rgba(26,48,80,0.8)',
                         borderRadius: '12px', color: '#fff', fontSize: 12,
                       }}
-                      formatter={(v: number) => [`PKR ${v.toFixed(1)}B`]}
+                      formatter={(value) => {
+                        const numeric = typeof value === 'number' ? value : Number(value ?? 0);
+                        return [`PKR ${numeric.toFixed(1)}B`];
+                      }}
                     />
                     <Legend
                       wrapperStyle={{ fontSize: 11, color: '#7f8ea4', paddingTop: 8 }}

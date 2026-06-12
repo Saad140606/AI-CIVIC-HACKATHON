@@ -1,9 +1,7 @@
 import { useState, useMemo } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { budgetApi } from '../lib/api';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 
 // Pakistan income tax slabs FY2025-26 (Federal Budget)
 const TAX_SLABS = [
@@ -35,8 +33,6 @@ const BUDGET_CATEGORIES = [
   { key: 'other', label: 'Other Ministries', labelUrdu: 'دیگر وزارتیں', color: '#6b7280', pct: 0.068, emoji: '🏢', description: 'All other federal ministries & divisions', descUrdu: 'تمام دیگر وفاقی وزارتیں' },
 ];
 
-const PAKISTAN_TAXPAYERS = 5_500_000; // estimated active tax filers
-
 const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
     const d = payload[0].payload;
@@ -57,12 +53,6 @@ const CustomTooltip = ({ active, payload }: any) => {
 export default function TaxCalculator() {
   const { lang } = useLanguage();
   const isUrdu = lang === 'ur';
-
-  const { data: budgetData } = useQuery({
-    queryKey: ['budget-summary'],
-    queryFn: budgetApi.getSummary,
-    staleTime: 5 * 60 * 1000,
-  });
 
   const [monthlyIncome, setMonthlyIncome] = useState(100000);
   const [showResults, setShowResults] = useState(false);
