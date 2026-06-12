@@ -49,7 +49,6 @@ function AppContent() {
     { to: '/compare', label: t.nav.compare, icon: '⚖️', end: false, id: 'nav-compare' },
     { to: '/wakala', label: lang === 'ur' ? 'وکالت چیک' : 'WakalaCheck', icon: '🏛️', end: false, id: 'nav-wakala' },
     { to: '/tax', label: lang === 'ur' ? 'ٹیکس کیلکولیٹر' : 'Tax Calc', icon: '🧮', end: false, id: 'nav-tax' },
-    { to: '/bill-summarizer', label: t.nav.billSummarizer, icon: '📄', end: false, id: 'nav-bill-summarizer' },
   ];
 
   return (
@@ -131,7 +130,7 @@ function AppContent() {
                 <div className="w-2 h-2 rounded-full bg-[#00e676]" />
                 <div className="absolute inset-0 rounded-full bg-[#00e676] animate-pulse-slow opacity-50" />
               </div>
-              <span className="text-xs text-[#00e676] font-bold tracking-wide">FY25-26</span>
+              <span className="text-xs text-[#00e676] font-bold tracking-wide">FY 2025-26</span>
             </motion.div>
 
             {/* Pakistan flag badge */}

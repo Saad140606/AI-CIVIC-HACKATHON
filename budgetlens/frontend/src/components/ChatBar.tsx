@@ -158,7 +158,7 @@ export default function ChatBar() {
                   <span className="loading-dot" style={{ background: '#00e676', animationDelay: '0.2s' }} />
                   <span className="loading-dot" style={{ background: '#00e676', animationDelay: '0.4s' }} />
                 </div>
-                <span className="text-[10px] text-[#00e676] font-bold">LIVE</span>
+                <span className="text-[10px] text-[#00e676] font-bold">OFFICIAL DATA</span>
               </div>
             </div>
 

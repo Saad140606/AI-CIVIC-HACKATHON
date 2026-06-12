@@ -19,12 +19,12 @@ export default defineConfig({
         orientation: 'portrait',
         icons: [
           {
-            src: 'https://placehold.co/192x192/0A1628/00D4FF?text=BL',
+            src: '/icon-192.png',
             sizes: '192x192',
             type: 'image/png',
           },
           {
-            src: 'https://placehold.co/512x512/0A1628/00D4FF?text=BL',
+            src: '/icon-512.png',
             sizes: '512x512',
             type: 'image/png',
           },
