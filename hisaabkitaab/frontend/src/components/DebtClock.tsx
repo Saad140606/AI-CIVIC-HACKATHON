@@ -1,12 +1,9 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 
-// Pakistan FY2025-26 debt servicing = PKR 8,199 Billion (as per budget)
-// Total external + domestic debt ≈ PKR 68,000 Billion (as of June 2025)
-const TOTAL_DEBT_PKR_B = 68000; // PKR Billions
-const ANNUAL_INTEREST_PKR_B = 8199; // PKR Billions (FY2025-26 debt servicing allocation)
-const SECONDS_PER_YEAR = 365.25 * 24 * 3600;
-const PKR_PER_SECOND = (ANNUAL_INTEREST_PKR_B * 1e9) / SECONDS_PER_YEAR; // PKR per second
+// Pakistan FY2025-26 debt servicing = PKR 9,775 Billion (as per federal budget)
+const ANNUAL_INTEREST_PKR_B = 9775; // PKR Billions (FY2025-26 debt servicing allocation)
+const PKR_PER_SECOND = 309692; // PKR per second
 
 interface Props {
   isUrdu?: boolean;
@@ -95,7 +92,7 @@ export default function DebtClock({ isUrdu = false }: Props) {
             ₨ {formatPKR(interestAccrued)}
           </motion.div>
           <div className="text-[10px] text-[#7f8ea4] mt-2">
-            {isUrdu ? 'مالی سال 2025-26 کے قرض سروسنگ الاؤنس پر مبنی' : 'Based on FY2025-26 debt servicing allocation of PKR 8,199B'}
+            {isUrdu ? 'مالی سال 2025-26 کے قرض سروسنگ الاؤنس پر مبنی' : 'Based on FY2025-26 debt servicing allocation of PKR 9,775B'}
           </div>
         </div>
 
@@ -137,15 +134,9 @@ export default function DebtClock({ isUrdu = false }: Props) {
         <div className="mt-4 p-3 rounded-xl" style={{ background: 'rgba(8,15,30,0.6)', border: '1px solid rgba(26,48,80,0.4)' }}>
           <div className="flex items-center justify-between text-xs">
             <span className="text-[#7f8ea4]">
-              {isUrdu ? 'کل قرض (تخمینی)' : 'Total National Debt (Est.)'}
+              {isUrdu ? 'سالانہ قرض سروسنگ بجٹ' : 'Annual Debt Servicing Budget'}
             </span>
-            <span className="font-black text-[#ef4444]">PKR {TOTAL_DEBT_PKR_B.toLocaleString()}B</span>
-          </div>
-          <div className="flex items-center justify-between text-xs mt-1.5">
-            <span className="text-[#7f8ea4]">
-              {isUrdu ? 'بجٹ کا حصہ (قرض سروسنگ)' : 'FY2025-26 Debt Servicing Budget'}
-            </span>
-            <span className="font-black text-[#f59e0b]">PKR 8,199B (48.4% of total)</span>
+            <span className="font-black text-[#f59e0b]">PKR {ANNUAL_INTEREST_PKR_B.toLocaleString()}B</span>
           </div>
           <div className="flex items-center justify-between text-xs mt-1.5">
             <span className="text-[#7f8ea4]">

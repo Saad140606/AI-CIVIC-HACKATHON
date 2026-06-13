@@ -53,33 +53,30 @@ function FloatingParticles() {
 }
 
 const CNIC_LOOKUP_DB = [
-  { inputs: ['42201', '42101', '42202', 'karachi', 'keamari'], constituency: 'NA-242 (Karachi Keamari-I)', mnaId: '2001' },
-  { inputs: ['35202', '35201', 'lahore'], constituency: 'NA-132 (Lahore-IX)', mnaId: '1001' },
-  { inputs: ['43201', '43202', 'larkana'], constituency: 'NA-194 (Larkana-I)', mnaId: '1002' },
-  { inputs: ['13101', 'haripur'], constituency: 'NA-19 (Haripur)', mnaId: '1003' },
-  { inputs: ['35203', 'lahore-iv'], constituency: 'NA-122 (Lahore-IV)', mnaId: '1004' },
-  { inputs: ['34601', 'sialkot'], constituency: 'NA-73 (Sialkot-I)', mnaId: '1005' },
-  { inputs: ['34501', 'narowal'], constituency: 'NA-108 (Narowal-II)', mnaId: '1006' },
-  { inputs: ['15201', 'chitral'], constituency: 'NA-10 (Chitral)', mnaId: '1009' },
-  { inputs: ['35204', 'lahore-vii'], constituency: 'NA-125 (Lahore-VII)', mnaId: '1010' },
-  { inputs: ['37401', 'rawalpindi'], constituency: 'NA-55 (Rawalpindi-IV)', mnaId: '1011' },
-  { inputs: ['35101', 'kasur'], constituency: 'NA-140 (Kasur-I)', mnaId: '1012' },
-  { inputs: ['45501', 'sukkur'], constituency: 'NA-194 (Sukkur-I)', mnaId: '1014' },
-  { inputs: ['16201', 'swabi'], constituency: 'NA-31 (Swabi-I)', mnaId: '1015' },
-  { inputs: ['17301', 'peshawar'], constituency: 'NA-44 (Peshawar-VI)', mnaId: '1017' },
-  { inputs: ['44301', 'tharparkar'], constituency: 'NA-222 (Tharparkar-II)', mnaId: '1018' },
-  { inputs: ['34101', 'gujrat'], constituency: 'NA-69 (Gujrat-II)', mnaId: '1019' },
-  { inputs: ['45201', 'khairpur'], constituency: 'NA-200 (Khairpur-II)', mnaId: '1020' },
-  { inputs: ['15601', 'swat'], constituency: 'NA-22 (Swat-II)', mnaId: '1021' },
-  { inputs: ['45301', 'nawabshah'], constituency: 'NA-208 (Nawabshah-I)', mnaId: '1022' },
-  { inputs: ['54201', 'khuzdar'], constituency: 'NA-259 (Khuzdar)', mnaId: '1023' },
-  { inputs: ['37402', 'rawalpindi-i'], constituency: 'NA-51 (Rawalpindi-I)', mnaId: '1024' },
-  { inputs: ['35205', 'lahore-ix'], constituency: 'NA-127 (Lahore-IX)', mnaId: '1025' },
-  { inputs: ['13501', 'mansehra'], constituency: 'NA-30 (Mansehra-I)', mnaId: '1026' },
-  { inputs: ['42401', 'karachi-west'], constituency: 'NA-241 (Karachi-West-I)', mnaId: '1027' },
-  { inputs: ['42501', 'karachi-central'], constituency: 'NA-248 (Karachi Central-I)', mnaId: '1028' },
-  { inputs: ['37403', 'islamabad'], constituency: 'NA-49 (Islamabad-III)', mnaId: '1029' },
-  { inputs: ['42301', 'karachi-central-ii'], constituency: 'NA-240 (Karachi Central-II)', mnaId: '1030' }
+  { inputs: ['422', '421', '423', '424', '425', '420', 'karachi', 'keamari'], constituency: 'NA-242' },
+  { inputs: ['352', 'lahore'], constituency: 'NA-132' },
+  { inputs: ['432', 'larkana'], constituency: 'NA-194' },
+  { inputs: ['131', 'haripur'], constituency: 'NA-19' },
+  { inputs: ['346', 'sialkot'], constituency: 'NA-73' },
+  { inputs: ['345', 'narowal'], constituency: 'NA-108' },
+  { inputs: ['152', 'chitral'], constituency: 'NA-10' },
+  { inputs: ['374', 'rawalpindi'], constituency: 'NA-52' },
+  { inputs: ['351', 'kasur'], constituency: 'NA-140' },
+  { inputs: ['455', '452', 'sukkur', 'khairpur'], constituency: 'NA-200' },
+  { inputs: ['162', 'swabi'], constituency: 'NA-31' },
+  { inputs: ['173', 'peshawar'], constituency: 'NA-44' },
+  { inputs: ['443', 'tharparkar'], constituency: 'NA-222' },
+  { inputs: ['341', 'gujrat'], constituency: 'NA-69' },
+  { inputs: ['156', 'swat'], constituency: 'NA-22' },
+  { inputs: ['453', 'nawabshah'], constituency: 'NA-208' },
+  { inputs: ['542', 'khuzdar'], constituency: 'NA-259' },
+  { inputs: ['135', 'mansehra'], constituency: 'NA-30' },
+  { inputs: ['331', 'faisalabad'], constituency: 'NA-97' },
+  { inputs: ['363', 'multan'], constituency: 'NA-148' },
+  { inputs: ['501', 'quetta'], constituency: 'NA-263' },
+  { inputs: ['413', 'hyderabad'], constituency: 'NA-220' },
+  { inputs: ['322', 'gujranwala'], constituency: 'NA-79' },
+  { inputs: ['611', 'islamabad'], constituency: 'NA-49' }
 ];
 
 export default function Dashboard() {
@@ -134,19 +131,36 @@ export default function Dashboard() {
     const cleaned = lookupInput.trim().toLowerCase();
     if (!cleaned) return;
 
-    const match = CNIC_LOOKUP_DB.find(item => 
-      item.inputs.some(inp => cleaned.includes(inp) || inp.includes(cleaned))
-    );
+    // First try to match directly by constituency code (e.g. "NA-242")
+    const naMatch = cleaned.match(/na-\d+/i);
+    let constituencyCode = naMatch ? naMatch[0].toUpperCase() : '';
 
-    if (match) {
-      const mna = allMNAs.find(m => m.id === match.mnaId);
+    if (!constituencyCode) {
+      // Try to find matching item in CNIC_LOOKUP_DB
+      const match = CNIC_LOOKUP_DB.find(item => 
+        item.inputs.some(inp => cleaned.includes(inp) || inp.includes(cleaned))
+      );
+      if (match) {
+        constituencyCode = match.constituency;
+      }
+    }
+
+    if (constituencyCode) {
+      // Find MNA that starts with constituencyCode
+      const mna = allMNAs.find(m => 
+        m.constituency.toUpperCase().startsWith(constituencyCode) ||
+        m.constituency.toUpperCase().includes(`(${constituencyCode}`) ||
+        m.constituency.toUpperCase().includes(`${constituencyCode} `)
+      );
       if (mna) {
         setMatchedMNA(mna);
       } else {
         setLookupError(isUrdu ? 'نمائندہ کا ڈیٹا لوڈ ہو رہا ہے، دوبارہ کوشش کریں' : 'Representative data loading, please try again.');
       }
     } else {
-      setLookupError(isUrdu ? 'شناختی کارڈ کوڈ (مثلا 42201) یا شہر کا نام تلاش نہیں ہو سکا' : 'Constituency not found. Try typing Karachi, Lahore, or 42201!');
+      setLookupError(isUrdu 
+        ? 'شناختی کارڈ کوڈ (مثلا 42201) یا شہر کا نام تلاش نہیں ہو سکا. کراچی، لاہور، فیصل آباد یا اسلام آباد درج کریں!' 
+        : 'Constituency not found. Try typing Karachi, Lahore, Faisalabad, Islamabad, or a CNIC code like 42201 / 33101!');
     }
   };
 
@@ -157,31 +171,31 @@ export default function Dashboard() {
   };
 
   const getCityMnaName = (city: string) => {
-    if (city === 'Karachi') return 'Ahmed Khan';
+    if (city === 'Karachi') return 'Syed Mustafa Kamal';
     if (city === 'Lahore') return 'Muhammad Shehbaz Sharif';
     if (city === 'Peshawar') return 'Muhammad Ali Mian Khan';
-    if (city === 'Rawalpindi') return 'Raja Pervez Ashraf';
+    if (city === 'Rawalpindi') return 'Raja Pervaiz Ashraf';
     return '';
   };
   const getCityConstituency = (city: string) => {
     if (city === 'Karachi') return 'NA-242';
     if (city === 'Lahore') return 'NA-132';
     if (city === 'Peshawar') return 'NA-44';
-    if (city === 'Rawalpindi') return 'NA-55';
+    if (city === 'Rawalpindi') return 'NA-52';
     return '';
   };
   const getCityMnaAttendance = (city: string) => {
-    if (city === 'Karachi') return 65;
+    if (city === 'Karachi') return 79;
     if (city === 'Lahore') return 47;
     if (city === 'Peshawar') return 82;
-    if (city === 'Rawalpindi') return 68;
+    if (city === 'Rawalpindi') return 56;
     return 0;
   };
   const getCityMnaGrade = (city: string) => {
-    if (city === 'Karachi') return 'B';
-    if (city === 'Lahore') return 'C+';
+    if (city === 'Karachi') return 'A-';
+    if (city === 'Lahore') return 'C';
     if (city === 'Peshawar') return 'A';
-    if (city === 'Rawalpindi') return 'B-';
+    if (city === 'Rawalpindi') return 'C+';
     return '';
   };
 
