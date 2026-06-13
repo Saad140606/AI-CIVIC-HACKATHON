@@ -1,4 +1,4 @@
-# 🇵🇰 WakalaLens Pakistan (وکالت لینس)
+# 🇵🇰 HisaabKitaab Pakistan (حساب کتاب)
 
 > **Submission for the AI for Civic Innovation Hackathon 2026**  
 > A cutting-edge, bilingual budget intelligence and democratic accountability platform that turns Pakistan’s raw public finance spreadsheets and legislative records into plain-language, visual insights for citizens, journalists, and researchers.
@@ -11,7 +11,7 @@
 
 Public finance documents in Pakistan are historically released as massive, complex Excel sheets or scanned PDFs. They are highly inaccessible to the average citizen, hiding crucial data on how public funds are allocated. Similarly, legislative performance (MNA attendance, bills sponsored) is scattered across poorly indexable portal tables.
 
-**WakalaLens Pakistan** bridges this gap by combining official raw finance datasets with advanced AI reasoning, clean charts, and interactive calculators:
+**HisaabKitaab Pakistan** bridges this gap by combining official raw finance datasets with advanced AI reasoning, clean charts, and interactive calculators:
 1. **Demystifying Budget Jargon:** Translating dry ministry figures into simple, contextual English and Urdu.
 2. **Citizen-First Tax Transparency:** Instantly visualizing exactly where every rupee of your income tax goes.
 3. **MNA Performance Tracking:** Giving voters a direct look at the attendance, legislative activity, and AI-rated grades of their elected representatives.
@@ -43,7 +43,7 @@ Every ministry is automatically analyzed and graded on a **Transparency Index (0
 Citizens can input their monthly salary to see their estimated income tax alongside indirect tax estimates.
 - **Personal Allocation Breakdown:** See precisely how many PKR of your tax funds Debt Servicing (48.4%), NFC Transfers to Provinces (21.8%), Defence (15%), PSDP Development (6.2%), and Health/Education (<2%).
 - **Equivalent Impact:** Translates your tax contribution into relatable items (e.g. "funds 12 public school days per month").
-- **Share Card Generator:** Download a high-quality, customized report card image directly to share on social media. (e.g. *“48.4% of my taxes go straight to Debt Servicing! 😤 #WakalaLens”*).
+- **Share Card Generator:** Download a high-quality, customized report card image directly to share on social media. (e.g. *“48.4% of my taxes go straight to Debt Servicing! 😤 #HisaabKitaab”*).
 
 ### 5. 📄 AI Legislative Bill Summarizer
 A drag-and-drop zone allows citizens to upload complex legislative bill PDFs. The backend parses the PDF and runs it through Gemini AI to output clean, bulleted summaries in both **English** and **Nastaliq Urdu**.
@@ -125,7 +125,7 @@ cd backend
 npm install
 npm run dev
 ```
-*Expected log:* `🚀 WakalaLens Pakistan API running on http://localhost:3001`
+*Expected log:* `🚀 HisaabKitaab Pakistan API running on http://localhost:3001`
 
 #### Terminal 2: Web Frontend
 ```bash
