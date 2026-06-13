@@ -48,6 +48,51 @@ const GradeBadge: React.FC<{ grade: string }> = ({ grade }) => {
   );
 };
 
+// ─── MNA Avatar Component ─────────────────────────────────────────────────────
+const MNAAvatar: React.FC<{
+  imageUrl?: string;
+  name: string;
+  partyColor: string;
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+}> = ({ imageUrl, name, partyColor, size = 'md' }) => {
+  const [failed, setFailed] = useState(false);
+  
+  const sizeClasses = {
+    sm: 'w-8 h-8 text-[10px]',
+    md: 'w-10 h-10 text-xs',
+    lg: 'w-11 h-11 text-xs',
+    xl: 'w-14 h-14 text-lg'
+  };
+
+  const initials = name
+    .split(' ')
+    .filter(Boolean)
+    .map(w => w[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase();
+
+  if (imageUrl && !failed) {
+    return (
+      <img
+        src={imageUrl}
+        alt={name}
+        className={`${sizeClasses[size]} rounded-full object-cover border-2 border-[#1e3a5f]/60 shrink-0`}
+        onError={() => setFailed(true)}
+      />
+    );
+  }
+
+  return (
+    <div
+      className={`${sizeClasses[size]} rounded-full flex items-center justify-center font-bold text-white shrink-0`}
+      style={{ background: `linear-gradient(135deg, ${partyColor}88, ${partyColor})` }}
+    >
+      {initials}
+    </div>
+  );
+};
+
 // ─── MNA Profile Card ─────────────────────────────────────────────────────────
 const MNAProfileCard: React.FC<{
   profile: MNAProfile;
@@ -78,12 +123,7 @@ const MNAProfileCard: React.FC<{
         <div className="flex items-start justify-between gap-4">
           {/* Avatar & name */}
           <div className="flex items-center gap-4">
-            <div
-              className="w-14 h-14 rounded-full flex items-center justify-center text-xl font-bold text-white flex-shrink-0"
-              style={{ background: `linear-gradient(135deg, ${profile.partyColor}88, ${profile.partyColor})` }}
-            >
-              {profile.name.split(' ').map(w => w[0]).join('').slice(0, 2)}
-            </div>
+            <MNAAvatar imageUrl={profile.imageUrl} name={profile.name} partyColor={profile.partyColor} size="xl" />
             <div>
               <h2 className="text-lg font-bold text-white leading-tight">
                 {isUrdu ? profile.nameUrdu : profile.name}
@@ -222,6 +262,57 @@ const MNAProfileCard: React.FC<{
         <div className="px-5 py-3 border-b border-[#1e3a5f]/30">
           <span className="text-[10px] text-[#8892a4]">{isUrdu ? 'تعلیم: ' : 'Education: '}</span>
           <span className="text-[11px] text-[#a0aec0]">{profile.education}</span>
+        </div>
+      )}
+
+      {/* Contact Details */}
+      {(profile.phone || profile.email || profile.address || profile.profileUrl) && (
+        <div className="px-5 py-4 border-b border-[#1e3a5f]/30 bg-[#1e3a5f]/5">
+          <div className="text-xs text-[#8892a4] font-bold mb-3 flex items-center gap-1.5">
+            <span>📞</span>
+            <span>{isUrdu ? 'رابطہ کی تفصیلات' : 'Contact & Assembly Details'}</span>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+            {profile.phone && profile.phone !== 'N/A' && (
+              <div className="flex items-start gap-2 bg-[#07111e] p-2.5 rounded-xl border border-[#1e3a5f]/30">
+                <span className="text-sm">📱</span>
+                <div>
+                  <div className="text-[10px] text-[#8892a4]">{isUrdu ? 'فون / موبائل' : 'Phone / Mobile'}</div>
+                  <div className="font-semibold text-white mt-0.5">{profile.phone}</div>
+                </div>
+              </div>
+            )}
+            {profile.email && (
+              <div className="flex items-start gap-2 bg-[#07111e] p-2.5 rounded-xl border border-[#1e3a5f]/30">
+                <span className="text-sm">✉️</span>
+                <div>
+                  <div className="text-[10px] text-[#8892a4]">{isUrdu ? 'ای میل' : 'Email Address'}</div>
+                  <div className="font-semibold text-white mt-0.5 break-all">{profile.email}</div>
+                </div>
+              </div>
+            )}
+            {profile.address && (
+              <div className="flex items-start gap-2 bg-[#07111e] p-2.5 rounded-xl border border-[#1e3a5f]/30 sm:col-span-2">
+                <span className="text-sm">📍</span>
+                <div>
+                  <div className="text-[10px] text-[#8892a4]">{isUrdu ? 'پتہ' : 'Address'}</div>
+                  <div className="font-semibold text-white mt-0.5 leading-relaxed">{profile.address}</div>
+                </div>
+              </div>
+            )}
+            {profile.profileUrl && (
+              <div className="sm:col-span-2 flex justify-end pt-1">
+                <a
+                  href={profile.profileUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-[#00b4d8] hover:underline text-[11px] font-semibold"
+                >
+                  {isUrdu ? 'قومی اسمبلی کی ویب سائٹ پر پروفائل دیکھیں ↗' : 'View Profile on National Assembly Website ↗'}
+                </a>
+              </div>
+            )}
+          </div>
         </div>
       )}
 
@@ -425,12 +516,7 @@ const MNAResultRow: React.FC<{ member: MNASearchResult; onClick: () => void; lan
       onClick={onClick}
       className="w-full text-left p-3 rounded-xl bg-[#0d1b2e] border border-[#1e3a5f]/40 hover:border-[#00b4d8]/40 hover:bg-[#0d1b2e]/80 transition-all duration-150 flex items-center gap-3"
     >
-      <div
-        className="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center text-sm font-bold text-white"
-        style={{ background: `linear-gradient(135deg, ${member.partyColor}88, ${member.partyColor})` }}
-      >
-        {member.name.split(' ').map(w => w[0]).join('').slice(0, 2)}
-      </div>
+      <MNAAvatar imageUrl={member.imageUrl} name={member.name} partyColor={member.partyColor} size="md" />
       <div className="flex-1 min-w-0">
         <div className="text-sm font-semibold text-white truncate">
           {isUrdu ? member.nameUrdu : member.name}
@@ -942,12 +1028,7 @@ const WakalaCheck: React.FC = () => {
                               className="w-full text-left p-3 hover:bg-[#1a3050]/40 border-b border-[#1e3a5f]/20 transition-all flex items-center justify-between gap-3 text-xs"
                             >
                               <div className="flex items-center gap-2.5 min-w-0">
-                                <div
-                                  className="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center font-bold text-white text-[11px]"
-                                  style={{ background: `linear-gradient(135deg, ${m.partyColor}88, ${m.partyColor})` }}
-                                >
-                                  {m.name.split(' ').map(w => w[0]).join('').slice(0, 2)}
-                                </div>
+                                <MNAAvatar imageUrl={m.imageUrl} name={m.name} partyColor={m.partyColor} size="sm" />
                                 <div className="truncate">
                                   <p className="font-bold text-white truncate">{isUrdu ? m.nameUrdu || m.name : m.name}</p>
                                   <p className="text-[10px] text-[#00b4d8] truncate">{isUrdu ? m.constituencyUrdu || m.constituency : m.constituency}</p>
@@ -1430,12 +1511,7 @@ const WakalaCheck: React.FC = () => {
                     ) : compareProfile1 ? (
                       <div className="bg-[#0d1b2e] border border-[#1e3a5f]/60 rounded-2xl overflow-hidden shadow-card" style={{ borderTop: `4px solid ${compareProfile1.partyColor}` }}>
                         <div className="p-4 flex items-center gap-3 border-b border-[#1e3a5f]/30">
-                          <div
-                            className="w-11 h-11 rounded-full flex items-center justify-center font-bold text-white text-sm shrink-0"
-                            style={{ background: `linear-gradient(135deg, ${compareProfile1.partyColor}88, ${compareProfile1.partyColor})` }}
-                          >
-                            {compareProfile1.name.split(' ').map(w => w[0]).join('').slice(0, 2)}
-                          </div>
+                          <MNAAvatar imageUrl={compareProfile1.imageUrl} name={compareProfile1.name} partyColor={compareProfile1.partyColor} size="lg" />
                           <div>
                             <h4 className="text-sm font-bold text-white leading-tight">{isUrdu ? compareProfile1.nameUrdu : compareProfile1.name}</h4>
                             <div className="text-[11px] text-[#00b4d8] mt-0.5">{isUrdu ? compareProfile1.constituencyUrdu : compareProfile1.constituency}</div>
@@ -1494,12 +1570,7 @@ const WakalaCheck: React.FC = () => {
                     ) : compareProfile2 ? (
                       <div className="bg-[#0d1b2e] border border-[#1e3a5f]/60 rounded-2xl overflow-hidden shadow-card" style={{ borderTop: `4px solid ${compareProfile2.partyColor}` }}>
                         <div className="p-4 flex items-center gap-3 border-b border-[#1e3a5f]/30">
-                          <div
-                            className="w-11 h-11 rounded-full flex items-center justify-center font-bold text-white text-sm shrink-0"
-                            style={{ background: `linear-gradient(135deg, ${compareProfile2.partyColor}88, ${compareProfile2.partyColor})` }}
-                          >
-                            {compareProfile2.name.split(' ').map(w => w[0]).join('').slice(0, 2)}
-                          </div>
+                          <MNAAvatar imageUrl={compareProfile2.imageUrl} name={compareProfile2.name} partyColor={compareProfile2.partyColor} size="lg" />
                           <div>
                             <h4 className="text-sm font-bold text-white leading-tight">{isUrdu ? compareProfile2.nameUrdu : compareProfile2.name}</h4>
                             <div className="text-[11px] text-[#00b4d8] mt-0.5">{isUrdu ? compareProfile2.constituencyUrdu : compareProfile2.constituency}</div>

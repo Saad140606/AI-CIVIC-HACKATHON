@@ -84,6 +84,7 @@ export interface MNASearchResult {
   billsSponsored?: number;
   billsPassed?: number;
   questionsRaised?: number;
+  imageUrl?: string;
   dataSource?: any;
 }
 
@@ -567,6 +568,7 @@ function toSearchResult(m: MNAProfile): MNASearchResult {
     billsSponsored: m.billsSponsored,
     billsPassed: m.billsPassed,
     questionsRaised: m.questionsRaised,
+    imageUrl: m.imageUrl,
     dataSource: m.dataSource
   };
 }

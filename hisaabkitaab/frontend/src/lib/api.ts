@@ -107,6 +107,7 @@ export interface MNASearchResult {
   billsSponsored?: number;
   billsPassed?: number;
   questionsRaised?: number;
+  imageUrl?: string;
 }
 
 export interface RecentBill {
@@ -148,6 +149,9 @@ export interface MNAProfile {
   imageUrl?: string;
   terms: number;
   education?: string;
+  phone?: string;
+  email?: string;
+  address?: string;
   committees: string[];
   recentBills: RecentBill[];
   lastUpdated: string;

@@ -42,6 +42,7 @@ export interface MNAProfile {
   education?: string;
   phone?: string;
   email?: string;
+  address?: string;
   committees: string[];
   recentBills: RecentBill[];
   lastUpdated: string;
@@ -144,6 +145,14 @@ export async function hydrateAllMnas(): Promise<MNAProfile[]> {
     console.log('⚠️  Could not read seed mnas.json, fallback values will be used.');
   }
 
+  // 6.5 Load official scraped data for photos/contact info
+  let officialMnas: any[] = [];
+  try {
+    officialMnas = JSON.parse(fs.readFileSync(path.join(dataDir, 'na_official_scraped.json'), 'utf8'));
+  } catch (err) {
+    console.log('⚠️  Could not read na_official_scraped.json, official profile details will be empty.');
+  }
+
   // Calculate party averages for attendance
   const partyAttendanceSums: Record<string, number> = {};
   const partyAttendanceCounts: Record<string, number> = {};
@@ -181,10 +190,33 @@ export async function hydrateAllMnas(): Promise<MNAProfile[]> {
     return null;
   }
 
+  // Helper to clean name for fuzzy matching
+  function cleanMatchName(name: string): string {
+    return name
+      .toLowerCase()
+      .replace(/\b(mr|ms|dr|syed|mian|sardar|sahibzada|pir|begum|engr|ch|choudhary|chaudhry)\b/g, '')
+      .replace(/[^a-z0-9]/g, '')
+      .trim();
+  }
+
   // 1. Process all Wikipedia scraped MNAs
   for (const wikiMna of wikiMNAs) {
     const naNumber = getConstituencyNumber(wikiMna.constituency);
     const constituencyCode = `NA-${naNumber}`;
+    
+    // Find official data match
+    let officialMna = null;
+    if (!wikiMna.isReserved && naNumber !== 999) {
+      officialMna = officialMnas.find(o => o.constituencyCode === constituencyCode);
+    }
+    
+    if (!officialMna) {
+      const cleanedWikiName = cleanMatchName(wikiMna.name);
+      officialMna = officialMnas.find(o => {
+        const cleanedO = cleanMatchName(o.name);
+        return cleanedO === cleanedWikiName || cleanedO.includes(cleanedWikiName) || cleanedWikiName.includes(cleanedO);
+      });
+    }
     
     // Find matching seed profile by constituency or name to keep ID/details
     const seedMna = seedMNAs.find(s => 
@@ -279,10 +311,13 @@ export async function hydrateAllMnas(): Promise<MNAProfile[]> {
       billsSponsored,
       billsPassed,
       questionsRaised,
-      profileUrl: seedMna ? seedMna.profileUrl : `https://na.gov.pk/en/member-profile.php?id=${mnaId}`,
-      imageUrl: seedMna?.imageUrl || wikiMna.imageUrl || `https://na.gov.pk/uploads/members/${mnaId}.jpg`,
+      profileUrl: officialMna?.profileUrl || seedMna?.profileUrl || `https://na.gov.pk/en/member-profile.php?id=${mnaId}`,
+      imageUrl: officialMna?.imageUrl || seedMna?.imageUrl || wikiMna.imageUrl || `https://na.gov.pk/uploads/members/${mnaId}.jpg`,
       terms: seedMna ? seedMna.terms : 1,
       education: seedMna ? seedMna.education : 'Bachelors',
+      phone: officialMna?.phone || seedMna?.phone || 'N/A',
+      email: seedMna?.email || 'member@na.gov.pk',
+      address: officialMna?.address || seedMna?.address || 'Parliament Lodges, Islamabad',
       committees: seedMna ? seedMna.committees : ['Standing Committee on Rules and Procedures'],
       recentBills,
       votingRecord,
