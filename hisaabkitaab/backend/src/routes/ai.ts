@@ -6,6 +6,38 @@ import * as pdfParse from 'pdf-parse';
 
 const router = Router();
 
+// ── In-Memory Rate Limiter Middleware for AI Routes (Hygiene) ──────────────────
+const rateLimitWindowMs = 15 * 60 * 1000; // 15 minutes
+const rateLimitMaxRequests = 100; // max 100 requests per IP per window
+const ipRequestCounts = new Map<string, { count: number; resetTime: number }>();
+
+const rateLimiter = (req: Request, res: Response, next: any) => {
+  const ip = (req.headers['x-forwarded-for'] as string) || req.ip || req.socket.remoteAddress || 'unknown';
+  const now = Date.now();
+  
+  let record = ipRequestCounts.get(ip);
+  if (!record || now > record.resetTime) {
+    record = { count: 0, resetTime: now + rateLimitWindowMs };
+  }
+  
+  record.count++;
+  ipRequestCounts.set(ip, record);
+  
+  if (record.count > rateLimitMaxRequests) {
+    return res.status(429).json({
+      error: 'Too many requests from this IP, please try again after 15 minutes.'
+    });
+  }
+  
+  // Set headers
+  res.setHeader('X-RateLimit-Limit', rateLimitMaxRequests);
+  res.setHeader('X-RateLimit-Remaining', Math.max(0, rateLimitMaxRequests - record.count));
+  res.setHeader('X-RateLimit-Reset', new Date(record.resetTime).toISOString());
+  
+  next();
+};
+
+
 // ── AI provider helpers ───────────────────────────────────────────────────────
 
 function getGenAI() {
@@ -112,7 +144,7 @@ async function chatText(
 }
 
 // ── POST /api/ai/explain ──────────────────────────────────────────────────────
-router.post('/explain', async (req: Request, res: Response) => {
+router.post('/explain', rateLimiter, async (req: Request, res: Response) => {
   try {
     const { ministry, budget, year } = req.body as { ministry: string; budget: number; year: string };
 
@@ -145,7 +177,7 @@ router.post('/explain', async (req: Request, res: Response) => {
 });
 
 // ── POST /api/ai/chat ─────────────────────────────────────────────────────────
-router.post('/chat', async (req: Request, res: Response) => {
+router.post('/chat', rateLimiter, async (req: Request, res: Response) => {
   try {
     const { message, history } = req.body as { message: string; history?: Array<{ role: string; text: string }> };
 
@@ -154,127 +186,102 @@ router.post('/chat', async (req: Request, res: Response) => {
     }
 
     const data = await loadBudgetData();
+    const cleaned = message.toLowerCase().trim();
 
-    // ── Helper: find ministry total by keyword ────────────────────────────
-    const findMinistry = (keyword: string) =>
-      data.fy2526.find(m => m.ministry.toLowerCase().includes(keyword));
-
-    const formatBn = (n: number) => `PKR ${n.toFixed(1)} billion (PKR ${(n / 1000).toFixed(2)} trillion)`;
-
-    const changeVs2425 = (name: string) => {
-      const curr = data.fy2526.find(m => m.ministry.toLowerCase().includes(name));
-      const prev = data.fy2425.find(m => m.ministry.toLowerCase().includes(name));
-      if (!curr || !prev || prev.total === 0) return null;
-      const pct = ((curr.total - prev.total) / prev.total * 100).toFixed(1);
-      return { curr: curr.total, prev: prev.total, pct, dir: Number(pct) >= 0 ? '▲' : '▼' };
+    // ── 1. Dynamic Search in Spreadsheet Budget Data (RAG-style) ─────────────────
+    const matchedMinistries: any[] = [];
+    
+    // Map common abbreviations to their spreadsheet equivalents
+    const commonAbbreviations: Record<string, string> = {
+      'moitt': 'it & telecom',
+      'it': 'it & telecom',
+      'hec': 'education',
+      'ndma': 'climate change',
+      'nha': 'communications',
+      'wapda': 'water resources',
+      'fbr': 'finance',
+      'pims': 'national health',
     };
-
-    // ── Intent: Total budget / overview ──────────────────────────────────
-    if (/total budget|overall budget|kitna hai|total baj|کل بجٹ|مجموعی بجٹ|how much is.+budget/i.test(message)) {
-      const total2526 = data.fy2526.reduce((s, m) => s + m.total, 0);
-      const total2425 = data.fy2425.reduce((s, m) => s + m.total, 0);
-      const pct = ((total2526 - total2425) / total2425 * 100).toFixed(1);
-      return res.json({
-        response: `**Pakistan FY2025-26 Federal Budget: ${formatBn(total2526)}**\n\nCompared to FY2024-25 (PKR ${total2425.toFixed(1)}B), that's a **${pct}%** ${Number(pct) >= 0 ? 'increase' : 'decrease'}.\n\n**Top 3 allocations:**\n${data.fy2526.slice(0, 3).map((m, i) => `${i + 1}. ${m.ministry}: PKR ${m.total.toFixed(1)}B`).join('\n')}\n\n---\n\n**پاکستان مالی سال 2025-26 وفاقی بجٹ:** ${(total2526 / 1000).toFixed(2)} کھرب روپے\n\nسرفہرست 3 مختصات: ${data.fy2526.slice(0, 3).map(m => `${m.ministry}: ${m.total.toFixed(1)} ارب روپے`).join('، ')}\n\n**ماخذ: وزارت خزانہ، حکومت پاکستان**`
-      });
+    
+    let searchTerm = cleaned;
+    for (const [abbr, expanded] of Object.entries(commonAbbreviations)) {
+      if (cleaned.includes(abbr)) {
+        searchTerm = cleaned + ' ' + expanded;
+      }
     }
 
-    // ── Intent: Education ────────────────────────────────────────────────
-    if (/education|taleem|تعلیم|hec|higher education|school|university/i.test(message)) {
-      const edu = findMinistry('education');
-      const chg = changeVs2425('education');
-      return res.json({
-        response: `**Education Budget FY2025-26:**\n${edu ? formatBn(edu.total) : 'PKR 212 billion'}\n${chg ? `\n**Change from FY2024-25:** ${chg.dir} ${chg.pct}% (was PKR ${chg.prev.toFixed(1)}B)` : ''}\n\nKey divisions: Higher Education Commission (HEC), Federal Directorate of Education (FDE), and vocational training institutes.\n\n**Source: Finance Division, GoP — finance.gov.pk**\n\n---\n\n**تعلیمی بجٹ 2025-26:** ${edu ? `${edu.total.toFixed(1)} ارب روپے` : '212 ارب روپے'}\n${chg ? `گذشتہ سال سے ${chg.dir} ${chg.pct}%` : ''}\n\nاعلیٰ تعلیمی کمیشن، وفاقی تعلیمی ڈائریکٹریٹ اور ووکیشنل ادارے اس بجٹ سے مستفید ہوں گے۔`
-      });
+    const queryWords = searchTerm.split(/\s+/).filter(w => 
+      w.length > 2 && 
+      !['the', 'and', 'for', 'budget', 'allocated', 'allocation', 'ministry', 'department', 'with', 'what', 'how', 'much', 'show', 'tell', 'explain'].includes(w)
+    );
+    
+    // Scan all spreadsheet ministries
+    for (const item of data.fy2526) {
+      const ministryName = item.ministry.toLowerCase();
+      const isDirectMatch = ministryName.includes(cleaned) || cleaned.includes(ministryName);
+      const isWordMatch = queryWords.some(w => ministryName.includes(w));
+      
+      if (isDirectMatch || isWordMatch) {
+        const y24 = data.fy2425.find(m => m.ministry === item.ministry)?.total || 0;
+        const y23 = data.fy2324.find(m => m.ministry === item.ministry)?.total || 0;
+        
+        // Prevent duplicate entries
+        if (!matchedMinistries.some(m => m.ministry === item.ministry)) {
+          matchedMinistries.push({
+            ministry: item.ministry,
+            fy2526: item.total,
+            fy2425: y24,
+            fy2324: y23
+          });
+        }
+      }
     }
 
-    // ── Intent: Health ────────────────────────────────────────────────────
-    if (/health|sehat|صحت|hospital|nhsrc|seha|medical/i.test(message)) {
-      const health = findMinistry('health');
-      const chg = changeVs2425('health');
-      return res.json({
-        response: `**Health Budget FY2025-26:**\n${health ? formatBn(health.total) : 'PKR 96 billion'}\n${chg ? `\n**Change from FY2024-25:** ${chg.dir} ${chg.pct}%` : ''}\n\nCovers: National Health Services, NHSRC, Pakistan Institute of Medical Sciences (PIMS), and federal hospital administration.\n\n**Source: Finance Division, GoP — finance.gov.pk**\n\n---\n\n**صحت بجٹ 2025-26:** ${health ? `${health.total.toFixed(1)} ارب روپے` : '96 ارب روپے'}\n\nقومی صحت سروسز، NHSRC اور وفاقی ہسپتال اس بجٹ سے فنڈ حاصل کریں گے۔`
-      });
+    // ── 2. Build Enriched Context ──────────────────────────────────────────────
+    let dynamicContext = "";
+    if (matchedMinistries.length > 0) {
+      dynamicContext += "\nSpecifically relevant budget allocations found in the spreadsheet:\n";
+      for (const m of matchedMinistries) {
+        dynamicContext += `- **${m.ministry}**:\n  * FY2025-26 Allocation: PKR ${m.fy2526.toFixed(1)} billion\n  * FY2024-25 Allocation: PKR ${m.fy2425.toFixed(1)} billion\n  * FY2023-24 Allocation: PKR ${m.fy2324.toFixed(1)} billion\n`;
+      }
     }
 
-    // ── Intent: Defence ───────────────────────────────────────────────────
-    if (/defence|defense|defa|فوج|دفاع|military|army|armed forces/i.test(message)) {
-      const def = findMinistry('defence');
-      const chg = changeVs2425('defence');
-      return res.json({
-        response: `**Defence Budget FY2025-26:**\n${def ? formatBn(def.total) : 'PKR 2,414 billion'}\n${chg ? `\n**Change from FY2024-25:** ${chg.dir} ${chg.pct}%` : ''}\n\nIncludes Pakistan Army, Navy, Air Force, and defence production. Pakistan's defence spending is ~${def ? ((def.total / data.fy2526.reduce((s, m) => s + m.total, 0)) * 100).toFixed(1) : '13'}% of total budget.\n\n**Source: Finance Division, GoP**\n\n---\n\n**دفاعی بجٹ 2025-26:** ${def ? `${def.total.toFixed(1)} ارب روپے` : '2,414 ارب روپے'}\n\nپاک فوج، بحریہ، فضائیہ اور دفاعی پیداوار کا مجموعی بجٹ۔`
-      });
-    }
+    const total2526 = data.fy2526.reduce((s, m) => s + m.total, 0);
+    const total2425 = data.fy2425.reduce((s, m) => s + m.total, 0);
+    const total2324 = data.fy2324.reduce((s, m) => s + m.total, 0);
 
-    // ── Intent: Karachi ───────────────────────────────────────────────────
-    if (/karachi|کراچی/i.test(message)) {
-      return res.json({
-        response: `**Karachi Development (FY2025-26 PSDP allocations):**\n• **Roads & highways (NHA):** PKR 18 billion\n• **Water supply projects (CDA/K-W&S):** PKR 12 billion\n• **Urban transport & metro:** PKR 15 billion\n• **Karachi Circular Railway (KCR) revival:** PKR 8 billion\n\n**Total estimated Karachi share: ~PKR 53 billion**\n\nNote: Federal PSDP allocations for Sindh (Karachi's province) total PKR 140+ billion in FY2025-26.\n\n**Source: Planning Division, GoP — pc.gov.pk**\n\n---\n\n**کراچی ترقیاتی بجٹ (PSDP 2025-26):**\n• سڑکیں: 18 ارب\n• پانی: 12 ارب\n• ٹرانسپورٹ: 15 ارب\n• کراچی سرکلر ریلوے: 8 ارب\n\nکراچی کا تخمینی حصہ: 53+ ارب روپے`
-      });
-    }
-
-    // ── Intent: NFC / Provinces ───────────────────────────────────────────
-    if (/nfc|province|صوبہ|صوبوں|transfer|punj|sindh|baloch|kpk/i.test(message)) {
-      const nfc = findMinistry('provinces') ?? findMinistry('transfer') ?? findMinistry('nfc');
-      return res.json({
-        response: `**NFC / Provincial Transfers FY2025-26:**\n${nfc ? formatBn(nfc.total) : 'PKR 7,438 billion'}\n\nUnder the 7th NFC Award, provinces receive ~57.5% of the federal divisible pool. Punjab gets ~51.7%, Sindh ~24.6%, KPK ~14.6%, Balochistan ~9.1%.\n\n**Source: Finance Division, GoP**\n\n---\n\n**این ایف سی/ صوبائی منتقلی 2025-26:** ${nfc ? `${nfc.total.toFixed(1)} ارب روپے` : '7,438 ارب روپے'}\n\n7ویں این ایف سی ایوارڈ کے تحت: پنجاب 51.7%، سندھ 24.6%، کے پی کے 14.6%، بلوچستان 9.1%`
-      });
-    }
-
-    // ── Intent: PSDP ─────────────────────────────────────────────────────
-    if (/psdp|development|infrastructure|ترقی|بنیادی ڈھانچہ|منصوبے/i.test(message)) {
-      const psdp = findMinistry('planning') ?? findMinistry('psdp');
-      return res.json({
-        response: `**PSDP (Development Budget) FY2025-26:**\n${psdp ? formatBn(psdp.total) : 'PKR 1,050 billion'}\n\nThe Public Sector Development Programme funds roads, dams, power projects, hospitals, and schools across Pakistan. Key projects include Diamer Bhasha Dam, ML-1 Railway, and various motorway extensions.\n\n**Source: Planning Division, GoP — pc.gov.pk**\n\n---\n\n**پی ایس ڈی پی (ترقیاتی بجٹ) 2025-26:** ${psdp ? `${psdp.total.toFixed(1)} ارب روپے` : '1,050 ارب روپے'}\n\nاس فنڈ سے سڑکیں، بند، بجلی منصوبے، ہسپتال اور اسکول تعمیر کیے جاتے ہیں۔`
-      });
-    }
-
-    // ── Intent: Debt servicing ────────────────────────────────────────────
-    if (/debt|qarz|قرض|interest|markup|سود/i.test(message)) {
-      const debt = findMinistry('debt');
-      return res.json({
-        response: `**Debt Servicing FY2025-26:**\n${debt ? formatBn(debt.total) : 'PKR 9,775 billion'}\n\nThis is Pakistan's single largest budget item — interest payments on domestic and foreign debt. It represents ~${debt ? ((debt.total / data.fy2526.reduce((s, m) => s + m.total, 0)) * 100).toFixed(0) : '52'}% of total federal expenditure.\n\n**Source: Finance Division, GoP**\n\n---\n\n**قرض کی ادائیگی 2025-26:** ${debt ? `${debt.total.toFixed(1)} ارب روپے` : '9,775 ارب روپے'}\n\nیہ پاکستان کا سب سے بڑا بجٹ مد ہے — ملکی و غیرملکی قرض پر سود کی ادائیگی۔`
-      });
-    }
-
-    // ── Intent: Year comparison ───────────────────────────────────────────
-    if (/compare|comparison|vs|versus|muqabla|موازنہ|2324|2425|2526|fy23|fy24|fy25/i.test(message)) {
-      const t2324 = data.fy2324.reduce((s, m) => s + m.total, 0);
-      const t2425 = data.fy2425.reduce((s, m) => s + m.total, 0);
-      const t2526 = data.fy2526.reduce((s, m) => s + m.total, 0);
-      return res.json({
-        response: `**3-Year Budget Comparison:**\n\n| Year | Total Budget |\n|------|-------------|\n| FY2023-24 | PKR ${t2324.toFixed(0)}B |\n| FY2024-25 | PKR ${t2425.toFixed(0)}B |\n| FY2025-26 | PKR ${t2526.toFixed(0)}B |\n\nGrowth FY24→25: ${((t2425 - t2324) / t2324 * 100).toFixed(1)}%\nGrowth FY25→26: ${((t2526 - t2425) / t2425 * 100).toFixed(1)}%\n\n**Source: Finance Division, GoP — finance.gov.pk**\n\n---\n\n**تین سالہ بجٹ موازنہ:**\n2023-24: ${t2324.toFixed(0)} ارب | 2024-25: ${t2425.toFixed(0)} ارب | 2025-26: ${t2526.toFixed(0)} ارب روپے`
-      });
-    }
-
-    // ── Build full budget context for AI ─────────────────────────────────
     const budgetContext = data.fy2526
-      .slice(0, 20)
+      .slice(0, 15)
       .map(m => `${m.ministry}: PKR ${m.total.toFixed(1)} billion`)
       .join('\n');
 
-    const systemPrompt = `You are HisaabKitaab AI, a helpful assistant for Pakistan's federal budget. You explain budget data to ordinary Pakistani citizens in simple language. You can answer in both English and Urdu (Roman Urdu or Nastaliq). Be friendly, informative, and use relatable examples.
+    const systemPrompt = `You are HisaabKitaab AI, a helpful budget accountability assistant for Pakistan. You explain budget data to ordinary Pakistani citizens in simple, plain language. You can answer in both English and Urdu (Roman Urdu or Nastaliq). Be friendly, informative, and use relatable examples.
 
-Here is Pakistan's FY2025-26 Federal Budget data (top ministries by allocation, Source: Finance Division GoP):
+Here is the overall federal budget data (Source: Finance Division GoP):
+- Total Budget FY2025-26: PKR ${total2526.toFixed(1)} billion (PKR ${(total2526 / 1000).toFixed(2)} trillion)
+- Total Budget FY2024-25: PKR ${total2425.toFixed(1)} billion (PKR ${(total2425 / 1000).toFixed(2)} trillion)
+- Total Budget FY2023-24: PKR ${total2324.toFixed(1)} billion (PKR ${(total2324 / 1000).toFixed(2)} trillion)
+
+Top ministries by allocation in FY2025-26:
 ${budgetContext}
+${dynamicContext}
+Answer the user's question accurately using this real budget data. If they ask about a specific ministry (like IT, education, health, defence, etc.), make sure you cite its allocations for all 3 years from the context. If you present figures, always mention "Source: Finance Division, GoP". If the query is in Roman Urdu or Urdu, reply in both Urdu and English.`;
 
-Total Budget FY2025-26: ~PKR ${Math.round(data.fy2526.reduce((s, m) => s + m.total, 0))} billion
-Total Budget FY2024-25: ~PKR ${Math.round(data.fy2425.reduce((s, m) => s + m.total, 0))} billion
-Total Budget FY2023-24: ~PKR ${Math.round(data.fy2324.reduce((s, m) => s + m.total, 0))} billion
-
-Answer the user's question based on this data. Always cite "Source: Finance Division, GoP" when sharing budget figures. If they ask in Urdu or Roman Urdu, reply in both Urdu and English.`;
-
-    const getMockResponse = () => ({
-      response: `میں آپ کی بات سمجھ گیا! (I understand your question about: "${message}") 
-
-Based on available real budget data (Source: Finance Division, GoP):
-• FY2025-26 total budget: PKR ${Math.round(data.fy2526.reduce((s, m) => s + m.total, 0))} billion
-• Education: PKR ${data.fy2526.find(m => m.ministry.toLowerCase().includes('education'))?.total?.toFixed(1) ?? '212'} billion
-• Defence: PKR ${data.fy2526.find(m => m.ministry.toLowerCase().includes('defence'))?.total?.toFixed(1) ?? '2414'} billion
-
-To enable richer AI responses, configure GEMINI_API_KEY or GROQ_API_KEY in backend/.env`,
-      mock: true,
-    });
+    const getMockResponse = () => {
+      let response = `میں آپ کی بات سمجھ گیا! (I understand your question: "${message}")\n\n`;
+      if (matchedMinistries.length > 0) {
+        response += `Based on the official federal budget data (Source: Finance Division, GoP):\n`;
+        for (const m of matchedMinistries) {
+          response += `• **${m.ministry}**:\n  - FY2025-26: PKR ${m.fy2526.toFixed(1)}B\n  - FY2024-25: PKR ${m.fy2425.toFixed(1)}B\n  - FY2023-24: PKR ${m.fy2324.toFixed(1)}B\n`;
+        }
+      } else {
+        response += `Here is the overall budget status:\n`;
+        response += `• **Total Budget FY2025-26**: PKR ${total2526.toFixed(1)} billion\n`;
+        response += `• **Total Budget FY2024-25**: PKR ${total2425.toFixed(1)} billion\n\n`;
+        response += `To enable full AI chat, configure GEMINI_API_KEY in the environment.`;
+      }
+      return { response, mock: true };
+    };
 
     try {
       const { text } = await chatText(systemPrompt, history || [], message);
@@ -290,7 +297,7 @@ To enable richer AI responses, configure GEMINI_API_KEY or GROQ_API_KEY in backe
 });
 
 // ── POST /api/ai/rate-mna ─────────────────────────────────────────────────────
-router.post('/rate-mna', async (req: Request, res: Response) => {
+router.post('/rate-mna', rateLimiter, async (req: Request, res: Response) => {
   try {
     const {
       mnaName, mnaNameUrdu, constituency, party, attendancePercent,
@@ -392,7 +399,7 @@ RECOMMENDATION: [one sentence]`;
 });
 
 // ── POST /api/ai/summarize-bill ───────────────────────────────────────────────
-router.post('/summarize-bill', async (req: Request, res: Response) => {
+router.post('/summarize-bill', rateLimiter, async (req: Request, res: Response) => {
   try {
     const { fileBase64 } = req.body as { fileBase64: string };
     if (!fileBase64) {

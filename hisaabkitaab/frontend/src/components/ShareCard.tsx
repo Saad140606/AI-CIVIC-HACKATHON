@@ -69,7 +69,7 @@ export default function ShareCard({ ministry, changePercent, mna, taxData, lang 
       const text = mna
         ? `${mna.name} (${mna.constituency}) has ${mna.attendancePercent}% attendance in the National Assembly. AI Grade: ${mna.grade}. Check their profile on #HisaabKitaab #Pakistan`
         : taxData
-        ? `Out of PKR ${taxData.annualTax.toLocaleString()} estimated annual tax I pay, 48% (PKR ${Math.round(taxData.debtShare).toLocaleString()}) goes straight to Debt Servicing! 😤 Check yours on #HisaabKitaab #Pakistan`
+        ? `Out of PKR ${taxData.annualTax.toLocaleString()} estimated annual tax I pay, ${Math.round(taxData.debtShare / (taxData.annualTax || 1) * 100)}% (PKR ${Math.round(taxData.debtShare).toLocaleString()}) goes straight to Debt Servicing! 😤 Check yours on #HisaabKitaab #Pakistan`
         : `${ministry?.ministry} received PKR ${ministry?.total.toFixed(1)} Billion in Pakistan's FY2025-26 Budget. #PakistanBudget #HisaabKitaab`;
       navigator.clipboard.writeText(text);
       alert('Insight copied to clipboard!');
@@ -231,6 +231,12 @@ export default function ShareCard({ ministry, changePercent, mna, taxData, lang 
   if (taxData) {
     const formattedTax = taxData.annualTax.toLocaleString();
     const formattedIncome = taxData.monthlyIncome.toLocaleString();
+    const totalTax = taxData.annualTax || 1;
+    const debtPct = ((taxData.debtShare / totalTax) * 100).toFixed(1);
+    const nfcPct = ((taxData.nfcShare / totalTax) * 100).toFixed(1);
+    const defencePct = ((taxData.defenceShare / totalTax) * 100).toFixed(1);
+    const educationPct = ((taxData.educationShare / totalTax) * 100).toFixed(1);
+    const healthPct = ((taxData.healthShare / totalTax) * 100).toFixed(1);
     return (
       <div className="w-full">
         {/* Hidden card for Tax screenshot */}
@@ -277,18 +283,18 @@ export default function ShareCard({ ministry, changePercent, mna, taxData, lang 
           {/* Viral Callout */}
           <div style={{ background: 'rgba(239, 68, 68, 0.08)', border: '1px solid rgba(239, 68, 68, 0.25)', padding: '16px', borderRadius: '12px', textAlign: 'center', marginBottom: 24, fontSize: 15, fontWeight: 700, color: '#ff7878' }}>
             {isUrdu 
-              ? '😤 میرے ٹیکس کا 48.4% حصہ براہِ راست قرض کی ادائیگی پر جاتا ہے!' 
-              : '😤 48.4% of my taxes go straight to Debt Servicing!'}
+              ? `😤 میرے ٹیکس کا ${debtPct}% حصہ براہِ راست قرض کی ادائیگی پر جاتا ہے!` 
+              : `😤 ${debtPct}% of my taxes go straight to Debt Servicing!`}
           </div>
 
           {/* Breakdown Items */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 28 }}>
             {[
-              { label: isUrdu ? '💸 قرض کی ادائیگی (48.4%)' : '💸 Debt Servicing (48.4%)', value: taxData.debtShare, color: '#ef4444' },
-              { label: isUrdu ? '🏛️ صوبائی منتقلی (21.8%)' : '🏛️ Provincial Transfers (21.8%)', value: taxData.nfcShare, color: '#8b5cf6' },
-              { label: isUrdu ? '🛡️ دفاع (15.0%)' : '🛡️ Defence (15.0%)', value: taxData.defenceShare, color: '#f59e0b' },
-              { label: isUrdu ? '📚 تعلیم (1.2%)' : '📚 Education (1.2%)', value: taxData.educationShare, color: '#00e676' },
-              { label: isUrdu ? '🏥 صحت (0.6%)' : '🏥 Health (0.6%)', value: taxData.healthShare, color: '#06b6d4' },
+              { label: isUrdu ? `💸 قرض کی ادائیگی (${debtPct}%)` : `💸 Debt Servicing (${debtPct}%)`, value: taxData.debtShare, color: '#ef4444' },
+              { label: isUrdu ? `🏛️ صوبائی منتقلی (${nfcPct}%)` : `🏛️ Provincial Transfers (${nfcPct}%)`, value: taxData.nfcShare, color: '#8b5cf6' },
+              { label: isUrdu ? `🛡️ دفاع (${defencePct}%)` : `🛡️ Defence (${defencePct}%)`, value: taxData.defenceShare, color: '#f59e0b' },
+              { label: isUrdu ? `📚 تعلیم (${educationPct}%)` : `📚 Education (${educationPct}%)`, value: taxData.educationShare, color: '#00e676' },
+              { label: isUrdu ? `🏥 صحت (${healthPct}%)` : `🏥 Health (${healthPct}%)`, value: taxData.healthShare, color: '#06b6d4' },
             ].map(item => (
               <div key={item.label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#07111E', padding: '12px 16px', borderRadius: '10px', border: '1px solid #1E3A5F44' }}>
                 <span style={{ fontSize: 13, color: '#a0aec0' }}>{item.label}</span>

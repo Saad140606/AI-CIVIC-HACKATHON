@@ -18,6 +18,23 @@ Public finance documents in Pakistan are historically released as massive, compl
 
 ---
 
+## 👥 Who Benefits (Civic Impact)
+
+* **General Public & Voters:** Instantly decode where their tax money goes, understand complex budget allocations in plain English/Urdu, and verify if their local representative (MNA) is actively attending sessions and sponsoring legislation.
+* **Journalists & Media Outlets:** Instantly query multi-year budget trend data, compare ministries, and download verified data visualizations to back up reporting.
+* **Civic Researchers & NGOs:** Analyze ministry transparency scores and summarize complex legislative bill PDFs to track policy changes and advocate for reforms.
+
+---
+
+## 📈 Scalability & Future Roadmap
+
+* **Provincial Assembly Scaling:** The modular architecture of our scrapers and database loader is designed to scale easily to Provincial Assemblies (Punjab, Sindh, KPK, Balochistan) to provide a localized, province-level accountability explorer.
+* **Direct Citizen Feedback & Ground Auditing:** Integrate a crowd-sourced auditing feature allowing local communities to upload geotagged photos of development projects (PSDP) in their area (e.g., verifying if a funded school or road was actually built).
+* **Legislative Push Alerts:** Allow voters to subscribe to WhatsApp or Email alerts when new bills are introduced or when their local MNA votes on critical legislation.
+* **Decentralized Scheduled Updates:** Transition the background scrapers into a scheduled chron job network, ensuring continuous data updates and auditing.
+
+---
+
 ## ✨ Features
 
 ### 1. 🏛️ Constituency ➔ MNA Hero Lookup

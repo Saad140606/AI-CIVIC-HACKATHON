@@ -1,8 +1,9 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
 import ShareCard from '../components/ShareCard';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
+import { budgetApi } from '../lib/api';
 
 // Pakistan income tax slabs FY2025-26 (Federal Budget)
 const TAX_SLABS = [
@@ -57,6 +58,60 @@ export default function TaxCalculator() {
 
   const [monthlyIncome, setMonthlyIncome] = useState(100000);
   const [showResults, setShowResults] = useState(false);
+  const [categories, setCategories] = useState(BUDGET_CATEGORIES);
+
+  useEffect(() => {
+    budgetApi.getSummary()
+      .then(res => {
+        const fy2526 = res.fy2526;
+        if (!fy2526 || fy2526.length === 0) return;
+
+        // Calculate total budget (excluding principal repayment)
+        const totalBudget = fy2526.reduce((sum, item) => sum + item.total, 0);
+
+        // Find matches for each key
+        const findAllocation = (keywords: string[]) => {
+          const matched = fy2526.filter(item => 
+            keywords.some(kw => item.ministry.toLowerCase().includes(kw))
+          );
+          return matched.reduce((sum, item) => sum + item.total, 0);
+        };
+
+        const debtTotal = findAllocation(['debt', 'servicing']);
+        const defenceTotal = findAllocation(['defence', 'defense']);
+        const transfersTotal = findAllocation(['transfers to provinces', 'nfc', 'provincial transfers']);
+        const psdpTotal = findAllocation(['planning', 'psdp']);
+        const educationTotal = findAllocation(['education', 'federal education']);
+        const healthTotal = findAllocation(['health', 'national health']);
+
+        const calculatedCategories = BUDGET_CATEGORIES.map(cat => {
+          let pct = cat.pct;
+          if (cat.key === 'debt' && debtTotal > 0) pct = debtTotal / totalBudget;
+          else if (cat.key === 'defence' && defenceTotal > 0) pct = defenceTotal / totalBudget;
+          else if (cat.key === 'transfers' && transfersTotal > 0) pct = transfersTotal / totalBudget;
+          else if (cat.key === 'psdp' && psdpTotal > 0) pct = psdpTotal / totalBudget;
+          else if (cat.key === 'education' && educationTotal > 0) pct = educationTotal / totalBudget;
+          else if (cat.key === 'health' && healthTotal > 0) pct = healthTotal / totalBudget;
+
+          return { ...cat, pct };
+        });
+
+        // Normalize the 'other' category so all percentages sum to 1.0 (100%)
+        const sumKnown = calculatedCategories
+          .filter(c => c.key !== 'other')
+          .reduce((sum, c) => sum + c.pct, 0);
+        
+        const otherIndex = calculatedCategories.findIndex(c => c.key === 'other');
+        if (otherIndex !== -1) {
+          calculatedCategories[otherIndex].pct = Math.max(0, 1.0 - sumKnown);
+        }
+
+        setCategories(calculatedCategories);
+      })
+      .catch(err => {
+        console.error('Failed to load real budget allocations for tax calculator:', err);
+      });
+  }, []);
 
   const calculations = useMemo(() => {
     const annual = monthlyIncome * 12;
@@ -68,7 +123,7 @@ export default function TaxCalculator() {
     const totalMonthlyTax = monthlyTax + indirectTaxMonthly;
 
     // Your contribution per category
-    const breakdown = BUDGET_CATEGORIES.map(cat => ({
+    const breakdown = categories.map(cat => ({
       ...cat,
       myMonthlyShare: totalMonthlyTax * cat.pct,
       myAnnualShare: totalMonthlyTax * 12 * cat.pct,
@@ -95,7 +150,7 @@ export default function TaxCalculator() {
       hospitalVisits: Math.floor(healthMonthly / 800), // ~PKR 800 per public hospital visit
       debtMonthly,
     };
-  }, [monthlyIncome]);
+  }, [monthlyIncome, categories]);
 
   const pieData = calculations.breakdown.map(c => ({
     ...c,
@@ -352,7 +407,7 @@ export default function TaxCalculator() {
 
                 {/* Legend */}
                 <div className="space-y-1.5 mt-2">
-                  {BUDGET_CATEGORIES.map(cat => (
+                  {categories.map(cat => (
                     <div key={cat.key} className="flex items-center justify-between text-xs">
                       <div className="flex items-center gap-2">
                         <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: cat.color }} />
