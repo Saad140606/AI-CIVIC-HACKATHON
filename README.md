@@ -3,7 +3,7 @@
 > **Submission for the AI for Civic Innovation Hackathon 2026**  
 > A cutting-edge, bilingual budget intelligence and democratic accountability platform that turns Pakistan’s raw public finance spreadsheets and legislative records into plain-language, visual insights for citizens, journalists, and researchers.
 
-🌐 **Live Demo:** [your-vercel-url.vercel.app](https://your-vercel-url.vercel.app)
+🌐 **Live Demo:** [https://ai-civic-hackathon.vercel.app/](https://ai-civic-hackathon.vercel.app/)
 
 ---
 
