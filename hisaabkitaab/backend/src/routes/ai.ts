@@ -61,6 +61,7 @@ function getGroq() {
  * Returns { text, provider } so callers know which succeeded.
  */
 async function generateText(prompt: string): Promise<{ text: string; provider: 'gemini' | 'groq' }> {
+  let geminiErrMessage = '';
   // ── 1. Try Gemini ────────────────────────────────────────────────────────
   try {
     const genAI = getGenAI();
@@ -68,6 +69,7 @@ async function generateText(prompt: string): Promise<{ text: string; provider: '
     const result = await model.generateContent(prompt);
     return { text: result.response.text(), provider: 'gemini' };
   } catch (geminiErr: any) {
+    geminiErrMessage = geminiErr.message;
     console.warn('⚠️  Gemini failed, trying Groq:', geminiErr.message);
   }
 
@@ -84,7 +86,7 @@ async function generateText(prompt: string): Promise<{ text: string; provider: '
     return { text, provider: 'groq' };
   } catch (groqErr: any) {
     console.warn('⚠️  Groq also failed:', groqErr.message);
-    throw new Error(`Both Gemini and Groq failed. Gemini: ${(groqErr as any)?.message}`);
+    throw new Error(`Gemini Error: ${geminiErrMessage || 'None'}, Groq Error: ${groqErr.message}`);
   }
 }
 
@@ -97,6 +99,7 @@ async function chatText(
   history: Array<{ role: string; text: string }>,
   userMessage: string
 ): Promise<{ text: string; provider: 'gemini' | 'groq' }> {
+  let geminiErrMessage = '';
   // ── 1. Try Gemini ────────────────────────────────────────────────────────
   try {
     const genAI = getGenAI();
@@ -115,6 +118,7 @@ async function chatText(
     const result = await chat.sendMessage(userMessage);
     return { text: result.response.text(), provider: 'gemini' };
   } catch (geminiErr: any) {
+    geminiErrMessage = geminiErr.message;
     console.warn('⚠️  Gemini chat failed, trying Groq:', geminiErr.message);
   }
 
@@ -139,7 +143,7 @@ async function chatText(
     return { text, provider: 'groq' };
   } catch (groqErr: any) {
     console.warn('⚠️  Groq chat also failed:', groqErr.message);
-    throw new Error('Both Gemini and Groq failed for chat');
+    throw new Error(`Gemini Error: ${geminiErrMessage || 'None'}, Groq Error: ${groqErr.message}`);
   }
 }
 
