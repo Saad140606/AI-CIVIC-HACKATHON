@@ -77,13 +77,13 @@ An embedded, context-aware chatbot lets users ask questions in natural language 
 
 ## 📸 Screenshots
 
-Interactive views from the platform (located in `frontend/public/figures/`):
+Interactive views from the platform (located in `hisaabkitaab/frontend/public/figures/`):
 
 | Page | Preview |
 |---|---|
-| **Democratic Accountability (WakalaCheck)** | ![WakalaCheck](frontend/public/figures/screenshot_2020.png) |
-| **Bilingual Budget Dashboard** | ![Dashboard](frontend/public/figures/screenshot_2021.png) |
-| **3-Year Trend Comparison** | ![Compare Trend](frontend/public/figures/screenshot_2022.png) |
+| **Democratic Accountability (WakalaCheck)** | ![WakalaCheck](hisaabkitaab/frontend/public/figures/screenshot_2020.png) |
+| **Bilingual Budget Dashboard** | ![Dashboard](hisaabkitaab/frontend/public/figures/screenshot_2021.png) |
+| **3-Year Trend Comparison** | ![Compare Trend](hisaabkitaab/frontend/public/figures/screenshot_2022.png) |
 
 ---
 
@@ -102,9 +102,9 @@ cd AI-CIVIC-HACKATHON
 ```
 
 ### 2. Configure Backend Environment
-Copy the env example inside the `backend` folder:
+Copy the env example inside the `hisaabkitaab/backend` folder:
 ```bash
-cd backend
+cd hisaabkitaab/backend
 cp .env.example .env
 ```
 Open `.env` and fill in your keys:
@@ -121,7 +121,7 @@ We run the frontend and backend in separate terminals:
 
 #### Terminal 1: API Backend
 ```bash
-cd backend
+cd hisaabkitaab/backend
 npm install
 npm run dev
 ```
@@ -129,7 +129,7 @@ npm run dev
 
 #### Terminal 2: Web Frontend
 ```bash
-cd frontend
+cd hisaabkitaab/frontend
 npm install
 npm run dev
 ```

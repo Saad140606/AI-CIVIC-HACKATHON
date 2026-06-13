@@ -78,6 +78,7 @@ function AppContent() {
     { to: '/explorer', label: t.nav.explorer, icon: '📊', end: false, id: 'nav-explorer' },
     { to: '/compare', label: t.nav.compare, icon: '⚖️', end: false, id: 'nav-compare' },
     { to: '/wakala', label: lang === 'ur' ? 'وکالت چیک' : 'WakalaCheck', icon: '🏛️', end: false, id: 'nav-wakala' },
+    { to: '/bill-summarizer', label: t.nav.billSummarizer, icon: '📄', end: false, id: 'nav-bill-summarizer' },
     { to: '/tax', label: lang === 'ur' ? 'ٹیکس کیلکولیٹر' : 'Tax Calc', icon: '🧮', end: false, id: 'nav-tax' },
   ];
 
