@@ -1,7 +1,21 @@
 import axios from 'axios';
 
+const getBaseURL = () => {
+  const url = import.meta.env.VITE_API_URL;
+  if (!url || url === '/') {
+    return '/api';
+  }
+  // If it's a full URL (e.g. deployed on Vercel pointing to Railway), ensure it ends with /api
+  if (url.startsWith('http')) {
+    return url.endsWith('/api') || url.endsWith('/api/') 
+      ? url 
+      : `${url.replace(/\/+$/, '')}/api`;
+  }
+  return url;
+};
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '/api',
+  baseURL: getBaseURL(),
   timeout: 30000,
 });
 
