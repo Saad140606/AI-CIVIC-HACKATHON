@@ -65,7 +65,7 @@ async function generateText(prompt: string): Promise<{ text: string; provider: '
   // ── 1. Try Gemini ────────────────────────────────────────────────────────
   try {
     const genAI = getGenAI();
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
     const result = await model.generateContent(prompt);
     return { text: result.response.text(), provider: 'gemini' };
   } catch (geminiErr: any) {
@@ -77,7 +77,7 @@ async function generateText(prompt: string): Promise<{ text: string; provider: '
   try {
     const groq = getGroq();
     const completion = await groq.chat.completions.create({
-      model: 'llama3-70b-8192',
+      model: 'llama-3.3-70b-versatile',
       messages: [{ role: 'user', content: prompt }],
       max_tokens: 1024,
       temperature: 0.7,
@@ -103,7 +103,7 @@ async function chatText(
   // ── 1. Try Gemini ────────────────────────────────────────────────────────
   try {
     const genAI = getGenAI();
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
     const conversationHistory = history.map(h => ({
       role: h.role === 'user' ? 'user' : 'model',
       parts: [{ text: h.text }],
@@ -134,7 +134,7 @@ async function chatText(
       { role: 'user', content: userMessage },
     ];
     const completion = await groq.chat.completions.create({
-      model: 'llama3-70b-8192',
+      model: 'llama-3.3-70b-versatile',
       messages,
       max_tokens: 1024,
       temperature: 0.7,
