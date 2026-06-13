@@ -446,6 +446,70 @@ const MNAResultRow: React.FC<{ member: MNASearchResult; onClick: () => void; lan
 // ─── Province Filter ───────────────────────────────────────────────────────────
 const PROVINCES = ['All', 'Punjab', 'Sindh', 'KPK', 'Balochistan', 'Federal'];
 
+// AI Comparative summary generator
+const generateComparisonAIReport = (mna1: any, mna2: any, isUrdu: boolean) => {
+  const diffAttendance = mna1.attendancePercent - mna2.attendancePercent;
+  const attTextEn = diffAttendance > 0 
+    ? `${mna1.name} has a higher attendance rate of ${mna1.attendancePercent}% (+${diffAttendance}% over ${mna2.name}).`
+    : diffAttendance < 0
+    ? `${mna2.name} leads in parliamentary attendance with ${mna2.attendancePercent}% (+${Math.abs(diffAttendance)}% over ${mna1.name}).`
+    : `Both members have identical attendance rates at ${mna1.attendancePercent}%.`;
+  
+  const attTextUr = diffAttendance > 0
+    ? `${mna1.nameUrdu || mna1.name} کی حاضری کی شرح ${mna1.attendancePercent}٪ ہے جو کہ ${mna2.nameUrdu || mna2.name} سے ${diffAttendance}٪ زیادہ ہے۔`
+    : diffAttendance < 0
+    ? `${mna2.nameUrdu || mna2.name} کی حاضری کی شرح ${mna2.attendancePercent}٪ ہے جو کہ ${mna1.nameUrdu || mna1.name} سے ${Math.abs(diffAttendance)}٪ زیادہ ہے۔`
+    : `دونوں اراکین کی حاضری کی شرح بالکل برابر ${mna1.attendancePercent}٪ ہے۔`;
+
+  const diffQuestions = (mna1.questionsRaised || 0) - (mna2.questionsRaised || 0);
+  const qTextEn = diffQuestions > 0
+    ? `${mna1.name} was more active in submitting assembly questions, raising ${mna1.questionsRaised} compared to ${mna2.name}'s ${mna2.questionsRaised}.`
+    : diffQuestions < 0
+    ? `${mna2.name} raised more questions in the National Assembly (${mna2.questionsRaised}) than ${mna1.name} (${mna1.questionsRaised}).`
+    : `Both submitted the exact same number of questions (${mna1.questionsRaised}).`;
+
+  const qTextUr = diffQuestions > 0
+    ? `${mna1.nameUrdu || mna1.name} قومی اسمبلی میں عوامی مسائل پر سوالات اٹھانے میں زیادہ متحرک رہے، انہوں نے ${mna1.questionsRaised} سوالات پیش کیے جبکہ ${mna2.nameUrdu || mna2.name} نے ${mna2.questionsRaised}۔`
+    : diffQuestions < 0
+    ? `${mna2.nameUrdu || mna2.name} نے اسمبلی میں زیادہ سوالات اٹھائے (${mna2.questionsRaised}) جبکہ ${mna1.nameUrdu || mna1.name} نے (${mna1.questionsRaised})۔`
+    : `دونوں اراکین نے یکساں سوالات اٹھائے (${mna1.questionsRaised})۔`;
+
+  const diffBills = (mna1.billsSponsored || 0) - (mna2.billsSponsored || 0);
+  const bTextEn = diffBills > 0
+    ? `${mna1.name} sponsored more legislative drafts (${mna1.billsSponsored} bills vs ${mna2.name}'s ${mna2.billsSponsored}).`
+    : diffBills < 0
+    ? `${mna2.name} proposed more legislative bills (${mna2.billsSponsored} vs ${mna1.name}'s ${mna1.billsSponsored}).`
+    : `Both members sponsored an equal number of legislative bills (${mna1.billsSponsored}).`;
+
+  const bTextUr = diffBills > 0
+    ? `${mna1.nameUrdu || mna1.name} نے قانون سازی کے زیادہ مسودے پیش کیے (${mna1.billsSponsored} بل بنام ${mna2.nameUrdu || mna2.name} کے ${mna2.billsSponsored})۔`
+    : diffBills < 0
+    ? `${mna2.nameUrdu || mna2.name} نے قانون سازی میں زیادہ بل پیش کیے (${mna2.billsSponsored} بنام ${mna1.nameUrdu || mna1.name} کے ${mna1.billsSponsored})۔`
+    : `دونوں اراکین نے برابر قانون سازی کے مسودے پیش کیے (${mna1.billsSponsored})۔`;
+
+  let diffVotes = 0;
+  if (mna1.votingRecord && mna2.votingRecord) {
+    mna1.votingRecord.forEach((v1: any, index: number) => {
+      const v2 = mna2.votingRecord[index];
+      if (v2 && v1.vote !== v2.vote) {
+        diffVotes++;
+      }
+    });
+  }
+
+  const vTextEn = diffVotes > 0
+    ? `They voted differently on ${diffVotes} out of 5 key bills, highlighting distinct party stances and legislative agendas.`
+    : `They voted identically on all 5 key national bills, showing perfect alignment.`;
+
+  const vTextUr = diffVotes > 0
+    ? `دونوں اراکین نے 5 اہم ترین قومی بلوں میں سے ${diffVotes} پر مختلف رائے کا اظہار کیا، جو ان کے الگ پارٹی موقف کو ظاہر کرتا ہے۔`
+    : `دونوں نے تمام 5 اہم قومی بلوں پر ایک جیسا ووٹ دیا، جو بہترین سیاسی ہم آہنگی کو ظاہر کرتا ہے۔`;
+
+  return isUrdu
+    ? `موازنہ رپورٹ:\n- ${attTextUr}\n- ${qTextUr}\n- ${bTextUr}\n- ${vTextUr}`
+    : `Comparative Summary:\n- ${attTextEn}\n- ${qTextEn}\n- ${bTextEn}\n- ${vTextEn}`;
+};
+
 // ─── Main WakalaCheck Page ────────────────────────────────────────────────────
 const WakalaCheck: React.FC = () => {
   const { lang } = useLanguage();
@@ -461,8 +525,26 @@ const WakalaCheck: React.FC = () => {
   // Advanced States
   const [selectedCity, setSelectedCity] = useState('');
   const [selectedConstituency, setSelectedConstituency] = useState('');
-  const [activeSubTab, setActiveSubTab] = useState<'profile' | 'leaderboard'>('profile');
+  const [activeSubTab, setActiveSubTab] = useState<'profile' | 'leaderboard' | 'compare'>('profile');
   const [leaderboardSortBy, setLeaderboardSortBy] = useState<'attendance' | 'bills' | 'questions'>('attendance');
+  const [compareId1, setCompareId1] = useState('');
+  const [compareId2, setCompareId2] = useState('');
+
+  // Fetch selected MNA 1 comparison details
+  const { data: compareProfile1Data, isLoading: loadingCompare1 } = useQuery({
+    queryKey: ['mna-profile', compareId1],
+    queryFn: () => compareId1 ? mnaApi.getById(compareId1) : null,
+    enabled: !!compareId1 && activeSubTab === 'compare',
+  });
+  const compareProfile1 = compareProfile1Data?.member;
+
+  // Fetch selected MNA 2 comparison details
+  const { data: compareProfile2Data, isLoading: loadingCompare2 } = useQuery({
+    queryKey: ['mna-profile', compareId2],
+    queryFn: () => compareId2 ? mnaApi.getById(compareId2) : null,
+    enabled: !!compareId2 && activeSubTab === 'compare',
+  });
+  const compareProfile2 = compareProfile2Data?.member;
 
   // Drag and drop states for PDF Bill Summary
   const [dragActive, setDragActive] = useState(false);
@@ -735,6 +817,27 @@ const WakalaCheck: React.FC = () => {
             )}
             <span>🏆</span>
             <span>{isUrdu ? 'پارلیمانی لیڈر بورڈ' : 'MNA Leaderboard'}</span>
+          </button>
+          <button
+            onClick={() => {
+              setActiveSubTab('compare');
+              setRating(null);
+            }}
+            className={`relative z-10 px-5 py-2.5 rounded-lg text-sm font-bold transition-colors duration-200 flex items-center gap-1.5 ${
+              activeSubTab === 'compare'
+                ? 'text-[#060d1a] font-black'
+                : 'text-[#8892a4] hover:text-white'
+            }`}
+          >
+            {activeSubTab === 'compare' && (
+              <motion.div
+                layoutId="wakalaActiveSubTab"
+                className="absolute inset-0 bg-accent rounded-lg -z-10"
+                transition={{ type: "spring", stiffness: 380, damping: 30 }}
+              />
+            )}
+            <span>⚔️</span>
+            <span>{isUrdu ? 'ارکان کا موازنہ' : 'Compare MNAs'}</span>
           </button>
         </div>
       </div>
@@ -1127,7 +1230,7 @@ const WakalaCheck: React.FC = () => {
             </div>
           </div>
         </div>
-      ) : (
+      ) : activeSubTab === 'leaderboard' ? (
           /* Leaderboard Sub-tab */
           <div className="bg-[#0d1b2e] border border-[#1e3a5f]/60 rounded-2xl p-6 overflow-hidden shadow-card animate-fade-in">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
@@ -1237,6 +1340,306 @@ const WakalaCheck: React.FC = () => {
                 </tbody>
               </table>
             </div>
+          </div>
+        ) : (
+          /* Comparison Sub-tab */
+          <div className="space-y-6 animate-fade-in">
+            {/* Top selector container */}
+            <div className="p-6 rounded-2xl bg-[#0d1b2e] border border-[#1e3a5f]/60 shadow-card">
+              <h3 className="text-lg font-bold text-white mb-2">
+                {isUrdu ? 'ارکانِ اسمبلی کا آمنے سامنے موازنہ' : 'Side-by-Side MNA Comparison'}
+              </h3>
+              <p className="text-xs text-[#8892a4] mb-4">
+                {isUrdu ? 'حاضری، بلوں اور اہم ووٹوں کا موازنہ کرنے کے لیے کوئی سے دو ارکان اسمبلی کا انتخاب کریں' : 'Select any two MNAs to compare their parliamentary attendance, legislative activity, and voting records side-by-side.'}
+              </p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Selector 1 */}
+                <div className="space-y-1.5">
+                  <label className="text-xs text-[#8892a4] font-semibold block">
+                    {isUrdu ? 'پہلا رکن منتخب کریں:' : 'Select First MNA:'}
+                  </label>
+                  <select
+                    value={compareId1}
+                    onChange={e => setCompareId1(e.target.value)}
+                    className="w-full bg-[#060d1a] border border-[#1e3a5f]/45 text-sm text-white focus:outline-none focus:border-[#00b4d8]/60 premium-input"
+                  >
+                    <option value="">{isUrdu ? 'پہلا رکن منتخب کریں...' : 'Choose MNA 1...'}</option>
+                    {[...allMembers].sort((a,b) => a.name.localeCompare(b.name)).map(m => (
+                      <option key={m.id} value={m.id}>
+                        {isUrdu ? `${m.nameUrdu || m.name} (${m.constituencyUrdu || m.constituency})` : `${m.name} (${m.constituency.split(' ')[0]})`}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Selector 2 */}
+                <div className="space-y-1.5">
+                  <label className="text-xs text-[#8892a4] font-semibold block">
+                    {isUrdu ? 'دوسرا رکن منتخب کریں:' : 'Select Second MNA:'}
+                  </label>
+                  <select
+                    value={compareId2}
+                    onChange={e => setCompareId2(e.target.value)}
+                    className="w-full bg-[#060d1a] border border-[#1e3a5f]/45 text-sm text-white focus:outline-none focus:border-[#00b4d8]/60 premium-input"
+                  >
+                    <option value="">{isUrdu ? 'دوسرا رکن منتخب کریں...' : 'Choose MNA 2...'}</option>
+                    {[...allMembers].sort((a,b) => a.name.localeCompare(b.name)).map(m => (
+                      <option key={m.id} value={m.id}>
+                        {isUrdu ? `${m.nameUrdu || m.name} (${m.constituencyUrdu || m.constituency})` : `${m.name} (${m.constituency.split(' ')[0]})`}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {/* Compare profile columns */}
+            {(!compareId1 || !compareId2) ? (
+              <div className="flex flex-col items-center justify-center h-64 bg-[#0d1b2e] rounded-2xl border border-[#1e3a5f]/40 text-center p-6 shadow-card">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-cyan-600/20 to-blue-700/20 border border-cyan-500/20 flex items-center justify-center text-3xl mb-4 animate-pulse">
+                  ⚔️
+                </div>
+                <h3 className="text-white font-semibold mb-2">
+                  {isUrdu ? 'دونوں ارکان کو منتخب کریں' : 'Select Two Members to Compare'}
+                </h3>
+                <p className="text-sm text-[#8892a4] max-w-sm">
+                  {isUrdu ? 'موازنہ شروع کرنے کے لیے اوپر موجود دونوں ڈراپ ڈاؤن لسٹوں سے ارکان قومی اسمبلی کو منتخب کریں۔' : 'Choose two politicians from the dropdown lists above to see their detailed report cards live on stage.'}
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Column 1 */}
+                  <div className="space-y-4">
+                    {loadingCompare1 ? (
+                      <div className="flex items-center justify-center h-48 bg-[#0d1b2e] rounded-2xl border border-[#1e3a5f]/40">
+                        <div className="w-6 h-6 border-2 border-[#00b4d8]/30 border-t-[#00b4d8] rounded-full animate-spin" />
+                      </div>
+                    ) : compareProfile1 ? (
+                      <div className="bg-[#0d1b2e] border border-[#1e3a5f]/60 rounded-2xl overflow-hidden shadow-card" style={{ borderTop: `4px solid ${compareProfile1.partyColor}` }}>
+                        <div className="p-4 flex items-center gap-3 border-b border-[#1e3a5f]/30">
+                          <div
+                            className="w-11 h-11 rounded-full flex items-center justify-center font-bold text-white text-sm shrink-0"
+                            style={{ background: `linear-gradient(135deg, ${compareProfile1.partyColor}88, ${compareProfile1.partyColor})` }}
+                          >
+                            {compareProfile1.name.split(' ').map(w => w[0]).join('').slice(0, 2)}
+                          </div>
+                          <div>
+                            <h4 className="text-sm font-bold text-white leading-tight">{isUrdu ? compareProfile1.nameUrdu : compareProfile1.name}</h4>
+                            <div className="text-[11px] text-[#00b4d8] mt-0.5">{isUrdu ? compareProfile1.constituencyUrdu : compareProfile1.constituency}</div>
+                            <span className="text-[10px] text-[#8892a4]">{compareProfile1.province} · {isUrdu ? compareProfile1.partyUrdu : compareProfile1.party}</span>
+                          </div>
+                        </div>
+
+                        {/* Comparative Stats Box */}
+                        <div className="p-4 space-y-4">
+                          {/* Attendance */}
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs text-[#8892a4] font-semibold">{isUrdu ? 'اسمبلی حاضری:' : 'Assembly Attendance:'}</span>
+                            <div className="flex items-center gap-3">
+                              <AttendanceRing percent={compareProfile1.attendancePercent} size={50} />
+                              <span className="text-xs text-[#5a6a7e]">({compareProfile1.sessionsAttended}/{compareProfile1.totalSessions})</span>
+                            </div>
+                          </div>
+
+                          {/* Details list */}
+                          <div className="grid grid-cols-2 gap-2 text-center">
+                            <div className="bg-[#060d1a] p-2.5 rounded-xl border border-[#1e3a5f]/20">
+                              <div className="text-lg font-black text-[#00b4d8]">{compareProfile1.billsSponsored}</div>
+                              <div className="text-[9px] text-[#8892a4] mt-0.5">{isUrdu ? 'بل پیش کیے' : 'Bills Sponsored'}</div>
+                            </div>
+                            <div className="bg-[#060d1a] p-2.5 rounded-xl border border-[#1e3a5f]/20">
+                              <div className="text-lg font-black text-purple-400">{compareProfile1.questionsRaised}</div>
+                              <div className="text-[9px] text-[#8892a4] mt-0.5">{isUrdu ? 'سوالات اٹھائے' : 'Questions Raised'}</div>
+                            </div>
+                          </div>
+
+                          <div className="text-xs space-y-2 pt-2 border-t border-[#1e3a5f]/25">
+                            <div className="flex justify-between">
+                              <span className="text-[#8892a4]">{isUrdu ? 'منتخب دورانیہ:' : 'Terms Elected:'}</span>
+                              <span className="font-semibold text-white">{compareProfile1.terms}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-[#8892a4]">{isUrdu ? 'سرکاری تنخواہ:' : 'Salary Status:'}</span>
+                              <span className="font-semibold text-[#00b4d8]">{isUrdu ? compareProfile1.salaryReceivedUrdu : compareProfile1.salaryReceived}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-[#8892a4]">{isUrdu ? 'تعلیمی ڈگری:' : 'Education:'}</span>
+                              <span className="font-semibold text-white text-[10px] text-right truncate max-w-[150px]" title={compareProfile1.education}>{compareProfile1.education || 'N/A'}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ) : null}
+                  </div>
+
+                  {/* Column 2 */}
+                  <div className="space-y-4">
+                    {loadingCompare2 ? (
+                      <div className="flex items-center justify-center h-48 bg-[#0d1b2e] rounded-2xl border border-[#1e3a5f]/40">
+                        <div className="w-6 h-6 border-2 border-[#00b4d8]/30 border-t-[#00b4d8] rounded-full animate-spin" />
+                      </div>
+                    ) : compareProfile2 ? (
+                      <div className="bg-[#0d1b2e] border border-[#1e3a5f]/60 rounded-2xl overflow-hidden shadow-card" style={{ borderTop: `4px solid ${compareProfile2.partyColor}` }}>
+                        <div className="p-4 flex items-center gap-3 border-b border-[#1e3a5f]/30">
+                          <div
+                            className="w-11 h-11 rounded-full flex items-center justify-center font-bold text-white text-sm shrink-0"
+                            style={{ background: `linear-gradient(135deg, ${compareProfile2.partyColor}88, ${compareProfile2.partyColor})` }}
+                          >
+                            {compareProfile2.name.split(' ').map(w => w[0]).join('').slice(0, 2)}
+                          </div>
+                          <div>
+                            <h4 className="text-sm font-bold text-white leading-tight">{isUrdu ? compareProfile2.nameUrdu : compareProfile2.name}</h4>
+                            <div className="text-[11px] text-[#00b4d8] mt-0.5">{isUrdu ? compareProfile2.constituencyUrdu : compareProfile2.constituency}</div>
+                            <span className="text-[10px] text-[#8892a4]">{compareProfile2.province} · {isUrdu ? compareProfile2.partyUrdu : compareProfile2.party}</span>
+                          </div>
+                        </div>
+
+                        {/* Comparative Stats Box */}
+                        <div className="p-4 space-y-4">
+                          {/* Attendance */}
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs text-[#8892a4] font-semibold">{isUrdu ? 'اسمبلی حاضری:' : 'Assembly Attendance:'}</span>
+                            <div className="flex items-center gap-3">
+                              <AttendanceRing percent={compareProfile2.attendancePercent} size={50} />
+                              <span className="text-xs text-[#5a6a7e]">({compareProfile2.sessionsAttended}/{compareProfile2.totalSessions})</span>
+                            </div>
+                          </div>
+
+                          {/* Details list */}
+                          <div className="grid grid-cols-2 gap-2 text-center">
+                            <div className="bg-[#060d1a] p-2.5 rounded-xl border border-[#1e3a5f]/20">
+                              <div className="text-lg font-black text-[#00b4d8]">{compareProfile2.billsSponsored}</div>
+                              <div className="text-[9px] text-[#8892a4] mt-0.5">{isUrdu ? 'بل پیش کیے' : 'Bills Sponsored'}</div>
+                            </div>
+                            <div className="bg-[#060d1a] p-2.5 rounded-xl border border-[#1e3a5f]/20">
+                              <div className="text-lg font-black text-purple-400">{compareProfile2.questionsRaised}</div>
+                              <div className="text-[9px] text-[#8892a4] mt-0.5">{isUrdu ? 'سوالات اٹھائے' : 'Questions Raised'}</div>
+                            </div>
+                          </div>
+
+                          <div className="text-xs space-y-2 pt-2 border-t border-[#1e3a5f]/25">
+                            <div className="flex justify-between">
+                              <span className="text-[#8892a4]">{isUrdu ? 'منتخب دورانیہ:' : 'Terms Elected:'}</span>
+                              <span className="font-semibold text-white">{compareProfile2.terms}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-[#8892a4]">{isUrdu ? 'سرکاری تنخواہ:' : 'Salary Status:'}</span>
+                              <span className="font-semibold text-[#00b4d8]">{isUrdu ? compareProfile2.salaryReceivedUrdu : compareProfile2.salaryReceived}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-[#8892a4]">{isUrdu ? 'تعلیمی ڈگری:' : 'Education:'}</span>
+                              <span className="font-semibold text-white text-[10px] text-right truncate max-w-[150px]" title={compareProfile2.education}>{compareProfile2.education || 'N/A'}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ) : null}
+                  </div>
+                </div>
+
+                {/* AI Dynamic Summary Verdict */}
+                {compareProfile1 && compareProfile2 && (
+                  <div
+                    className="p-6 rounded-2xl relative overflow-hidden"
+                    style={{
+                      background: 'linear-gradient(135deg, #0c1929, #080f1e)',
+                      border: '1px solid rgba(168, 85, 247, 0.25)',
+                      boxShadow: '0 8px 32px rgba(168,85,247,0.05), 0 4px 16px rgba(0,0,0,0.5)',
+                    }}
+                  >
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
+                    
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/25 flex items-center justify-center text-xl">
+                        🤖
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-black text-white">
+                          {isUrdu ? 'اے آئی تقابلی خلاصہ رپورٹ' : 'WakalaLens AI Comparative Summary'}
+                        </h4>
+                        <p className="text-[10px] text-[#8892a4]">
+                          {isUrdu ? 'پارلیمانی سرگرمیوں کا فوری آٹو تجزیہ' : 'Local real-time analysis of active parliamentary session records.'}
+                        </p>
+                      </div>
+                    </div>
+
+                    {(() => {
+                      const verdict = generateComparisonAIReport(compareProfile1, compareProfile2, isUrdu);
+                      return (
+                        <div className="space-y-4">
+                          <div className="p-4 rounded-xl bg-[#060d1a]/60 border border-[#1e3a5f]/40 text-xs leading-relaxed text-[#a0aec0]">
+                            {verdict.split('\n').map((line, idx) => (
+                              <p key={idx} className={`mb-1.5 ${isUrdu ? 'font-urdu text-right text-xs' : 'font-medium text-left text-xs'}`} dir={isUrdu ? 'rtl' : 'ltr'}>
+                                {line}
+                              </p>
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    })()}
+                  </div>
+                )}
+
+                {/* Voting record comparison table */}
+                {compareProfile1 && compareProfile2 && (
+                  <div className="p-6 rounded-2xl bg-[#0d1b2e] border border-[#1e3a5f]/60 shadow-card">
+                    <h4 className="text-sm font-bold text-white mb-4 flex items-center gap-1.5">
+                      <span>📜</span>
+                      <span>{isUrdu ? 'قانون سازی ووٹنگ ریکارڈ کا موازنہ' : 'Legislative Voting Comparison'}</span>
+                    </h4>
+
+                    <div className="space-y-3">
+                      {compareProfile1.votingRecord && compareProfile1.votingRecord.map((record, index) => {
+                        const v2 = compareProfile2.votingRecord?.[index];
+                        
+                        const renderVoteBadge = (vote: string, label: string) => {
+                          const c = vote === 'YES' ? 'text-emerald-400 border-emerald-500/30 bg-emerald-500/5'
+                                  : vote === 'NO' ? 'text-red-400 border-red-500/30 bg-red-500/5'
+                                  : 'text-amber-400 border-amber-500/30 bg-amber-500/5';
+                          return (
+                            <span className={`text-[10px] px-2.5 py-1 rounded-full font-black border ${c}`}>
+                              {label}
+                            </span>
+                          );
+                        };
+
+                        const v1Label = record.vote === 'YES' ? (isUrdu ? 'ہاں' : 'YES') :
+                                        record.vote === 'NO' ? (isUrdu ? 'ناں' : 'NO') : (isUrdu ? 'غیر حاضر' : 'ABSENT');
+                        const v2Label = v2 ? (v2.vote === 'YES' ? (isUrdu ? 'ہاں' : 'YES') :
+                                             v2.vote === 'NO' ? (isUrdu ? 'ناں' : 'NO') : (isUrdu ? 'غیر حاضر' : 'ABSENT')) : 'N/A';
+
+                        return (
+                          <div key={index} className="rounded-xl border border-[#1e3a5f]/40 bg-[#060d1a] overflow-hidden p-4">
+                            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                              <div className="flex-1">
+                                <h5 className="text-xs font-bold text-white">{isUrdu ? record.billNameUrdu : record.billName}</h5>
+                                <p className="text-[10px] text-[#5a6a7e] mt-1 leading-normal">
+                                  {isUrdu ? record.explanationUrdu : record.explanationEnglish}
+                                </p>
+                              </div>
+
+                              <div className="flex items-center gap-3 self-end sm:self-center bg-[#0d1b2e]/60 p-2 rounded-xl border border-[#1e3a5f]/20">
+                                <div className="text-center">
+                                  <div className="text-[8px] text-[#8892a4] mb-0.5 truncate max-w-[60px]">{isUrdu ? compareProfile1.nameUrdu : compareProfile1.name.split(' ').pop()}</div>
+                                  {renderVoteBadge(record.vote, v1Label)}
+                                </div>
+                                <span className="text-[10px] text-[#5a6a7e] font-bold">vs</span>
+                                <div className="text-center">
+                                  <div className="text-[8px] text-[#8892a4] mb-0.5 truncate max-w-[60px]">{isUrdu ? compareProfile2.nameUrdu : compareProfile2.name.split(' ').pop()}</div>
+                                  {v2 ? renderVoteBadge(v2.vote, v2Label) : <span className="text-xs text-gray-500">N/A</span>}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )}
       </div>

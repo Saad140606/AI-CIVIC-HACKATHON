@@ -1,5 +1,6 @@
 import { useRef, useCallback } from 'react';
 import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
 import type { MinistryTotal } from '../lib/api';
 import { formatBillions } from '../lib/utils';
 
@@ -72,6 +73,35 @@ export default function ShareCard({ ministry, changePercent, mna, taxData, lang 
         : `${ministry?.ministry} received PKR ${ministry?.total.toFixed(1)} Billion in Pakistan's FY2025-26 Budget. #PakistanBudget #WakalaLens`;
       navigator.clipboard.writeText(text);
       alert('Insight copied to clipboard!');
+    }
+  }, [ministry, mna, taxData]);
+
+  const handleDownloadPDF = useCallback(async () => {
+    if (!cardRef.current) return;
+
+    try {
+      const canvas = await html2canvas(cardRef.current, {
+        backgroundColor: '#0A1628',
+        scale: 2,
+        useCORS: true,
+      });
+
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'px',
+        format: [canvas.width / 2, canvas.height / 2]
+      });
+      pdf.addImage(imgData, 'PNG', 0, 0, canvas.width / 2, canvas.height / 2);
+      const filename = mna
+        ? `wakalalens-mna-${mna.name.replace(/\s+/g, '-').toLowerCase()}.pdf`
+        : taxData
+        ? `wakalalens-tax-breakdown.pdf`
+        : `wakalalens-budget-${ministry?.ministry.replace(/\s+/g, '-')}.pdf`;
+      pdf.save(filename);
+    } catch (err) {
+      console.error('Failed to generate PDF:', err);
+      alert('PDF generation failed. Please try downloading as Image.');
     }
   }, [ministry, mna, taxData]);
 
@@ -184,8 +214,16 @@ export default function ShareCard({ ministry, changePercent, mna, taxData, lang 
           onClick={handleShare}
           className="w-full mt-2 py-2.5 px-4 rounded-xl font-bold text-xs bg-[#0d1b2e] border border-[#1e3a5f] text-[#00b4d8] hover:text-white hover:border-[#00b4d8] transition-all flex items-center justify-center gap-2"
         >
-          <span>📤</span>
-          {isUrdu ? 'رپورٹ کارڈ ڈاؤن لوڈ کریں' : 'Download Report Card Image'}
+          <span>📸</span>
+          {isUrdu ? 'تصویر ڈاؤن لوڈ کریں' : 'Download Report Card Image'}
+        </button>
+
+        <button
+          onClick={handleDownloadPDF}
+          className="w-full mt-2 py-2.5 px-4 rounded-xl font-bold text-xs bg-[#120726] border border-[#7c3aed]/50 text-[#c084fc] hover:text-white hover:border-[#7c3aed] transition-all flex items-center justify-center gap-2 shadow-sm"
+        >
+          <span>📄</span>
+          {isUrdu ? 'پی ڈی ایف رپورٹ کارڈ ڈاؤن لوڈ کریں' : 'Download Report Card as PDF'}
         </button>
       </div>
     );
@@ -271,8 +309,16 @@ export default function ShareCard({ ministry, changePercent, mna, taxData, lang 
           onClick={handleShare}
           className="w-full mt-2 py-3 px-4 rounded-xl font-bold text-sm bg-[#7c3aed]/10 border border-[#7c3aed]/30 text-[#c084fc] hover:text-white hover:border-[#7c3aed] hover:bg-[#7c3aed]/20 transition-all flex items-center justify-center gap-2"
         >
-          <span>📤</span>
-          {isUrdu ? 'ٹیکس کارڈ ڈاؤن لوڈ کریں' : 'Download Tax Breakdown Card'}
+          <span>📸</span>
+          {isUrdu ? 'ٹیکس کارڈ تصویر ڈاؤن لوڈ کریں' : 'Download Tax Card Image'}
+        </button>
+
+        <button
+          onClick={handleDownloadPDF}
+          className="w-full mt-2 py-3 px-4 rounded-xl font-bold text-sm bg-[#0d1b2e] border border-[#1e3a5f] text-[#00b4d8] hover:text-white hover:border-[#00b4d8] transition-all flex items-center justify-center gap-2"
+        >
+          <span>📄</span>
+          {isUrdu ? 'پی ڈی ایف ٹیکس کارڈ ڈاؤن لوڈ کریں' : 'Download Tax Card as PDF'}
         </button>
       </div>
     );

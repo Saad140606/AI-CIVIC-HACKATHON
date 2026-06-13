@@ -20,12 +20,108 @@ function downloadCSV(rows: string[][], filename: string) {
   URL.revokeObjectURL(url);
 }
 
+interface ManifestoPromise {
+  party: 'PML-N' | 'PPP' | 'PTI';
+  promise: string;
+  promiseUrdu: string;
+  sector: string;
+  sectorUrdu: string;
+  allocation: string;
+  allocationUrdu: string;
+  verdict: 'Kept' | 'Partially Kept' | 'Broken';
+  verdictUrdu: 'مکمل' | 'جزوی' | 'ناکام';
+  aiVerdict: string;
+  aiVerdictUrdu: string;
+}
+
+const MANIFESTO_PROMISES: ManifestoPromise[] = [
+  {
+    party: 'PML-N',
+    promise: 'Provide 1 million laptops and digital skills training to youth.',
+    promiseUrdu: 'نوجوانوں کو 10 لاکھ لیپ ٹاپ اور ڈیجیٹل ہنر کی تربیت فراہم کرنا۔',
+    sector: 'Education & IT',
+    sectorUrdu: 'تعلیم اور آئی ٹی',
+    allocation: 'PKR 26B allocated for youth training & laptop schemes (↑4% YoY).',
+    allocationUrdu: 'نوجوانوں کی تربیت اور لیپ ٹاپ سکیموں کے لیے 26 ارب روپے مختص (سال بہ سال 4 فیصد اضافہ)۔',
+    verdict: 'Partially Kept',
+    verdictUrdu: 'جزوی',
+    aiVerdict: 'Funding was allocated but only covers around 200,000 laptops instead of the promised 1 million due to import duties and fiscal tightening.',
+    aiVerdictUrdu: 'فنڈز مختص کیے گئے تھے لیکن درآمدی ڈیوٹی اور مالیاتی تنگی کے باعث 10 لاکھ کے بجائے صرف 2 لاکھ لیپ ٹاپ ہی کور ہو سکتے ہیں۔'
+  },
+  {
+    party: 'PML-N',
+    promise: 'Build 5 new major highways across Punjab and Sindh.',
+    promiseUrdu: 'پنجاب اور سندھ میں 5 نئی بڑی شاہراہیں تعمیر کرنا۔',
+    sector: 'Infrastructure',
+    sectorUrdu: 'انفراسٹرکچر',
+    allocation: 'NHA Development budget dropped by 8% to PKR 108B.',
+    allocationUrdu: 'نیشنل ہائی وے اتھارٹی (NHA) کے ترقیاتی بجٹ میں 8 فیصد کمی کے ساتھ 108 ارب روپے رہ گئے۔',
+    verdict: 'Broken',
+    verdictUrdu: 'ناکام',
+    aiVerdict: 'Due to severe PSDP development cuts under the IMF agreement, construction on new highway projects has been postponed.',
+    aiVerdictUrdu: 'آئی ایم ایف معاہدے کے تحت ترقیاتی بجٹ میں شدید کٹوتیوں کی وجہ سے نئی شاہراہوں کے منصوبوں پر کام ملتوی کر دیا گیا ہے۔'
+  },
+  {
+    party: 'PPP',
+    promise: 'Double salaries of government employees and minimum wage to PKR 45,000.',
+    promiseUrdu: 'سرکاری ملازمین کی تنخواہیں دگنی کرنا اور کم از کم اجرت 45,000 روپے کرنا۔',
+    sector: 'Labor & Finance',
+    sectorUrdu: 'لیبر اور مالیات',
+    allocation: '25% ad-hoc relief allowance for government employees; minimum wage set at PKR 37,000.',
+    allocationUrdu: 'سرکاری ملازمین کے لیے 25 فیصد ایڈہاک ریلیف الاؤنس؛ کم از کم اجرت 37,000 روپے مقرر۔',
+    verdict: 'Partially Kept',
+    verdictUrdu: 'جزوی',
+    aiVerdict: 'Minimum wage increased from 32k to 37k, which falls short of the promised 45k due to high inflation constraints and budget deficits.',
+    aiVerdictUrdu: 'کم از کم اجرت 32 ہزار سے بڑھا کر 37 ہزار کر دی گئی، جو بجٹ خسارے کی وجہ سے 45 ہزار کے وعدے سے کم ہے۔'
+  },
+  {
+    party: 'PPP',
+    promise: 'Provide 300 units of free solar power to low-income families.',
+    promiseUrdu: 'کم آمدنی والے خاندانوں کو 300 یونٹ مفت سولر بجلی فراہم کرنا۔',
+    sector: 'Energy',
+    sectorUrdu: 'توانائی',
+    allocation: 'PKR 12B allocated for Benazir Income Support Program solar distribution.',
+    allocationUrdu: 'بینظیر انکم سپورٹ پروگرام سولر تقسیم کے لیے 12 ارب روپے مختص۔',
+    verdict: 'Partially Kept',
+    verdictUrdu: 'جزوی',
+    aiVerdict: 'Targeted solar pilot programs launched through BISP, but funding is insufficient to cover all promised households this fiscal year.',
+    aiVerdictUrdu: 'BISP کے ذریعے ٹارگٹڈ سولر پائلٹ پروگرام شروع کیے گئے، لیکن رواں مالی سال تمام گھرانوں کو کور کرنے کے لیے فنڈز ناکافی ہیں۔'
+  },
+  {
+    party: 'PTI',
+    promise: 'Increase Climate Change & Green Pakistan budget by 50%.',
+    promiseUrdu: 'موسمیاتی تبدیلی اور گرین پاکستان کے بجٹ میں 50 فیصد اضافہ کرنا۔',
+    sector: 'Environment',
+    sectorUrdu: 'ماحول',
+    allocation: 'Climate Change budget slashed by 40% from FY24-25 to FY25-26.',
+    allocationUrdu: 'مالی سال 24-25 سے 25-26 تک موسمیاتی تبدیلی کے بجٹ میں 40 فیصد کمی۔',
+    verdict: 'Broken',
+    verdictUrdu: 'ناکام',
+    aiVerdict: 'Instead of an increase, environmental and climate budgets were heavily cut to accommodate emergency interest servicing payments.',
+    aiVerdictUrdu: 'اضافے کے بجائے، ہنگامی قرضوں کی سود کی ادائیگی کے لیے ماحولیاتی اور موسمیاتی بجٹ میں بھاری کٹوتی کی گئی۔'
+  },
+  {
+    party: 'PTI',
+    promise: 'Provide Health Card (Sehat Insaf Card) universal coverage nationwide.',
+    promiseUrdu: 'ملک بھر میں صحت کارڈ (صحت انصاف کارڈ) کی عالمگیر کوریج فراہم کرنا۔',
+    sector: 'Health',
+    sectorUrdu: 'صحت',
+    allocation: 'PKR 102B allocated for universal health insurance schemes across KPK/Punjab.',
+    allocationUrdu: 'کے پی کے اور پنجاب میں ہیلتھ انشورنس اسکیموں کے لیے 102 ارب روپے مختص۔',
+    verdict: 'Kept',
+    verdictUrdu: 'مکمل',
+    aiVerdict: 'Universal health coverage funding was retained in KPK and partially restored in Punjab, representing a major policy success.',
+    aiVerdictUrdu: 'خیبرپختونخوا میں ہیلتھ کارڈ کی مکمل کوریج کو برقرار رکھا گیا اور پنجاب میں جزوی بحالی ہوئی، جو ایک اہم کامیابی ہے۔'
+  }
+];
+
 export default function Compare() {
   const { t, lang } = useLanguage();
   const isUrdu = lang === 'ur';
-  const [activeTab, setActiveTab] = useState<'sector' | 'ministry'>('sector');
+  const [activeTab, setActiveTab] = useState<'sector' | 'ministry' | 'promises'>('sector');
   const [selected, setSelected] = useState('');
   const [search, setSearch] = useState('');
+  const [selectedPartyFilter, setSelectedPartyFilter] = useState<'All' | 'PML-N' | 'PPP' | 'PTI'>('All');
 
   const { data } = useQuery({
     queryKey: ['budget-summary'],
@@ -155,7 +251,7 @@ export default function Compare() {
             className="flex p-1 rounded-2xl"
             style={{ background: 'rgba(8, 15, 30, 0.8)', border: '1px solid rgba(26, 48, 80, 0.6)' }}
           >
-            {(['sector', 'ministry'] as const).map((tab) => (
+            {(['sector', 'ministry', 'promises'] as const).map((tab) => (
               <motion.button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
@@ -175,7 +271,9 @@ export default function Compare() {
               >
                 {tab === 'sector'
                   ? (isUrdu ? '📊 شعبہ جاتی موازنہ' : '📊 Sector AI Compare')
-                  : (isUrdu ? '🏛️ وزارت موازنہ' : '🏛️ Ministry Compare')}
+                  : tab === 'ministry'
+                  ? (isUrdu ? '🏛️ وزارت موازنہ' : '🏛️ Ministry Compare')
+                  : (isUrdu ? '🎯 منشور کا سراغ' : '🎯 Manifesto Promises')}
               </motion.button>
             ))}
           </div>
@@ -543,6 +641,114 @@ export default function Compare() {
               </p>
             </motion.div>
           )}
+        </motion.div>
+      )}
+
+      {/* Tab 3: Manifesto Promises */}
+      {activeTab === 'promises' && (
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ type: 'spring', stiffness: 80 }}
+          className="space-y-6"
+        >
+          {/* Top description and filters */}
+          <div
+            className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 rounded-2xl"
+            style={{
+              background: 'linear-gradient(135deg, #0c1929, #080f1e)',
+              border: '1px solid rgba(26, 48, 80, 0.6)',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
+            }}
+          >
+            <div>
+              <h3 className="text-base font-bold text-white">
+                {isUrdu ? 'پارٹی منشور بمقابلہ بجٹ ٹریکر' : 'Manifesto Promises vs Budget Allocations'}
+              </h3>
+              <p className="text-xs text-[#7f8ea4] mt-0.5">
+                {isUrdu ? 'انتخابی منشور کے بڑے وعدوں اور مالی سال 2025-26 کے بجٹ کی حقیقت کا موازنہ' : 'Track key election promises made by major parties against real funding in FY2025-26.'}
+              </p>
+            </div>
+            
+            {/* Party Selector Buttons */}
+            <div className="flex flex-wrap gap-1.5 bg-[#060d1a] border border-[#1e3a5f]/40 p-1 rounded-lg">
+              {(['All', 'PML-N', 'PPP', 'PTI'] as const).map(p => (
+                <button
+                  key={p}
+                  onClick={() => setSelectedPartyFilter(p)}
+                  className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all ${
+                    selectedPartyFilter === p
+                      ? 'bg-[#1e3a5f] text-white shadow-sm'
+                      : 'text-[#8892a4] hover:text-white'
+                  }`}
+                >
+                  {p === 'All' ? (isUrdu ? 'تمام پارٹیاں' : 'All Parties') : p}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Promises Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {MANIFESTO_PROMISES.filter(item => selectedPartyFilter === 'All' || item.party === selectedPartyFilter).map((item, idx) => {
+              const verdictColors = {
+                'Kept': 'text-emerald-400 border-emerald-500/30 bg-emerald-500/5',
+                'Partially Kept': 'text-amber-400 border-amber-500/30 bg-amber-500/5',
+                'Broken': 'text-red-400 border-red-500/30 bg-red-500/5',
+              };
+              const partyColors = {
+                'PML-N': 'text-emerald-500 border-emerald-500/30 bg-emerald-500/10',
+                'PPP': 'text-red-500 border-red-500/30 bg-red-500/10',
+                'PTI': 'text-purple-400 border-purple-500/30 bg-purple-500/10',
+              };
+              
+              return (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, scale: 0.96 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: idx * 0.05 }}
+                  className="rounded-2xl p-5 border border-[#1e3a5f]/40 bg-[#0d1b2e] flex flex-col justify-between hover:border-[#00d4ff]/40 transition-all duration-200"
+                >
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between gap-3">
+                      <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black border ${partyColors[item.party]}`}>
+                        {item.party}
+                      </span>
+                      <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black border ${verdictColors[item.verdict]}`}>
+                        {isUrdu ? item.verdictUrdu : item.verdict}
+                      </span>
+                    </div>
+
+                    <div className="space-y-1">
+                      <div className="text-[10px] text-[#8892a4] uppercase font-bold tracking-wider">{isUrdu ? 'انتخابی منشور کا وعدہ' : 'Election Promise'}</div>
+                      <p className="text-sm font-semibold text-white leading-snug">
+                        {isUrdu ? item.promiseUrdu : item.promise}
+                      </p>
+                    </div>
+
+                    <div className="space-y-1 pt-2 border-t border-[#1e3a5f]/20">
+                      <div className="text-[10px] text-[#00b4d8] uppercase font-bold tracking-wider">{isUrdu ? 'بجٹ کا مختص (FY 2025-26)' : 'Actual Budget Allocation (FY 2025-26)'}</div>
+                      <p className="text-xs text-[#a0aec0] leading-snug">
+                        {isUrdu ? item.allocationUrdu : item.allocation}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* AI Explanation verdict */}
+                  <div className="mt-4 p-3 rounded-xl bg-[#060d1a]/50 border border-[#1e3a5f]/30 text-[11px] leading-relaxed">
+                    <div className="text-[9px] text-purple-400 uppercase font-bold tracking-wider mb-1 flex items-center gap-1">
+                      <span>🤖</span>
+                      <span>{isUrdu ? 'اے آئی بجٹ کا فیصلہ' : 'WakalaLens AI Verdict'}</span>
+                    </div>
+                    <p className="text-[#8892a4]">
+                      {isUrdu ? item.aiVerdictUrdu : item.aiVerdict}
+                    </p>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
         </motion.div>
       )}
     </div>

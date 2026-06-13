@@ -42,21 +42,6 @@ router.get('/list', async (_req, res) => {
   }
 });
 
-// GET /api/mna/:id
-router.get('/:id', async (req, res) => {
-  try {
-    const { id } = req.params;
-    const profile = await getMNAById(id);
-    if (!profile) {
-      return res.status(404).json({ success: false, error: 'MNA not found' });
-    }
-    return res.json({ success: true, member: profile });
-  } catch (err) {
-    console.error('MNA profile error:', err);
-    return res.status(500).json({ success: false, error: 'Failed to load member profile' });
-  }
-});
-
 // GET /api/mna/constituency/:name
 router.get('/constituency/:name', async (req, res) => {
   try {
@@ -73,6 +58,21 @@ router.get('/constituency/:name', async (req, res) => {
   } catch (err) {
     console.error('Constituency search error:', err);
     return res.status(500).json({ success: false, error: 'Failed to search constituency' });
+  }
+});
+
+// GET /api/mna/:id
+router.get('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const profile = await getMNAById(id);
+    if (!profile) {
+      return res.status(404).json({ success: false, error: 'MNA not found' });
+    }
+    return res.json({ success: true, member: profile });
+  } catch (err) {
+    console.error('MNA profile error:', err);
+    return res.status(500).json({ success: false, error: 'Failed to load member profile' });
   }
 });
 

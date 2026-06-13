@@ -1,4 +1,5 @@
 import * as cheerio from 'cheerio';
+import fetch from 'node-fetch';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 export interface VotingRecordItem {
@@ -949,7 +950,108 @@ const SEED_MNA_DATA: MNAProfile[] = [
 // ─── Cache ─────────────────────────────────────────────────────────────────────
 let mnaCache: MNAProfile[] | null = null;
 let cacheTimestamp = 0;
-const CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour
+const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
+
+// ─── Scraper and Fuzzy Match ──────────────────────────────────────────────────
+export interface ScrapedMNA {
+  name: string;
+  constituency: string;
+  party: string;
+  profileUrl: string;
+  imageUrl?: string;
+}
+
+export async function scrapeNAMembers(): Promise<ScrapedMNA[]> {
+  try {
+    const response = await fetch('https://na.gov.pk/en/member-profiles.php', {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+      },
+      timeout: 2000,
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const html = await response.text();
+    const $ = cheerio.load(html);
+    const results: ScrapedMNA[] = [];
+    
+    // Attempt standard cheerio selectors for members
+    $('a[href*="member-profile.php?id="], a[href*="member-profile.php"]').each((_, el) => {
+      const href = $(el).attr('href') || '';
+      const profileUrl = href.startsWith('http') ? href : `https://na.gov.pk${href.startsWith('/') ? '' : '/en/'}${href}`;
+      
+      const parent = $(el).closest('tr, td, div, li');
+      const text = parent.text() || '';
+      
+      let name = $(el).text().trim();
+      if (!name) return;
+      
+      const constituencyMatch = text.match(/\b(NA-\d+)\b/i);
+      if (!constituencyMatch) return;
+      const constituency = constituencyMatch[1].toUpperCase();
+      
+      name = name.replace(/\bNA-\d+\b/gi, '').replace(/\s+/g, ' ').trim();
+      if (!name) return;
+      
+      let party = 'IND';
+      const partyMatch = text.match(/\b(PML-N|PPP|PTI|MQM-P|MQM|JUI-F|JUI|PML-Q|PML|BNP-M|BNP|JI|IND|Independent)\b/i);
+      if (partyMatch) {
+        party = partyMatch[1].toUpperCase();
+        if (party === 'INDEPENDENT') party = 'IND';
+      }
+      
+      let imageUrl: string | undefined = undefined;
+      const img = parent.find('img');
+      if (img.length > 0) {
+        const src = img.attr('src') || '';
+        if (src) {
+          imageUrl = src.startsWith('http') ? src : `https://na.gov.pk${src.startsWith('/') ? '' : '/en/'}${src}`;
+        }
+      }
+      
+      if (!results.some(r => r.constituency === constituency)) {
+        results.push({
+          name,
+          constituency,
+          party,
+          profileUrl,
+          imageUrl,
+        });
+      }
+    });
+    
+    return results;
+  } catch (error) {
+    throw error;
+  }
+}
+
+function getLastName(fullName: string): string {
+  const parts = fullName.toLowerCase().replace(/[^a-z0-9\s]/g, '').trim().split(/\s+/);
+  return parts.length > 0 ? parts[parts.length - 1] : '';
+}
+
+function fuzzyMatchLastName(seedName: string, scrapedName: string): boolean {
+  const lastSeed = getLastName(seedName);
+  const lastScraped = getLastName(scrapedName);
+  
+  if (!lastSeed || !lastScraped) return false;
+  if (lastSeed !== lastScraped) return false;
+  
+  const commonNames = ['khan', 'ali', 'hussain', 'shah', 'sharif', 'sadiq', 'ahmed', 'muhammad'];
+  if (commonNames.includes(lastSeed)) {
+    const seedWords = seedName.toLowerCase().replace(/[^a-z0-9\s]/g, '').trim().split(/\s+/);
+    const scrapedWords = scrapedName.toLowerCase().replace(/[^a-z0-9\s]/g, '').trim().split(/\s+/);
+    const seedRest = seedWords.slice(0, -1);
+    const scrapedRest = scrapedWords.slice(0, -1);
+    return seedRest.some(w => scrapedRest.includes(w));
+  }
+  
+  return true;
+}
 
 // ─── Public API ────────────────────────────────────────────────────────────────
 export async function getAllMNAs(): Promise<MNAProfile[]> {
@@ -1006,7 +1108,30 @@ export async function getAllMNAs(): Promise<MNAProfile[]> {
   const toUrdu = (v: 'YES' | 'NO' | 'ABSENT'): 'ہاں' | 'ناں' | 'غیر حاضر' =>
     v === 'YES' ? 'ہاں' : v === 'NO' ? 'ناں' : 'غیر حاضر';
 
-  mnaCache = SEED_MNA_DATA.map(m => {
+  let mergedData = SEED_MNA_DATA;
+  try {
+    const scraped = await scrapeNAMembers();
+    if (scraped && scraped.length > 0) {
+      mergedData = SEED_MNA_DATA.map(seedMna => {
+        const match = scraped.find(s => fuzzyMatchLastName(seedMna.name, s.name));
+        if (match) {
+          return {
+            ...seedMna,
+            name: match.name,
+            constituency: match.constituency,
+            party: match.party,
+            profileUrl: match.profileUrl || seedMna.profileUrl,
+            imageUrl: match.imageUrl || seedMna.imageUrl,
+          };
+        }
+        return seedMna;
+      });
+    }
+  } catch (err) {
+    // Fall back silently to SEED_MNA_DATA
+  }
+
+  mnaCache = mergedData.map(m => {
     // Use pre-filled votingRecord if already set in seed (e.g., MNA 2001)
     const votes = m.votingRecord?.length
       ? m.votingRecord

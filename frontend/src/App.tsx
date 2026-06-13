@@ -37,11 +37,41 @@ function AppContent() {
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
 
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [showInstallBanner, setShowInstallBanner] = useState(false);
+
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    const handleBeforeInstallPrompt = (e: Event) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+      setShowInstallBanner(true);
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      setShowInstallBanner(false);
+    }
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    };
+  }, []);
+
+  const handleInstallClick = async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    console.log(`User response to the install prompt: ${outcome}`);
+    setDeferredPrompt(null);
+    setShowInstallBanner(false);
+  };
 
   const navLinks = [
     { to: '/', label: t.nav.dashboard, icon: '🏠', end: true, id: 'nav-dashboard' },
@@ -251,6 +281,59 @@ function AppContent() {
 
       {/* Floating AI Chat */}
       <ChatBar />
+
+      {/* PWA Install Banner */}
+      <AnimatePresence>
+        {showInstallBanner && (
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 50 }}
+            className="fixed bottom-24 left-6 z-50 max-w-sm w-[calc(100vw-3rem)] p-4 rounded-2xl overflow-hidden shadow-2xl flex flex-col gap-3"
+            style={{
+              background: 'linear-gradient(135deg, #0c1929, #080f1e)',
+              border: '1px solid rgba(0, 212, 255, 0.25)',
+              boxShadow: '0 20px 50px rgba(0,0,0,0.6)',
+            }}
+          >
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#00d4ff]/20 to-[#a855f7]/20 border border-[#00d4ff]/30 flex items-center justify-center text-xl shrink-0">
+                  🇵🇰
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-white">
+                    {isUrdu ? 'وکالت لینس انسٹال کریں' : 'Install WakalaLens'}
+                  </h4>
+                  <p className="text-[11px] text-[#7f8ea4] leading-normal mt-0.5">
+                    {isUrdu ? 'بجٹ اور نمائندوں کے ڈیٹا تک تیز ترین رسائی حاصل کریں۔' : 'Add to home screen for fast access & offline budget tracking.'}
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowInstallBanner(false)}
+                className="text-[#7f8ea4] hover:text-white transition-colors text-xs font-bold"
+              >
+                ✕
+              </button>
+            </div>
+            <div className="flex gap-2">
+              <button
+                onClick={handleInstallClick}
+                className="flex-1 py-2 px-3 rounded-xl text-xs font-bold bg-gradient-to-r from-[#00d4ff] to-[#0077b6] text-[#03070f] hover:brightness-110 active:scale-95 transition-all shadow-md"
+              >
+                {isUrdu ? 'انسٹال کریں' : 'Install App'}
+              </button>
+              <button
+                onClick={() => setShowInstallBanner(false)}
+                className="py-2 px-4 rounded-xl text-xs font-semibold bg-white/5 border border-white/10 text-[#7f8ea4] hover:text-white hover:bg-white/10 active:scale-95 transition-all"
+              >
+                {isUrdu ? 'بعد میں' : 'Later'}
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

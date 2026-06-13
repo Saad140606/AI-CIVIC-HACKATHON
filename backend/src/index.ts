@@ -22,6 +22,21 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', service: 'WakalaLens Pakistan API', timestamp: new Date().toISOString() });
 });
 
+// Root check to show API is online
+app.get('/', (req, res) => {
+  res.json({
+    status: 'online',
+    service: 'WakalaLens Pakistan API',
+    version: '1.0.0',
+    timestamp: new Date().toISOString(),
+    endpoints: [
+      { path: '/health', method: 'GET', desc: 'Service health status' },
+      { path: '/api/budget/summary', method: 'GET', desc: 'Get budget summary details' },
+      { path: '/api/mna/list', method: 'GET', desc: 'Get list of all MNAs' }
+    ]
+  });
+});
+
 // Routes
 app.use('/api/budget', budgetRouter);
 app.use('/api/ai', aiRouter);

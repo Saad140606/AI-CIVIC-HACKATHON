@@ -1,7 +1,9 @@
 # 🇵🇰 WakalaLens Pakistan (وکالت لینس)
 
-> **Submission for the AI for Civic Innovation Hackathon 2025**  
+> **Submission for the AI for Civic Innovation Hackathon 2026**  
 > A cutting-edge, bilingual budget intelligence and democratic accountability platform that turns Pakistan’s raw public finance spreadsheets and legislative records into plain-language, visual insights for citizens, journalists, and researchers.
+
+🌐 **Live Demo:** [your-vercel-url.vercel.app](https://your-vercel-url.vercel.app)
 
 ---
 
@@ -143,12 +145,15 @@ Open **http://localhost:5173** in your browser.
 |---|---|---|
 | **Ministry of Finance (GoP)** | [finance.gov.pk](https://www.finance.gov.pk) | Official Federal Budget Books (FY23-24, FY24-25, FY25-26 Excel sheets) |
 | **National Assembly of Pakistan** | [na.gov.pk](https://na.gov.pk) | Member rosters, attendance records, division details, and bill copies |
+| **PILDAT** | [pildat.org](https://pildat.org) | MNA Attendance & Parliamentary Watch Reports |
 
 ---
 
 ## 👥 Team
 
-Built for the **AI for Civic Innovation Hackathon 2025** by the Pakistan National Budgets team, including Saad Najam and Nabeel Ali from FAST NUCES Karachi.
+Built for the AI for Civic Innovation Hackathon 2026 by:
+- Saad Najam — FAST-NUCES Karachi
+- Nabeel Ali — FAST-NUCES Karachi
 
 ---
 

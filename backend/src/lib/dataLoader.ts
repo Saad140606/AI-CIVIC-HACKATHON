@@ -35,7 +35,8 @@ export interface BudgetSummary {
 // Data cache
 let cache: BudgetSummary | null = null;
 
-const DATA_ROOT = path.resolve(__dirname, '../../data');
+const DATA_ROOT = process.env.DATA_PATH || 
+  path.resolve(__dirname, '../../data');
 
 function findBudgetColumn(row: BudgetRow, candidates: string[]): string | undefined {
   for (const c of candidates) {
@@ -227,6 +228,11 @@ export const FY2526_HARDCODED: MinistryTotal[] = [
 
 export async function loadBudgetData(): Promise<BudgetSummary> {
   if (cache) return cache;
+
+  if (!fs.existsSync(DATA_ROOT)) {
+    console.error(`❌ Data directory not found: ${DATA_ROOT}`);
+    console.error(`Available paths: ${fs.readdirSync(path.resolve(__dirname, '../..')).join(', ')}`);
+  }
 
   console.log('📊 Loading budget data from Excel files...');
 

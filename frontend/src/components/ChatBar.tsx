@@ -19,16 +19,67 @@ const QUICK_QUESTIONS = [
 export default function ChatBar() {
   const { t } = useLanguage();
   const [open, setOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      role: 'ai',
-      text: `👋 Assalam-o-Alaikum! I'm WakalaLens AI. Ask me anything about Pakistan's federal budget or MNAs — in English, Urdu, or Roman Urdu!\n\nTry: "Which ministry got the most money?", "sehat ka budget kitna hai" (Roman Urdu), or "تعلیم کو کتنا پیسہ ملا؟"`,
-    },
-  ]);
+  const [messages, setMessages] = useState<Message[]>(() => {
+    try {
+      const saved = localStorage.getItem('wakala_chat_history');
+      return saved ? JSON.parse(saved) : [
+        {
+          role: 'ai',
+          text: `👋 Assalam-o-Alaikum! I'm WakalaLens AI. Ask me anything about Pakistan's federal budget or MNAs — in English, Urdu, or Roman Urdu!\n\nTry: "Which ministry got the most money?", "sehat ka budget kitna hai" (Roman Urdu), or "تعلیم کو کتنا پیسہ ملا؟"`,
+        },
+      ];
+    } catch {
+      return [
+        {
+          role: 'ai',
+          text: `👋 Assalam-o-Alaikum! I'm WakalaLens AI. Ask me anything about Pakistan's federal budget or MNAs — in English, Urdu, or Roman Urdu!\n\nTry: "Which ministry got the most money?", "sehat ka budget kitna hai" (Roman Urdu), or "تعلیم کو کتنا پیسہ ملا؟"`,
+        },
+      ];
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('wakala_chat_history', JSON.stringify(messages.slice(-20)));
+    } catch {}
+  }, [messages]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isListening, setIsListening] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const startListening = () => {
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("Speech recognition is not supported in this browser. Try Google Chrome.");
+      return;
+    }
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'ur-PK';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => {
+      setIsListening(true);
+    };
+
+    recognition.onresult = (e: any) => {
+      const transcript = e.results[0][0].transcript;
+      setInput(transcript);
+    };
+
+    recognition.onerror = (e: any) => {
+      console.error(e);
+      setIsListening(false);
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+
+    recognition.start();
+  };
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -153,6 +204,16 @@ export default function ChatBar() {
               </div>
 
               <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    setMessages([]);
+                    localStorage.removeItem('wakala_chat_history');
+                  }}
+                  className="text-[10px] text-red-400 hover:text-red-300 font-bold uppercase transition-colors px-2 py-1 rounded bg-red-500/10 border border-red-500/20 mr-1"
+                  title="Clear Chat History"
+                >
+                  Clear
+                </button>
                 <div className="flex gap-0.5">
                   <span className="loading-dot" style={{ background: '#00e676' }} />
                   <span className="loading-dot" style={{ background: '#00e676', animationDelay: '0.2s' }} />
@@ -302,6 +363,30 @@ export default function ChatBar() {
                     e.target.style.boxShadow = 'none';
                   }}
                 />
+                <motion.button
+                  id="chat-mic-btn"
+                  onClick={startListening}
+                  whileHover={{ scale: 1.08 }}
+                  whileTap={{ scale: 0.92 }}
+                  className="w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold transition-all shrink-0"
+                  style={{
+                    background: isListening
+                      ? 'linear-gradient(135deg, #ef4444, #b91c1c)'
+                      : 'rgba(26, 48, 80, 0.5)',
+                    border: isListening
+                      ? '1px solid #ef4444'
+                      : '1px solid rgba(26, 48, 80, 0.7)',
+                    color: isListening ? '#ffffff' : '#00d4ff',
+                    boxShadow: isListening ? '0 0 12px rgba(239, 68, 68, 0.5)' : 'none',
+                  }}
+                  title={isListening ? "Listening Urdu..." : "Speak in Urdu"}
+                >
+                  {isListening ? (
+                    <span className="animate-pulse">🎙️</span>
+                  ) : (
+                    <span>🎤</span>
+                  )}
+                </motion.button>
                 <motion.button
                   id="chat-send-btn"
                   onClick={handleSend}
