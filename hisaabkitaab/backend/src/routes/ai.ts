@@ -288,7 +288,9 @@ Answer the user's question accurately using this real budget data. If they ask a
       return res.json({ response: text });
     } catch (err: any) {
       console.warn('AI chat: both providers failed, using mock:', err.message);
-      return res.json(getMockResponse());
+      const mockRes = getMockResponse();
+      mockRes.response += `\n\n*(Debug Error: ${err.message})*`;
+      return res.json(mockRes);
     }
   } catch (err: any) {
     console.error('AI chat controller error:', err.message);
