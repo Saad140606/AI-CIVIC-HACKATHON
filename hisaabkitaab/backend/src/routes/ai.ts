@@ -427,12 +427,52 @@ ${text.slice(0, 8000)}`;
       const parts = resText.split(/(?=[\u0600-\u06FF]|اردو:|Urdu:|---)/i);
       const english = parts[0]?.trim() || resText;
       const urdu = parts[1]?.trim() || '';
-      return res.json({ english, urdu, full: resText });
+
+      const keyPoints = english
+        .split(/[.!?]+/)
+        .map(s => s.trim())
+        .filter(s => s.length > 5);
+
+      const keyPointsUrdu = urdu
+        .split(/[۔!؟]+/)
+        .map(s => s.trim())
+        .filter(s => s.length > 5);
+
+      return res.json({
+        english,
+        urdu,
+        summary: english,
+        summaryUrdu: urdu,
+        keyPoints: keyPoints.slice(0, 4),
+        keyPointsUrdu: keyPointsUrdu.slice(0, 4),
+        billType: 'AI Generated Summary',
+        status: 'completed',
+        full: resText
+      });
     } catch (err: any) {
       console.warn('AI bill summary: both providers failed, using mock:', err.message);
+      const englishMock = 'This bill proposes to establish a national framework for public service digitalization and governance improvements. It outlines key regulations to protect citizen privacy while enabling online access to government services. This will reduce administrative delays and make document applications easier for the public.';
+      const urduMock = 'یہ بل سرکاری خدمات کو آن لائن فراہم کرنے کے لیے بنایا گیا ہے۔ اس کا مقصد شہریوں کے لیے شناختی دستاویزات اور سرٹیفکیٹ آن لائن حاصل کرنے کے طریقہ کار کو آسان بنانا ہے۔ یہ بل سرکاری دفاتر کے چکروں اور طویل تاخیر کو ختم کرنے میں مددگار ثابت ہوگا۔';
+
       return res.json({
-        english: 'This bill proposes to establish a national framework for public service digitalization and governance improvements. It outlines key regulations to protect citizen privacy while enabling online access to government services. This will reduce administrative delays and make document applications easier for the public.',
-        urdu: 'یہ بل سرکاری خدمات کو آن لائن فراہم کرنے کے لیے بنایا گیا ہے۔ اس کا مقصد شہریوں کے لیے شناختی دستاویزات اور سرٹیفکیٹ آن لائن حاصل کرنے کے طریقہ کار کو آسان بنانا ہے۔ یہ بل سرکاری دفاتر کے چکروں اور طویل تاخیر کو ختم کرنے میں مددگار ثابت ہوگا۔',
+        english: englishMock,
+        urdu: urduMock,
+        summary: englishMock,
+        summaryUrdu: urduMock,
+        keyPoints: [
+          'National framework for public service digitalization',
+          'Regulations to protect citizen privacy',
+          'Enables online access to government services',
+          'Reduces administrative delays for the public'
+        ],
+        keyPointsUrdu: [
+          'عوامی خدمات کی ڈیجیٹلائزیشن کے لیے قومی فریم ورک',
+          'شہریوں کی رازداری کے تحفظ کے لیے قواعد و ضوابط',
+          'سرکاری خدمات تک آن لائن رسائی کو ممکن بنانا',
+          'عوام کے لیے انتظامی تاخیر کو کم کرنا'
+        ],
+        billType: 'PDF Document',
+        status: 'completed',
         mock: true,
       });
     }
