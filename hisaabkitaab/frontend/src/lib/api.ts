@@ -137,6 +137,7 @@ export interface MNAProfile {
   nameUrdu: string;
   constituency: string;
   constituencyUrdu: string;
+  constituencyFull?: string;
   province: string;
   party: string;
   partyUrdu: string;

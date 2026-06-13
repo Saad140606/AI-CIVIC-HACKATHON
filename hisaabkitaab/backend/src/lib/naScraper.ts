@@ -28,6 +28,7 @@ export interface MNAProfile {
   nameUrdu: string;
   constituency: string;
   constituencyUrdu: string;
+  constituencyFull?: string;
   province: string;
   party: string;
   partyUrdu: string;
@@ -46,6 +47,7 @@ export interface MNAProfile {
   education?: string;
   phone?: string;
   email?: string;
+  address?: string;
   committees: string[];
   recentBills: RecentBill[];
   lastUpdated: string;

@@ -24,6 +24,7 @@ export interface MNAProfile {
   nameUrdu: string;
   constituency: string;
   constituencyUrdu: string;
+  constituencyFull?: string;
   province: string;
   party: string;
   partyUrdu: string;
@@ -322,8 +323,8 @@ export async function hydrateAllMnas(): Promise<MNAProfile[]> {
       billsPassed,
       questionsRaised,
       profileUrl: officialMna?.profileUrl || seedMna?.profileUrl || `https://na.gov.pk/en/member-profile.php?id=${mnaId}`,
-+      // Prefer official memberId for profile URL if available
-+      ...(officialMna?.memberId && { profileUrl: `https://na.gov.pk/en/member-profile.php?id=${officialMna.memberId}` }),
+      // Prefer official memberId for profile URL if available
+      ...(officialMna?.memberId ? { profileUrl: `https://na.gov.pk/en/member-profile.php?id=${officialMna.memberId}` } : {}),
       imageUrl: officialMna?.imageUrl || seedMna?.imageUrl || wikiMna.imageUrl || `https://na.gov.pk/uploads/members/${mnaId}.jpg`,
       terms: seedMna ? seedMna.terms : 1,
       education: seedMna ? seedMna.education : 'Bachelors',
@@ -332,8 +333,8 @@ export async function hydrateAllMnas(): Promise<MNAProfile[]> {
       address: officialMna?.address || seedMna?.address || 'Parliament Lodges, Islamabad',
       committees: seedMna ? seedMna.committees : ['Standing Committee on Rules and Procedures'],
       recentBills,
-+      // If no official voting data, keep empty to avoid templated duplicates
-+      votingRecord: officialMna?.votingRecord?.length ? officialMna.votingRecord : [],
+      // If no official voting data, keep empty to avoid templated duplicates
+      votingRecord: officialMna?.votingRecord?.length ? officialMna.votingRecord : [],
       lastUpdated: new Date().toISOString(),
       nationalAverage: 62.5,
       dataSource: {
