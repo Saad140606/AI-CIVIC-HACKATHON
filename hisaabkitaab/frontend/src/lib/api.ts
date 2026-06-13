@@ -137,6 +137,12 @@ export interface MNAProfile {
   salaryReceived?: string;
   salaryReceivedUrdu?: string;
   votingRecord?: VotingRecordItem[];
+  dataSource?: {
+    name: 'wikipedia' | 'seed';
+    attendance: 'pildat' | 'estimated';
+    votes: 'election2024' | 'none';
+    questions: 'na.gov.pk' | 'none';
+  };
 }
 
 export interface MNARatingResult {

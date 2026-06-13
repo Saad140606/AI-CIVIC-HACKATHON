@@ -1,0 +1,2662 @@
+[
+  {
+    "constituency": "NA-1",
+    "winnerName": "Abdul Latif",
+    "winnerParty": "Independent",
+    "winnerVotes": 61944,
+    "runnerUpName": "Muhammad Talha Mehmood",
+    "runnerUpVotes": 43127,
+    "totalVotesCast": 162505,
+    "turnoutPercent": 45.5
+  },
+  {
+    "constituency": "NA-2",
+    "winnerName": "Amjad Ali Khan",
+    "winnerParty": "Independent",
+    "winnerVotes": 88998,
+    "runnerUpName": "Ameer Muqam",
+    "runnerUpVotes": 37772,
+    "totalVotesCast": 171423,
+    "turnoutPercent": 52.3
+  },
+  {
+    "constituency": "NA-3",
+    "winnerName": "Saleem Rehman",
+    "winnerParty": "Independent",
+    "winnerVotes": 81490,
+    "runnerUpName": "Wajid Ali Khan",
+    "runnerUpVotes": 27941,
+    "totalVotesCast": 162499,
+    "turnoutPercent": 44.9
+  },
+  {
+    "constituency": "NA-4",
+    "winnerName": "Sohail Sultan",
+    "winnerParty": "Independent",
+    "winnerVotes": 88085,
+    "runnerUpName": "Muhammad Saleem Khan",
+    "runnerUpVotes": 20997,
+    "totalVotesCast": 156726,
+    "turnoutPercent": 52.6
+  },
+  {
+    "constituency": "NA-5",
+    "winnerName": "Sahibzada Sibghat Ullah",
+    "winnerParty": "Independent",
+    "winnerVotes": 91165,
+    "runnerUpName": "Sahib Zada Tariq Ullah",
+    "runnerUpVotes": 49066,
+    "totalVotesCast": 205889,
+    "turnoutPercent": 48.9
+  },
+  {
+    "constituency": "NA-6",
+    "winnerName": "Muhammad Bashir Khan",
+    "winnerParty": "Independent",
+    "winnerVotes": 81229,
+    "runnerUpName": "Siraj ul Haq",
+    "runnerUpVotes": 57458,
+    "totalVotesCast": 165309,
+    "turnoutPercent": 40.9
+  },
+  {
+    "constituency": "NA-7",
+    "winnerName": "Mehboob Shah",
+    "winnerParty": "Independent",
+    "winnerVotes": 84670,
+    "runnerUpName": "Muhammad Ismail",
+    "runnerUpVotes": 31104,
+    "totalVotesCast": 172688,
+    "turnoutPercent": 43.8
+  },
+  {
+    "constituency": "NA-8",
+    "winnerName": "Mubarak Zeb Khan",
+    "winnerParty": "Independent",
+    "winnerVotes": 74011,
+    "runnerUpName": "Gul Zafar Khan",
+    "runnerUpVotes": 47307,
+    "totalVotesCast": 182336,
+    "turnoutPercent": 48.6
+  },
+  {
+    "constituency": "NA-9",
+    "winnerName": "Junaid Akbar",
+    "winnerParty": "Independent",
+    "winnerVotes": 113545,
+    "runnerUpName": "Syed Ahmad Ali Shah",
+    "runnerUpVotes": 40785,
+    "totalVotesCast": 196354,
+    "turnoutPercent": 40.4
+  },
+  {
+    "constituency": "NA-10",
+    "winnerName": "Gohar Ali Khan",
+    "winnerParty": "Independent",
+    "winnerVotes": 110954,
+    "runnerUpName": "Haji Abdur Rauf Khan",
+    "runnerUpVotes": 31056,
+    "totalVotesCast": 203771,
+    "turnoutPercent": 47.1
+  },
+  {
+    "constituency": "NA-11",
+    "winnerName": "Amir Muqam",
+    "winnerParty": "PML-N",
+    "winnerVotes": 61204,
+    "runnerUpName": "Said Fareen",
+    "runnerUpVotes": 55312,
+    "totalVotesCast": 149002,
+    "turnoutPercent": 45.2
+  },
+  {
+    "constituency": "NA-12",
+    "winnerName": "Malak Muhammad Idress",
+    "winnerParty": "Independent",
+    "winnerVotes": 28010,
+    "runnerUpName": "Salah Uddin Khan",
+    "runnerUpVotes": 23014,
+    "totalVotesCast": 101159,
+    "turnoutPercent": 45.9
+  },
+  {
+    "constituency": "NA-13",
+    "winnerName": "Muhammad Nawaz Khan",
+    "winnerParty": "Independent",
+    "winnerVotes": 32647,
+    "runnerUpName": "Qari Muhammad Yousaf",
+    "runnerUpVotes": 21542,
+    "totalVotesCast": 91544,
+    "turnoutPercent": 44.4
+  },
+  {
+    "constituency": "NA-14",
+    "winnerName": "Sardar Muhammad Yousaf Zaman",
+    "winnerParty": "PML-N",
+    "winnerVotes": 115642,
+    "runnerUpName": "Muhammad Saleem Imran",
+    "runnerUpVotes": 103388,
+    "totalVotesCast": 254111,
+    "turnoutPercent": 41.1
+  },
+  {
+    "constituency": "NA-15",
+    "winnerName": "Shahzada Muhammad Gushtasap Khan",
+    "winnerParty": "Independent",
+    "winnerVotes": 105259,
+    "runnerUpName": "Mian Muhammad Nawaz Sharif",
+    "runnerUpVotes": 80413,
+    "totalVotesCast": 238571,
+    "turnoutPercent": 47.1
+  },
+  {
+    "constituency": "NA-16",
+    "winnerName": "Ali Asghar Khan",
+    "winnerParty": "Independent",
+    "winnerVotes": 105300,
+    "runnerUpName": "Murtaza Jayed Abhasi",
+    "runnerUpVotes": 86621,
+    "totalVotesCast": 241948,
+    "turnoutPercent": 54.8
+  },
+  {
+    "constituency": "NA-17",
+    "winnerName": "Ali Khan Jadoon",
+    "winnerParty": "Independent",
+    "winnerVotes": 97366,
+    "runnerUpName": "Malik Mohabbat Awan",
+    "runnerUpVotes": 44760,
+    "totalVotesCast": 173228,
+    "turnoutPercent": 52.8
+  },
+  {
+    "constituency": "NA-18",
+    "winnerName": "Omar Ayub Khan",
+    "winnerParty": "Independent",
+    "winnerVotes": 194157,
+    "runnerUpName": "Babar Nawaz Khan",
+    "runnerUpVotes": 113079,
+    "totalVotesCast": 350990,
+    "turnoutPercent": 54
+  },
+  {
+    "constituency": "NA-19",
+    "winnerName": "Asad Qaiser",
+    "winnerParty": "Independent",
+    "winnerVotes": 115719,
+    "runnerUpName": "Maulna Fazal Ali Haqqani",
+    "runnerUpVotes": 45764,
+    "totalVotesCast": 212846,
+    "turnoutPercent": 54.6
+  },
+  {
+    "constituency": "NA-20",
+    "winnerName": "Shahram Khan Tarakai",
+    "winnerParty": "Independent",
+    "winnerVotes": 123828,
+    "runnerUpName": "Waris Khan",
+    "runnerUpVotes": 48286,
+    "totalVotesCast": 214895,
+    "turnoutPercent": 49.5
+  },
+  {
+    "constituency": "NA-21",
+    "winnerName": "Mujahid Ali",
+    "winnerParty": "Independent",
+    "winnerVotes": 119068,
+    "runnerUpName": "Azam Khan",
+    "runnerUpVotes": 52222,
+    "totalVotesCast": 232636,
+    "turnoutPercent": 53.6
+  },
+  {
+    "constituency": "NA-22",
+    "winnerName": "Muhammad Atif Khan",
+    "winnerParty": "Independent",
+    "winnerVotes": 115935,
+    "runnerUpName": "Ameer Haidar Azam Khan Hoti",
+    "runnerUpVotes": 66952,
+    "totalVotesCast": 215371,
+    "turnoutPercent": 52.1
+  },
+  {
+    "constituency": "NA-23",
+    "winnerName": "Ali Muhammad Khan",
+    "winnerParty": "Independent",
+    "winnerVotes": 102188,
+    "runnerUpName": "Ahmad Khan Bahadur",
+    "runnerUpVotes": 33922,
+    "totalVotesCast": 198071,
+    "turnoutPercent": 47.1
+  },
+  {
+    "constituency": "NA-24",
+    "winnerName": "Malik Anwar Taj",
+    "winnerParty": "Independent",
+    "winnerVotes": 89841,
+    "runnerUpName": "Mufti Gohar Ali Shah",
+    "runnerUpVotes": 48624,
+    "totalVotesCast": 193582,
+    "turnoutPercent": 48.2
+  },
+  {
+    "constituency": "NA-25",
+    "winnerName": "Fazal Muhammad Khan",
+    "winnerParty": "Independent",
+    "winnerVotes": 100742,
+    "runnerUpName": "Aimal Wali Khan",
+    "runnerUpVotes": 68019,
+    "totalVotesCast": 219319,
+    "turnoutPercent": 41.9
+  },
+  {
+    "constituency": "NA-26",
+    "winnerName": "Sajid Khan S/O Sultan",
+    "winnerParty": "Independent",
+    "winnerVotes": 41502,
+    "runnerUpName": "Maulana Muhammad Arif",
+    "runnerUpVotes": 19985,
+    "totalVotesCast": 93889,
+    "turnoutPercent": 53.9
+  },
+  {
+    "constituency": "NA-27",
+    "winnerName": "Muhammad Iqbal Khan",
+    "winnerParty": "Independent",
+    "winnerVotes": 85647,
+    "runnerUpName": "Alhaj Shah Jee Gul Afridi",
+    "runnerUpVotes": 18979,
+    "totalVotesCast": 135965,
+    "turnoutPercent": 46.5
+  },
+  {
+    "constituency": "NA-28",
+    "winnerName": "Noor Alam Khan",
+    "winnerParty": "JUI-F",
+    "winnerVotes": 138389,
+    "runnerUpName": "Haji Sajid Nawaz",
+    "runnerUpVotes": 65119,
+    "totalVotesCast": 241123,
+    "turnoutPercent": 47.3
+  },
+  {
+    "constituency": "NA-29",
+    "winnerName": "Arbab Amir Ayub",
+    "winnerParty": "Independent",
+    "winnerVotes": 68792,
+    "runnerUpName": "Saqib Ullah Khan",
+    "runnerUpVotes": 18888,
+    "totalVotesCast": 122708,
+    "turnoutPercent": 40.8
+  },
+  {
+    "constituency": "NA-30",
+    "winnerName": "Shandana Gulzar Khan",
+    "winnerParty": "Independent",
+    "winnerVotes": 78971,
+    "runnerUpName": "Nasir Khan Musazai",
+    "runnerUpVotes": 20950,
+    "totalVotesCast": 131995,
+    "turnoutPercent": 54.5
+  },
+  {
+    "constituency": "NA-31",
+    "winnerName": "Sher Ali Arbab",
+    "winnerParty": "Independent",
+    "winnerVotes": 82985,
+    "runnerUpName": "Arbab Alamgir Khan",
+    "runnerUpVotes": 22543,
+    "totalVotesCast": 143079,
+    "turnoutPercent": 52.9
+  },
+  {
+    "constituency": "NA-32",
+    "winnerName": "Asif Khan S/O Ghulam Jan",
+    "winnerParty": "Independent",
+    "winnerVotes": 122792,
+    "runnerUpName": "Haji Ghulam Ahmad Bilour",
+    "runnerUpVotes": 45846,
+    "totalVotesCast": 220490,
+    "turnoutPercent": 54
+  },
+  {
+    "constituency": "NA-33",
+    "winnerName": "Syed Shah Ahad Ali Shah",
+    "winnerParty": "Independent",
+    "winnerVotes": 93474,
+    "runnerUpName": "Pervez Khattak",
+    "runnerUpVotes": 26592,
+    "totalVotesCast": 197095,
+    "turnoutPercent": 54.5
+  },
+  {
+    "constituency": "NA-34",
+    "winnerName": "Zulfiqar Ali",
+    "winnerParty": "Independent",
+    "winnerVotes": 95704,
+    "runnerUpName": "Imran Khattak",
+    "runnerUpVotes": 32732,
+    "totalVotesCast": 208156,
+    "turnoutPercent": 50.6
+  },
+  {
+    "constituency": "NA-35",
+    "winnerName": "Shehyar Khan Afridi",
+    "winnerParty": "Independent",
+    "winnerVotes": 128594,
+    "runnerUpName": "Abbas Afridi",
+    "runnerUpVotes": 59034,
+    "totalVotesCast": 244119,
+    "turnoutPercent": 46.9
+  },
+  {
+    "constituency": "NA-36",
+    "winnerName": "Yousaf Khan",
+    "winnerParty": "Independent",
+    "winnerVotes": 73347,
+    "runnerUpName": "Mufti Ubaid Ullah",
+    "runnerUpVotes": 35178,
+    "totalVotesCast": 134522,
+    "turnoutPercent": 52.2
+  },
+  {
+    "constituency": "NA-37",
+    "winnerName": "Hameed Hussain",
+    "winnerParty": "MWM",
+    "winnerVotes": 58661,
+    "runnerUpName": "Sajid Hussain Turi",
+    "runnerUpVotes": 54792,
+    "totalVotesCast": 153639,
+    "turnoutPercent": 43.9
+  },
+  {
+    "constituency": "NA-38",
+    "winnerName": "Shahid Ahmad",
+    "winnerParty": "Independent",
+    "winnerVotes": 117998,
+    "runnerUpName": "Shah Abdul Aziz",
+    "runnerUpVotes": 40949,
+    "totalVotesCast": 216258,
+    "turnoutPercent": 50.8
+  },
+  {
+    "constituency": "NA-39",
+    "winnerName": "Nasim Ali Shah",
+    "winnerParty": "Independent",
+    "winnerVotes": 146667,
+    "runnerUpName": "Zahid Akram Durrani",
+    "runnerUpVotes": 111293,
+    "totalVotesCast": 278355,
+    "turnoutPercent": 50.5
+  },
+  {
+    "constituency": "NA-40",
+    "winnerName": "Mufti Misbha Uddin S/O Ahmad Uddin",
+    "winnerParty": "JUI-F",
+    "winnerVotes": 43400,
+    "runnerUpName": "Aurangzeb Khan",
+    "runnerUpVotes": 33799,
+    "totalVotesCast": 142297,
+    "turnoutPercent": 49.7
+  },
+  {
+    "constituency": "NA-41",
+    "winnerName": "Sher Afzal Khan Marwat",
+    "winnerParty": "Independent",
+    "winnerVotes": 117599,
+    "runnerUpName": "Maulna Asjad Mahmood",
+    "runnerUpVotes": 69000,
+    "totalVotesCast": 242798,
+    "turnoutPercent": 49.8
+  },
+  {
+    "constituency": "NA-42",
+    "winnerName": "Zubair Khan",
+    "winnerParty": "Independent",
+    "winnerVotes": 20240,
+    "runnerUpName": "Muhammad Ali",
+    "runnerUpVotes": 16302,
+    "totalVotesCast": 75186,
+    "turnoutPercent": 43.6
+  },
+  {
+    "constituency": "NA-43",
+    "winnerName": "Dawar Khan Kundi",
+    "winnerParty": "Independent",
+    "winnerVotes": 64575,
+    "runnerUpName": "Maulana Asad Mahmood",
+    "runnerUpVotes": 64020,
+    "totalVotesCast": 166881,
+    "turnoutPercent": 48.1
+  },
+  {
+    "constituency": "NA-44",
+    "winnerName": "Ali Amin Khan Gandapur",
+    "winnerParty": "Independent",
+    "winnerVotes": 92161,
+    "runnerUpName": "Maulana FazI Ur Rahman",
+    "runnerUpVotes": 59585,
+    "totalVotesCast": 208664,
+    "turnoutPercent": 41.4
+  },
+  {
+    "constituency": "NA-45",
+    "winnerName": "Fateh Ullah Khan Miankhel",
+    "winnerParty": "PPP",
+    "winnerVotes": 56944,
+    "runnerUpName": "Maulna Obaid Ur Rehman",
+    "runnerUpVotes": 48361,
+    "totalVotesCast": 152212,
+    "turnoutPercent": 51.2
+  },
+  {
+    "constituency": "NA-46",
+    "winnerName": "Anjum Aqeel Khan",
+    "winnerParty": "PML-N",
+    "winnerVotes": 82536,
+    "runnerUpName": "Aammar Masood Mughal",
+    "runnerUpVotes": 46313,
+    "totalVotesCast": 161267,
+    "turnoutPercent": 41.7
+  },
+  {
+    "constituency": "NA-47",
+    "winnerName": "Tariq Fazal Chaudhary",
+    "winnerParty": "PML-N",
+    "winnerVotes": 101575,
+    "runnerUpName": "Muhammad Shoaib Shaheen",
+    "runnerUpVotes": 87105,
+    "totalVotesCast": 251896,
+    "turnoutPercent": 44.6
+  },
+  {
+    "constituency": "NA-48",
+    "winnerName": "Raja Khuram Shahzad Nawaz",
+    "winnerParty": "Independent",
+    "winnerVotes": 69701,
+    "runnerUpName": "Syed Muhammad Ali Bukhari",
+    "runnerUpVotes": 59865,
+    "totalVotesCast": 181664,
+    "turnoutPercent": 41.4
+  },
+  {
+    "constituency": "NA-49",
+    "winnerName": "Sheikh Aftab Ahmad",
+    "winnerParty": "PML-N",
+    "winnerVotes": 120158,
+    "runnerUpName": "Tahir Sadiq",
+    "runnerUpVotes": 110462,
+    "totalVotesCast": 317838,
+    "turnoutPercent": 53.8
+  },
+  {
+    "constituency": "NA-50",
+    "winnerName": "Malik Sohail Khan",
+    "winnerParty": "PML-N",
+    "winnerVotes": 118288,
+    "runnerUpName": "Eman Waseem",
+    "runnerUpVotes": 109908,
+    "totalVotesCast": 415423,
+    "turnoutPercent": 47.3
+  },
+  {
+    "constituency": "NA-51",
+    "winnerName": "Raja Osama Sarwar",
+    "winnerParty": "PML-N",
+    "winnerVotes": 149400,
+    "runnerUpName": "Muhammad Latasub Satti",
+    "runnerUpVotes": 113911,
+    "totalVotesCast": 349388,
+    "turnoutPercent": 43.8
+  },
+  {
+    "constituency": "NA-52",
+    "winnerName": "Raja Parvaiz Ashraf",
+    "winnerParty": "PPP",
+    "winnerVotes": 113015,
+    "runnerUpName": "Tariq Aziz Bhatti",
+    "runnerUpVotes": 91918,
+    "totalVotesCast": 328074,
+    "turnoutPercent": 42.4
+  },
+  {
+    "constituency": "NA-53",
+    "winnerName": "Raja Qamar Ul Islam",
+    "winnerParty": "PML-N",
+    "winnerVotes": 72006,
+    "runnerUpName": "Ajmal Sabir Raja",
+    "runnerUpVotes": 58480,
+    "totalVotesCast": 207841,
+    "turnoutPercent": 49.1
+  },
+  {
+    "constituency": "NA-54",
+    "winnerName": "Aqeel Malik",
+    "winnerParty": "Independent",
+    "winnerVotes": 85930,
+    "runnerUpName": "Azra Masood",
+    "runnerUpVotes": 73729,
+    "totalVotesCast": 230704,
+    "turnoutPercent": 40.4
+  },
+  {
+    "constituency": "NA-55",
+    "winnerName": "Ibrar Ahmad",
+    "winnerParty": "PML-N",
+    "winnerVotes": 112345,
+    "runnerUpName": "Muhammad Basharat Raja",
+    "runnerUpVotes": 96799,
+    "totalVotesCast": 235054,
+    "turnoutPercent": 40.4
+  },
+  {
+    "constituency": "NA-56",
+    "winnerName": "Muhammad Hanif Abbasi",
+    "winnerParty": "PML-N",
+    "winnerVotes": 96655,
+    "runnerUpName": "Shahryar Riaz",
+    "runnerUpVotes": 82619,
+    "totalVotesCast": 215008,
+    "turnoutPercent": 45.8
+  },
+  {
+    "constituency": "NA-57",
+    "winnerName": "Danyal Choudhary",
+    "winnerParty": "PML-N",
+    "winnerVotes": 83333,
+    "runnerUpName": "Seemabia Tahir",
+    "runnerUpVotes": 59803,
+    "totalVotesCast": 182308,
+    "turnoutPercent": 45.8
+  },
+  {
+    "constituency": "NA-58",
+    "winnerName": "Tahir Iqbal",
+    "winnerParty": "PML-N",
+    "winnerVotes": 163873,
+    "runnerUpName": "Ayaz Ameer",
+    "runnerUpVotes": 152819,
+    "totalVotesCast": 361602,
+    "turnoutPercent": 50.2
+  },
+  {
+    "constituency": "NA-59",
+    "winnerName": "Sardar Ghulam Abbas",
+    "winnerParty": "PML-N",
+    "winnerVotes": 135123,
+    "runnerUpName": "Muhammad Roman Ahmad",
+    "runnerUpVotes": 125632,
+    "totalVotesCast": 330874,
+    "turnoutPercent": 52.4
+  },
+  {
+    "constituency": "NA-60",
+    "winnerName": "Bilal Azhar Kiani",
+    "winnerParty": "PML-N",
+    "winnerVotes": 99973,
+    "runnerUpName": "Chaudhary Hassan Adeel",
+    "runnerUpVotes": 90579,
+    "totalVotesCast": 232003,
+    "turnoutPercent": 50.3
+  },
+  {
+    "constituency": "NA-61",
+    "winnerName": "Chaudhary Farrukh Altaf",
+    "winnerParty": "PML-N",
+    "winnerVotes": 88100,
+    "runnerUpName": "Shaukat Iqbal Mirza",
+    "runnerUpVotes": 84636,
+    "totalVotesCast": 236565,
+    "turnoutPercent": 41.5
+  },
+  {
+    "constituency": "NA-62",
+    "winnerName": "Muhammad Ilyas Choudhary",
+    "winnerParty": "Independent",
+    "winnerVotes": 97436,
+    "runnerUpName": "Choudhary Abid Raza",
+    "runnerUpVotes": 71154,
+    "totalVotesCast": 228805,
+    "turnoutPercent": 45.5
+  },
+  {
+    "constituency": "NA-63",
+    "winnerName": "Hussain Elahi",
+    "winnerParty": "PML-Q",
+    "winnerVotes": 87567,
+    "runnerUpName": "Sajid Yousaf",
+    "runnerUpVotes": 82176,
+    "totalVotesCast": 265223,
+    "turnoutPercent": 42.3
+  },
+  {
+    "constituency": "NA-64",
+    "winnerName": "Choudhary Salik Hussain",
+    "winnerParty": "PML-Q",
+    "winnerVotes": 100379,
+    "runnerUpName": "Qaisara Elahi",
+    "runnerUpVotes": 89795,
+    "totalVotesCast": 223456,
+    "turnoutPercent": 50.6
+  },
+  {
+    "constituency": "NA-65",
+    "winnerName": "Chaudhry Naseer Ahmad Abbas",
+    "winnerParty": "PML-N",
+    "winnerVotes": 90772,
+    "runnerUpName": "Syed Wajahat Hussain Shah",
+    "runnerUpVotes": 82351,
+    "totalVotesCast": 278446,
+    "turnoutPercent": 44.6
+  },
+  {
+    "constituency": "NA-66",
+    "winnerName": "Muhammad Ahmad Chattha",
+    "winnerParty": "Independent",
+    "winnerVotes": 160850,
+    "runnerUpName": "Dr. Nisar Ahmad Cheema",
+    "runnerUpVotes": 100684,
+    "totalVotesCast": 304578,
+    "turnoutPercent": 47.8
+  },
+  {
+    "constituency": "NA-67",
+    "winnerName": "Aneeqa Mehdi Bhatti",
+    "winnerParty": "Independent",
+    "winnerVotes": 211044,
+    "runnerUpName": "Saira Afzal Tarar",
+    "runnerUpVotes": 183947,
+    "totalVotesCast": 448868,
+    "turnoutPercent": 46.8
+  },
+  {
+    "constituency": "NA-68",
+    "winnerName": "Haji Imtiaz Ahmad Choudhary",
+    "winnerParty": "Independent",
+    "winnerVotes": 166229,
+    "runnerUpName": "Mushahid Raza",
+    "runnerUpVotes": 71008,
+    "totalVotesCast": 297871,
+    "turnoutPercent": 52.1
+  },
+  {
+    "constituency": "NA-69",
+    "winnerName": "Nasir Iqbal Bosal",
+    "winnerParty": "PML-N",
+    "winnerVotes": 113506,
+    "runnerUpName": "Kousar Parveen Bhatti",
+    "runnerUpVotes": 108900,
+    "totalVotesCast": 287623,
+    "turnoutPercent": 47.3
+  },
+  {
+    "constituency": "NA-70",
+    "winnerName": "Choudhary Armghan Subhani",
+    "winnerParty": "PML-N",
+    "winnerVotes": 123495,
+    "runnerUpName": "Hafiz Hamid Raza",
+    "runnerUpVotes": 112145,
+    "totalVotesCast": 285339,
+    "turnoutPercent": 43.9
+  },
+  {
+    "constituency": "NA-71",
+    "winnerName": "Khawaja Muhammad Asif",
+    "winnerParty": "PML-N",
+    "winnerVotes": 119017,
+    "runnerUpName": "Rehana Imtiaz Dar",
+    "runnerUpVotes": 100563,
+    "totalVotesCast": 245556,
+    "turnoutPercent": 40.6
+  },
+  {
+    "constituency": "NA-72",
+    "winnerName": "Ali Zahid",
+    "winnerParty": "PML-N",
+    "winnerVotes": 109507,
+    "runnerUpName": "Choudhary Amjad Ali Bajwa",
+    "runnerUpVotes": 103640,
+    "totalVotesCast": 290452,
+    "turnoutPercent": 45.2
+  },
+  {
+    "constituency": "NA-73",
+    "winnerName": "Nosheen Iftikhar",
+    "winnerParty": "PML-N",
+    "winnerVotes": 112178,
+    "runnerUpName": "Ali Asjad Malhi",
+    "runnerUpVotes": 104190,
+    "totalVotesCast": 253904,
+    "turnoutPercent": 50.4
+  },
+  {
+    "constituency": "NA-74",
+    "winnerName": "Muhammad Aslam Ghuman",
+    "winnerParty": "Independent",
+    "winnerVotes": 130606,
+    "runnerUpName": "Rana Shameem Ahmad Khan",
+    "runnerUpVotes": 96018,
+    "totalVotesCast": 267665,
+    "turnoutPercent": 46.5
+  },
+  {
+    "constituency": "NA-75",
+    "winnerName": "Anwar ul Haq Chaudhry",
+    "winnerParty": "PML-N",
+    "winnerVotes": 100116,
+    "runnerUpName": "Dr. Tahir Ali Javed",
+    "runnerUpVotes": 75626,
+    "totalVotesCast": 314885,
+    "turnoutPercent": 43.5
+  },
+  {
+    "constituency": "NA-76",
+    "winnerName": "Chaudhary Ahsan Iqbal",
+    "winnerParty": "PML-N",
+    "winnerVotes": 137042,
+    "runnerUpName": "Javaid Safdar khalon",
+    "runnerUpVotes": 110278,
+    "totalVotesCast": 300957,
+    "turnoutPercent": 45.7
+  },
+  {
+    "constituency": "NA-77",
+    "winnerName": "Chaudhry Mahmood Bashir Virk",
+    "winnerParty": "PML-N",
+    "winnerVotes": 109704,
+    "runnerUpName": "Rashida Tariq",
+    "runnerUpVotes": 91825,
+    "totalVotesCast": 244788,
+    "turnoutPercent": 53.8
+  },
+  {
+    "constituency": "NA-78",
+    "winnerName": "Muhammad Mobeen Arif",
+    "winnerParty": "Independent",
+    "winnerVotes": 106504,
+    "runnerUpName": "Khurram Dastagir Khan",
+    "runnerUpVotes": 89478,
+    "totalVotesCast": 233785,
+    "turnoutPercent": 48.5
+  },
+  {
+    "constituency": "NA-79",
+    "winnerName": "Ch. Zulfiqar Ali Bhindar",
+    "winnerParty": "PML-N",
+    "winnerVotes": 95604,
+    "runnerUpName": "Ehsan Ullah Virk",
+    "runnerUpVotes": 92581,
+    "totalVotesCast": 276864,
+    "turnoutPercent": 51.4
+  },
+  {
+    "constituency": "NA-80",
+    "winnerName": "Shahid Usman",
+    "winnerParty": "PML-N",
+    "winnerVotes": 98206,
+    "runnerUpName": "Lala Asad Ullah",
+    "runnerUpVotes": 94895,
+    "totalVotesCast": 234251,
+    "turnoutPercent": 50.1
+  },
+  {
+    "constituency": "NA-81",
+    "winnerName": "Azhar Qayyum Nahra",
+    "winnerParty": "PML-N",
+    "winnerVotes": 110057,
+    "runnerUpName": "Chaudhry Bilal Ejaz",
+    "runnerUpVotes": 106860,
+    "totalVotesCast": 255896,
+    "turnoutPercent": 54.6
+  },
+  {
+    "constituency": "NA-82",
+    "winnerName": "Mukhtar Ahmed Malik",
+    "winnerParty": "PML-N",
+    "winnerVotes": 108954,
+    "runnerUpName": "Nadeem Afzal Gondal",
+    "runnerUpVotes": 87458,
+    "totalVotesCast": 284834,
+    "turnoutPercent": 53.4
+  },
+  {
+    "constituency": "NA-83",
+    "winnerName": "Usama Ahmed Mela",
+    "winnerParty": "Independent",
+    "winnerVotes": 136604,
+    "runnerUpName": "Mohsin Nawaz Ranjha",
+    "runnerUpVotes": 98700,
+    "totalVotesCast": 268106,
+    "turnoutPercent": 45.6
+  },
+  {
+    "constituency": "NA-84",
+    "winnerName": "Shafqat Abbas Awan",
+    "winnerParty": "Independent",
+    "winnerVotes": 101949,
+    "runnerUpName": "Liaqat Ali Khan",
+    "runnerUpVotes": 77478,
+    "totalVotesCast": 236463,
+    "turnoutPercent": 46.3
+  },
+  {
+    "constituency": "NA-85",
+    "winnerName": "Zulfiqar Ali Bhatti",
+    "winnerParty": "PML-N",
+    "winnerVotes": 121015,
+    "runnerUpName": "Khudadad Ahmed Kalyar",
+    "runnerUpVotes": 111165,
+    "totalVotesCast": 271156,
+    "turnoutPercent": 50.6
+  },
+  {
+    "constituency": "NA-86",
+    "winnerName": "Muhammad Miqdad Ali Khan",
+    "winnerParty": "Independent",
+    "winnerVotes": 105882,
+    "runnerUpName": "Syed Javed Hasnain Shah",
+    "runnerUpVotes": 94487,
+    "totalVotesCast": 260835,
+    "turnoutPercent": 53.5
+  },
+  {
+    "constituency": "NA-87",
+    "winnerName": "Malik Shakir Bashir Awan",
+    "winnerParty": "PML-N",
+    "winnerVotes": 117775,
+    "runnerUpName": "Malik Umar Aslam Khan",
+    "runnerUpVotes": 108314,
+    "totalVotesCast": 271363,
+    "turnoutPercent": 41.3
+  },
+  {
+    "constituency": "NA-88",
+    "winnerName": "Gul Asghar Khan Baghoor",
+    "winnerParty": "IPP",
+    "winnerVotes": 82577,
+    "runnerUpName": "Muhammad Moazzam Sher Kallu",
+    "runnerUpVotes": 64156,
+    "totalVotesCast": 273506,
+    "turnoutPercent": 45.6
+  },
+  {
+    "constituency": "NA-89",
+    "winnerName": "Muhammad Jamal Ahsan Khan Niazi",
+    "winnerParty": "Independent",
+    "winnerVotes": 217613,
+    "runnerUpName": "Obaid Ullah Khan Shadi Khel",
+    "runnerUpVotes": 34573,
+    "totalVotesCast": 301139,
+    "turnoutPercent": 48.9
+  },
+  {
+    "constituency": "NA-90",
+    "winnerName": "Umair Khan Niazi",
+    "winnerParty": "Independent",
+    "winnerVotes": 179956,
+    "runnerUpName": "Muhammad Humair Hayyat Khan Niazi",
+    "runnerUpVotes": 51266,
+    "totalVotesCast": 284816,
+    "turnoutPercent": 51.6
+  },
+  {
+    "constituency": "NA-91",
+    "winnerName": "Muhammad Sana Ullah Khan Masti Khel",
+    "winnerParty": "Independent",
+    "winnerVotes": 106153,
+    "runnerUpName": "Abdul Majeed Khan Khanankhel",
+    "runnerUpVotes": 85532,
+    "totalVotesCast": 307481,
+    "turnoutPercent": 53.1
+  },
+  {
+    "constituency": "NA-92",
+    "winnerName": "Rasheed Akbar Khan Nawani",
+    "winnerParty": "Independent",
+    "winnerVotes": 143604,
+    "runnerUpName": "Muhammad Afzal Khan Dhandla",
+    "runnerUpVotes": 131789,
+    "totalVotesCast": 349217,
+    "turnoutPercent": 41.7
+  },
+  {
+    "constituency": "NA-93",
+    "winnerName": "Mehr Ghulam Muhammad Lali",
+    "winnerParty": "Independent",
+    "winnerVotes": 94406,
+    "runnerUpName": "Malik Ghulam Abbas Niswana",
+    "runnerUpVotes": 59909,
+    "totalVotesCast": 228808,
+    "turnoutPercent": 45.8
+  },
+  {
+    "constituency": "NA-94",
+    "winnerName": "Qaiser Ahmad Sheikh",
+    "winnerParty": "PML-N",
+    "winnerVotes": 79623,
+    "runnerUpName": "Muhammad Khalid",
+    "runnerUpVotes": 72476,
+    "totalVotesCast": 248678,
+    "turnoutPercent": 52.8
+  },
+  {
+    "constituency": "NA-95",
+    "winnerName": "Ali Afzal Sahi",
+    "winnerParty": "Independent",
+    "winnerVotes": 144229,
+    "runnerUpName": "Azad Ali Tabassum",
+    "runnerUpVotes": 93586,
+    "totalVotesCast": 277360,
+    "turnoutPercent": 41
+  },
+  {
+    "constituency": "NA-96",
+    "winnerName": "Rai Haidar Ali Khan",
+    "winnerParty": "Independent",
+    "winnerVotes": 134724,
+    "runnerUpName": "Nawab Sher Waseer",
+    "runnerUpVotes": 92554,
+    "totalVotesCast": 275003,
+    "turnoutPercent": 45.3
+  },
+  {
+    "constituency": "NA-97",
+    "winnerName": "Mohammad Saad ullah Khan Baloch",
+    "winnerParty": "Independent",
+    "winnerVotes": 72846,
+    "runnerUpName": "Ali Gohar Khan Baloch",
+    "runnerUpVotes": 70532,
+    "totalVotesCast": 242622,
+    "turnoutPercent": 47.2
+  },
+  {
+    "constituency": "NA-98",
+    "winnerName": "Chaudhary Muhammad Shahbaz Babar",
+    "winnerParty": "PML-N",
+    "winnerVotes": 119559,
+    "runnerUpName": "Mumtaz Ahmad",
+    "runnerUpVotes": 105653,
+    "totalVotesCast": 286054,
+    "turnoutPercent": 40.4
+  },
+  {
+    "constituency": "NA-99",
+    "winnerName": "Umar Farooq",
+    "winnerParty": "Independent",
+    "winnerVotes": 120797,
+    "runnerUpName": "Muhammad Qasim Farooq",
+    "runnerUpVotes": 80401,
+    "totalVotesCast": 249648,
+    "turnoutPercent": 44.8
+  },
+  {
+    "constituency": "NA-100",
+    "winnerName": "Dr. Nisar Jutt",
+    "winnerParty": "Independent",
+    "winnerVotes": 131980,
+    "runnerUpName": "Rana Sana Ullah Khan",
+    "runnerUpVotes": 112651,
+    "totalVotesCast": 275076,
+    "turnoutPercent": 52.6
+  },
+  {
+    "constituency": "NA-101",
+    "winnerName": "Rana Atif",
+    "winnerParty": "Independent",
+    "winnerVotes": 134886,
+    "runnerUpName": "Mian Irfan Ahmad",
+    "runnerUpVotes": 89612,
+    "totalVotesCast": 259104,
+    "turnoutPercent": 45.4
+  },
+  {
+    "constituency": "NA-102",
+    "winnerName": "Changez Ahmed Khan",
+    "winnerParty": "Independent",
+    "winnerVotes": 132553,
+    "runnerUpName": "Chaudhary Abid Sher Ali",
+    "runnerUpVotes": 100328,
+    "totalVotesCast": 259697,
+    "turnoutPercent": 44.7
+  },
+  {
+    "constituency": "NA-103",
+    "winnerName": "Muhammad Ali Sarfraz",
+    "winnerParty": "Independent",
+    "winnerVotes": 147987,
+    "runnerUpName": "Haji Muhammad Akram Ansari",
+    "runnerUpVotes": 86643,
+    "totalVotesCast": 260593,
+    "turnoutPercent": 44.3
+  },
+  {
+    "constituency": "NA-104",
+    "winnerName": "Sahibzada Muhammad Hamid Raza",
+    "winnerParty": "Independent",
+    "winnerVotes": 132655,
+    "runnerUpName": "Raja Daniyal Ahmad",
+    "runnerUpVotes": 92610,
+    "totalVotesCast": 258011,
+    "turnoutPercent": 41.1
+  },
+  {
+    "constituency": "NA-105",
+    "winnerName": "Usama Hamza",
+    "winnerParty": "Independent",
+    "winnerVotes": 138494,
+    "runnerUpName": "Chaudhary Khalid Javed Warraich",
+    "runnerUpVotes": 108003,
+    "totalVotesCast": 285473,
+    "turnoutPercent": 42.3
+  },
+  {
+    "constituency": "NA-106",
+    "winnerName": "Muhammad Junaid Anwar Chaudhry",
+    "winnerParty": "PML-N",
+    "winnerVotes": 137779,
+    "runnerUpName": "Khalid Nawaz",
+    "runnerUpVotes": 137105,
+    "totalVotesCast": 306717,
+    "turnoutPercent": 51.7
+  },
+  {
+    "constituency": "NA-107",
+    "winnerName": "Muhammad Riaz Khan Fatyana",
+    "winnerParty": "Independent",
+    "winnerVotes": 129971,
+    "runnerUpName": "Chaudhary Asad Ur Rehman",
+    "runnerUpVotes": 96083,
+    "totalVotesCast": 287084,
+    "turnoutPercent": 53.4
+  },
+  {
+    "constituency": "NA-108",
+    "winnerName": "Sahibzada Muhammad Mehboob Sultan",
+    "winnerParty": "Independent",
+    "winnerVotes": 169676,
+    "runnerUpName": "Makhdoom Syed Faisal Saleh Hayat",
+    "runnerUpVotes": 134369,
+    "totalVotesCast": 334967,
+    "turnoutPercent": 41.7
+  },
+  {
+    "constituency": "NA-109",
+    "winnerName": "Sheikh Waqas Akram",
+    "winnerParty": "Independent",
+    "winnerVotes": 176699,
+    "runnerUpName": "Muhammad Yaqub Sheikh",
+    "runnerUpVotes": 61803,
+    "totalVotesCast": 299603,
+    "turnoutPercent": 45.3
+  },
+  {
+    "constituency": "NA-110",
+    "winnerName": "Sahibzada Muhammad Ameer Sultan",
+    "winnerParty": "Independent",
+    "winnerVotes": 199853,
+    "runnerUpName": "Muhammad Asif Muavia Sial",
+    "runnerUpVotes": 104422,
+    "totalVotesCast": 339856,
+    "turnoutPercent": 50.6
+  },
+  {
+    "constituency": "NA-111",
+    "winnerName": "Muhammad Arshad Sahi",
+    "winnerParty": "Independent",
+    "winnerVotes": 113711,
+    "runnerUpName": "Muhammad Barjees Tahir",
+    "runnerUpVotes": 93467,
+    "totalVotesCast": 248135,
+    "turnoutPercent": 43.5
+  },
+  {
+    "constituency": "NA-112",
+    "winnerName": "Dr. Shizra Mansab Ali Khan Kharal",
+    "winnerParty": "PML-N",
+    "winnerVotes": 105646,
+    "runnerUpName": "Ijaz Ahmad Shah",
+    "runnerUpVotes": 93329,
+    "totalVotesCast": 244464,
+    "turnoutPercent": 51.4
+  },
+  {
+    "constituency": "NA-113",
+    "winnerName": "Ahmad Atteeq Anwar",
+    "winnerParty": "PML-N",
+    "winnerVotes": 119407,
+    "runnerUpName": "Rahat Aman Ullah Bhatti",
+    "runnerUpVotes": 90872,
+    "totalVotesCast": 258993,
+    "turnoutPercent": 49.3
+  },
+  {
+    "constituency": "NA-114",
+    "winnerName": "Rana Tanveer Hussain",
+    "winnerParty": "PML-N",
+    "winnerVotes": 101111,
+    "runnerUpName": "Arshad Mehmood Manda",
+    "runnerUpVotes": 82026,
+    "totalVotesCast": 228600,
+    "turnoutPercent": 40
+  },
+  {
+    "constituency": "NA-115",
+    "winnerName": "Khurram Shahzad Wirk",
+    "winnerParty": "Independent",
+    "winnerVotes": 130416,
+    "runnerUpName": "Mian Javed Latif",
+    "runnerUpVotes": 94161,
+    "totalVotesCast": 268703,
+    "turnoutPercent": 45.3
+  },
+  {
+    "constituency": "NA-116",
+    "winnerName": "Khurram Munawar Manj",
+    "winnerParty": "Independent",
+    "winnerVotes": 135129,
+    "runnerUpName": "Sardar Muhammad Arfan Dogar",
+    "runnerUpVotes": 89960,
+    "totalVotesCast": 293733,
+    "turnoutPercent": 43.3
+  },
+  {
+    "constituency": "NA-117",
+    "winnerName": "Abdul Aleem Khan",
+    "winnerParty": "IPP",
+    "winnerVotes": 91490,
+    "runnerUpName": "Ali Ijaz",
+    "runnerUpVotes": 80854,
+    "totalVotesCast": 228420,
+    "turnoutPercent": 52
+  },
+  {
+    "constituency": "NA-118",
+    "winnerName": "Muhammad Hamza Shehbaz Sharif",
+    "winnerParty": "PML-N",
+    "winnerVotes": 105948,
+    "runnerUpName": "Aliya Hamza Malik",
+    "runnerUpVotes": 100984,
+    "totalVotesCast": 258375,
+    "turnoutPercent": 47.5
+  },
+  {
+    "constituency": "NA-119",
+    "winnerName": "Maryam Nawaz Sharif",
+    "winnerParty": "PML-N",
+    "winnerVotes": 83856,
+    "runnerUpName": "Shehzad Farooq",
+    "runnerUpVotes": 68384,
+    "totalVotesCast": 196899,
+    "turnoutPercent": 49.9
+  },
+  {
+    "constituency": "NA-120",
+    "winnerName": "Sardar Ayaz Sadiq",
+    "winnerParty": "PML-N",
+    "winnerVotes": 68037,
+    "runnerUpName": "Usman Hamza",
+    "runnerUpVotes": 49309,
+    "totalVotesCast": 159785,
+    "turnoutPercent": 43.5
+  },
+  {
+    "constituency": "NA-121",
+    "winnerName": "Waseem Qadir",
+    "winnerParty": "Independent",
+    "winnerVotes": 78707,
+    "runnerUpName": "Sheikh Rohail Asgher",
+    "runnerUpVotes": 70598,
+    "totalVotesCast": 184086,
+    "turnoutPercent": 43.6
+  },
+  {
+    "constituency": "NA-122",
+    "winnerName": "Sardar Muhammad Latif Khan Khosa",
+    "winnerParty": "Independent",
+    "winnerVotes": 117124,
+    "runnerUpName": "Khawaja Saad Rafique",
+    "runnerUpVotes": 77913,
+    "totalVotesCast": 227391,
+    "turnoutPercent": 54.1
+  },
+  {
+    "constituency": "NA-123",
+    "winnerName": "Mian Muhammad Shehbaz Sharif",
+    "winnerParty": "PML-N",
+    "winnerVotes": 63953,
+    "runnerUpName": "Afzaal Azeem Pahat",
+    "runnerUpVotes": 48489,
+    "totalVotesCast": 155649,
+    "turnoutPercent": 49.9
+  },
+  {
+    "constituency": "NA-124",
+    "winnerName": "Rana Mubashir Iqbal",
+    "winnerParty": "PML-N",
+    "winnerVotes": 55391,
+    "runnerUpName": "Rana Zameer Ahmad Jedhu",
+    "runnerUpVotes": 43603,
+    "totalVotesCast": 125004,
+    "turnoutPercent": 45.4
+  },
+  {
+    "constituency": "NA-125",
+    "winnerName": "Muhammad Afzal Khokhar",
+    "winnerParty": "PML-N",
+    "winnerVotes": 65102,
+    "runnerUpName": "Javaid Umar",
+    "runnerUpVotes": 51144,
+    "totalVotesCast": 160021,
+    "turnoutPercent": 52.1
+  },
+  {
+    "constituency": "NA-126",
+    "winnerName": "Malik Saif Ul Mulook Khokhar",
+    "winnerParty": "PML-N",
+    "winnerVotes": 67121,
+    "runnerUpName": "Malik Touqeer Abbas Khokhar",
+    "runnerUpVotes": 60506,
+    "totalVotesCast": 151311,
+    "turnoutPercent": 51.1
+  },
+  {
+    "constituency": "NA-127",
+    "winnerName": "Attah Ullah Tarrar",
+    "winnerParty": "PML-N",
+    "winnerVotes": 98214,
+    "runnerUpName": "Malik Zaheer Abbas Khokhar",
+    "runnerUpVotes": 82282,
+    "totalVotesCast": 217177,
+    "turnoutPercent": 52.7
+  },
+  {
+    "constituency": "NA-128",
+    "winnerName": "Mohammad Awn Saqlain",
+    "winnerParty": "IPP",
+    "winnerVotes": 172578,
+    "runnerUpName": "Salman Akram Raja",
+    "runnerUpVotes": 159026,
+    "totalVotesCast": 377038,
+    "turnoutPercent": 48.8
+  },
+  {
+    "constituency": "NA-129",
+    "winnerName": "Mian Muhammad Azhar",
+    "winnerParty": "Independent",
+    "winnerVotes": 103739,
+    "runnerUpName": "Hafiz Muhammad Numan",
+    "runnerUpVotes": 71546,
+    "totalVotesCast": 209604,
+    "turnoutPercent": 45.4
+  },
+  {
+    "constituency": "NA-130",
+    "winnerName": "Mian Muhammad Nawaz Sharif",
+    "winnerParty": "PML-N",
+    "winnerVotes": 179312,
+    "runnerUpName": "Dr. Yasmeen Rashid",
+    "runnerUpVotes": 104491,
+    "totalVotesCast": 315717,
+    "turnoutPercent": 51.7
+  },
+  {
+    "constituency": "NA-131",
+    "winnerName": "Saad Waseem",
+    "winnerParty": "PML-N",
+    "winnerVotes": 110556,
+    "runnerUpName": "Muhammad Maqsood Sabir Ansari",
+    "runnerUpVotes": 79545,
+    "totalVotesCast": 294534,
+    "turnoutPercent": 48.4
+  },
+  {
+    "constituency": "NA-132",
+    "winnerName": "Mian Muhammad Shehbaz Sharif",
+    "winnerParty": "PML-N",
+    "winnerVotes": 137234,
+    "runnerUpName": "Sardar Muhammad Hussain Doger",
+    "runnerUpVotes": 111128,
+    "totalVotesCast": 297798,
+    "turnoutPercent": 44.8
+  },
+  {
+    "constituency": "NA-133",
+    "winnerName": "Dr. Azeem Ud Din Zahid Lakhvi",
+    "winnerParty": "Independent",
+    "winnerVotes": 130167,
+    "runnerUpName": "Rana Muhammad Ishaq Khan",
+    "runnerUpVotes": 119343,
+    "totalVotesCast": 316181,
+    "turnoutPercent": 53.1
+  },
+  {
+    "constituency": "NA-134",
+    "winnerName": "Rana Muhammad Hayat Khan",
+    "winnerParty": "PML-N",
+    "winnerVotes": 142322,
+    "runnerUpName": "Sidra Faisal",
+    "runnerUpVotes": 76887,
+    "totalVotesCast": 308724,
+    "turnoutPercent": 42.4
+  },
+  {
+    "constituency": "NA-135",
+    "winnerName": "Nadeem Abbas",
+    "winnerParty": "PML-N",
+    "winnerVotes": 129281,
+    "runnerUpName": "Malik Muhammad Akram Bhatti",
+    "runnerUpVotes": 106755,
+    "totalVotesCast": 292877,
+    "turnoutPercent": 47.7
+  },
+  {
+    "constituency": "NA-136",
+    "winnerName": "Riaz ul Haq Jujj",
+    "winnerParty": "PML-N",
+    "winnerVotes": 127806,
+    "runnerUpName": "Rao Hassan Sikandar",
+    "runnerUpVotes": 80191,
+    "totalVotesCast": 258113,
+    "turnoutPercent": 51.3
+  },
+  {
+    "constituency": "NA-137",
+    "winnerName": "Syed Raza Ali Gillani",
+    "winnerParty": "Independent",
+    "winnerVotes": 132067,
+    "runnerUpName": "Rao Muhammad Ajmal Khan",
+    "runnerUpVotes": 105470,
+    "totalVotesCast": 281625,
+    "turnoutPercent": 47.5
+  },
+  {
+    "constituency": "NA-138",
+    "winnerName": "Mian Muhammad Mueen Wattoo",
+    "winnerParty": "PML-N",
+    "winnerVotes": 122775,
+    "runnerUpName": "Mian Manzoor Ahmed Khan Wattoo",
+    "runnerUpVotes": 79731,
+    "totalVotesCast": 282491,
+    "turnoutPercent": 44.1
+  },
+  {
+    "constituency": "NA-139",
+    "winnerName": "Mian Ahmed Raza Maneka",
+    "winnerParty": "PML-N",
+    "winnerVotes": 121870,
+    "runnerUpName": "Rao Umar Hasham Khan",
+    "runnerUpVotes": 116746,
+    "totalVotesCast": 316246,
+    "turnoutPercent": 44.6
+  },
+  {
+    "constituency": "NA-140",
+    "winnerName": "Rana Iradat Sharif Khan",
+    "winnerParty": "PML-N",
+    "winnerVotes": 139434,
+    "runnerUpName": "Raja Talia Saeed",
+    "runnerUpVotes": 104915,
+    "totalVotesCast": 323438,
+    "turnoutPercent": 43.8
+  },
+  {
+    "constituency": "NA-141",
+    "winnerName": "Syed Imran Ahmad Shah",
+    "winnerParty": "PML-N",
+    "winnerVotes": 118242,
+    "runnerUpName": "Rana Aamir Shahzad Tahir",
+    "runnerUpVotes": 107060,
+    "totalVotesCast": 282865,
+    "turnoutPercent": 51.5
+  },
+  {
+    "constituency": "NA-142",
+    "winnerName": "Usman Ali",
+    "winnerParty": "Independent",
+    "winnerVotes": 107498,
+    "runnerUpName": "Chaudhry Muhammad Ashraf",
+    "runnerUpVotes": 96126,
+    "totalVotesCast": 302326,
+    "turnoutPercent": 47.6
+  },
+  {
+    "constituency": "NA-143",
+    "winnerName": "Rai Hassan Nawaz Khan",
+    "winnerParty": "Independent",
+    "winnerVotes": 147887,
+    "runnerUpName": "Chaudhary Muhammad Tufail Jatt",
+    "runnerUpVotes": 83806,
+    "totalVotesCast": 322583,
+    "turnoutPercent": 48.3
+  },
+  {
+    "constituency": "NA-144",
+    "winnerName": "Muhammad Raza Hayat Hiraj",
+    "winnerParty": "Independent",
+    "winnerVotes": 119133,
+    "runnerUpName": "Syed Abid Hussain Imam",
+    "runnerUpVotes": 78384,
+    "totalVotesCast": 265717,
+    "turnoutPercent": 46.7
+  },
+  {
+    "constituency": "NA-145",
+    "winnerName": "Muhammad Khan Daha",
+    "winnerParty": "PML-N",
+    "winnerVotes": 102952,
+    "runnerUpName": "Abid Mehmood",
+    "runnerUpVotes": 56217,
+    "totalVotesCast": 241747,
+    "turnoutPercent": 49.7
+  },
+  {
+    "constituency": "NA-146",
+    "winnerName": "Zahoor Hussain Qureshi",
+    "winnerParty": "Independent",
+    "winnerVotes": 112777,
+    "runnerUpName": "Peer Muhammad Aslam Bodla Siddiqi",
+    "runnerUpVotes": 104875,
+    "totalVotesCast": 273207,
+    "turnoutPercent": 45.7
+  },
+  {
+    "constituency": "NA-147",
+    "winnerName": "Chaudry Iftikhar Nazir",
+    "winnerParty": "PML-N",
+    "winnerVotes": 107933,
+    "runnerUpName": "Naveed Hameed",
+    "runnerUpVotes": 83813,
+    "totalVotesCast": 279401,
+    "turnoutPercent": 50.1
+  },
+  {
+    "constituency": "NA-148",
+    "winnerName": "Syed Yousuf Raza Gilani",
+    "winnerParty": "PPP",
+    "winnerVotes": 68110,
+    "runnerUpName": "Barrister Taimur Altaf Malik",
+    "runnerUpVotes": 67979,
+    "totalVotesCast": 219115,
+    "turnoutPercent": 51.5
+  },
+  {
+    "constituency": "NA-149",
+    "winnerName": "Malik Mohammad Amir Dogar",
+    "winnerParty": "Independent",
+    "winnerVotes": 143692,
+    "runnerUpName": "Jahangir Khan Tareen",
+    "runnerUpVotes": 50175,
+    "totalVotesCast": 233335,
+    "turnoutPercent": 48.5
+  },
+  {
+    "constituency": "NA-150",
+    "winnerName": "Makhdoom Zain Hussain Qureshi",
+    "winnerParty": "Independent",
+    "winnerVotes": 126775,
+    "runnerUpName": "Javed Akhtar Ansari",
+    "runnerUpVotes": 76760,
+    "totalVotesCast": 248580,
+    "turnoutPercent": 43
+  },
+  {
+    "constituency": "NA-151",
+    "winnerName": "Syed Ali Moosa Gilani",
+    "winnerParty": "PPP",
+    "winnerVotes": 79082,
+    "runnerUpName": "Mehar Bano Qureshi",
+    "runnerUpVotes": 71659,
+    "totalVotesCast": 237896,
+    "turnoutPercent": 54.6
+  },
+  {
+    "constituency": "NA-152",
+    "winnerName": "Syed Abdul Qadir Gilani",
+    "winnerParty": "PPP",
+    "winnerVotes": 97065,
+    "runnerUpName": "Syed Jawaid Ali Shah",
+    "runnerUpVotes": 71376,
+    "totalVotesCast": 264580,
+    "turnoutPercent": 53
+  },
+  {
+    "constituency": "NA-153",
+    "winnerName": "Rana Muhammad Qasim Noon",
+    "winnerParty": "PML-N",
+    "winnerVotes": 95202,
+    "runnerUpName": "Dewan Ashiq Hussain Bukhari",
+    "runnerUpVotes": 49104,
+    "totalVotesCast": 272673,
+    "turnoutPercent": 52.3
+  },
+  {
+    "constituency": "NA-154",
+    "winnerName": "Abdul Rehman Khan Kanju",
+    "winnerParty": "PML-N",
+    "winnerVotes": 127984,
+    "runnerUpName": "Rana Muhammad Faraz Noon",
+    "runnerUpVotes": 120683,
+    "totalVotesCast": 286336,
+    "turnoutPercent": 53.6
+  },
+  {
+    "constituency": "NA-155",
+    "winnerName": "Khan Muhammad Saddique Khan Baloch",
+    "winnerParty": "PML-N",
+    "winnerVotes": 117687,
+    "runnerUpName": "Jahangir Khan Tareen",
+    "runnerUpVotes": 71131,
+    "totalVotesCast": 287816,
+    "turnoutPercent": 51.6
+  },
+  {
+    "constituency": "NA-156",
+    "winnerName": "Ayesha Nazir Jatt",
+    "winnerParty": "Independent",
+    "winnerVotes": 119758,
+    "runnerUpName": "Chaudhry Nazeer Ahmad Arrain",
+    "runnerUpVotes": 90065,
+    "totalVotesCast": 254953,
+    "turnoutPercent": 50.3
+  },
+  {
+    "constituency": "NA-157",
+    "winnerName": "Syed Sajid Mehdi",
+    "winnerParty": "PML-N",
+    "winnerVotes": 99615,
+    "runnerUpName": "Sabeen Safdar",
+    "runnerUpVotes": 80187,
+    "totalVotesCast": 248187,
+    "turnoutPercent": 48.7
+  },
+  {
+    "constituency": "NA-158",
+    "winnerName": "Begum Tehmina Doultana",
+    "winnerParty": "PML-N",
+    "winnerVotes": 111219,
+    "runnerUpName": "Tahir Iqbal Chuadhry",
+    "runnerUpVotes": 103137,
+    "totalVotesCast": 261929,
+    "turnoutPercent": 42.9
+  },
+  {
+    "constituency": "NA-159",
+    "winnerName": "Aurangzeb Khan Khichi",
+    "winnerParty": "Independent",
+    "winnerVotes": 116302,
+    "runnerUpName": "Saeed Ahmad Khan Manais",
+    "runnerUpVotes": 96637,
+    "totalVotesCast": 264246,
+    "turnoutPercent": 49.6
+  },
+  {
+    "constituency": "NA-160",
+    "winnerName": "Muhammad Abdul Ghafar Wattoo",
+    "winnerParty": "PML-N",
+    "winnerVotes": 118557,
+    "runnerUpName": "Syed Muhammad Asghar Shah",
+    "runnerUpVotes": 110492,
+    "totalVotesCast": 262231,
+    "turnoutPercent": 43.1
+  },
+  {
+    "constituency": "NA-161",
+    "winnerName": "Alam Dad Laleka",
+    "winnerParty": "PML-N",
+    "winnerVotes": 100679,
+    "runnerUpName": "Shahid Amin",
+    "runnerUpVotes": 81772,
+    "totalVotesCast": 242556,
+    "turnoutPercent": 40.6
+  },
+  {
+    "constituency": "NA-162",
+    "winnerName": "Chaudhary Ehsan Ul Haq Bajwa",
+    "winnerParty": "PML-N",
+    "winnerVotes": 114379,
+    "runnerUpName": "Khalil Ahmed",
+    "runnerUpVotes": 97980,
+    "totalVotesCast": 267531,
+    "turnoutPercent": 48.1
+  },
+  {
+    "constituency": "NA-163",
+    "winnerName": "Muhammad Ijaz Ul Haq",
+    "winnerParty": "PML-Z",
+    "winnerVotes": 84343,
+    "runnerUpName": "Ch. Shoukat Mehmood Basra",
+    "runnerUpVotes": 75198,
+    "totalVotesCast": 274683,
+    "turnoutPercent": 43.3
+  },
+  {
+    "constituency": "NA-164",
+    "winnerName": "Mian Riaz Hussain Pirzada",
+    "winnerParty": "PML-N",
+    "winnerVotes": 123377,
+    "runnerUpName": "Malik Ejaz Ahmad Gaddan",
+    "runnerUpVotes": 117176,
+    "totalVotesCast": 276349,
+    "turnoutPercent": 44.9
+  },
+  {
+    "constituency": "NA-165",
+    "winnerName": "Tariq Bashir Cheema",
+    "winnerParty": "PML-Q",
+    "winnerVotes": 116571,
+    "runnerUpName": "Ch. Saud Majeed",
+    "runnerUpVotes": 105758,
+    "totalVotesCast": 299462,
+    "turnoutPercent": 46.2
+  },
+  {
+    "constituency": "NA-166",
+    "winnerName": "Makhdoom Syed Sami Ul Hassan Gillani",
+    "winnerParty": "PML-N",
+    "winnerVotes": 62157,
+    "runnerUpName": "Prince Bahawal Khan Abbasi",
+    "runnerUpVotes": 48606,
+    "totalVotesCast": 212804,
+    "turnoutPercent": 50.4
+  },
+  {
+    "constituency": "NA-167",
+    "winnerName": "Muhammad Usman Awaisi",
+    "winnerParty": "PML-N",
+    "winnerVotes": 88670,
+    "runnerUpName": "Malik Aamir Yar Warn",
+    "runnerUpVotes": 64037,
+    "totalVotesCast": 233572,
+    "turnoutPercent": 42.2
+  },
+  {
+    "constituency": "NA-168",
+    "winnerName": "Malik Muhammad Iqbal Channar",
+    "winnerParty": "PML-N",
+    "winnerVotes": 122302,
+    "runnerUpName": "Samiullah Chaudhary",
+    "runnerUpVotes": 50360,
+    "totalVotesCast": 206251,
+    "turnoutPercent": 40.1
+  },
+  {
+    "constituency": "NA-169",
+    "winnerName": "Makhdoomzada Syed Murtaza Mahmood",
+    "winnerParty": "PPP",
+    "winnerVotes": 81187,
+    "runnerUpName": "Syed Mubeen Ahmed",
+    "runnerUpVotes": 73533,
+    "totalVotesCast": 255254,
+    "turnoutPercent": 50.4
+  },
+  {
+    "constituency": "NA-170",
+    "winnerName": "Mian Ghous Muhammad",
+    "winnerParty": "Independent",
+    "winnerVotes": 113336,
+    "runnerUpName": "Sheikh Fayyaz uddin",
+    "runnerUpVotes": 79144,
+    "totalVotesCast": 244411,
+    "turnoutPercent": 46.1
+  },
+  {
+    "constituency": "NA-171",
+    "winnerName": "Mumtaz Mustafa",
+    "winnerParty": "Independent",
+    "winnerVotes": 103834,
+    "runnerUpName": "Makhdum Hashim Jawan Bakht",
+    "runnerUpVotes": 56028,
+    "totalVotesCast": 236197,
+    "turnoutPercent": 49.7
+  },
+  {
+    "constituency": "NA-172",
+    "winnerName": "Javed Iqbal Waraich",
+    "winnerParty": "Independent",
+    "winnerVotes": 129727,
+    "runnerUpName": "Mian Imtiaz Ahmad",
+    "runnerUpVotes": 84893,
+    "totalVotesCast": 253826,
+    "turnoutPercent": 42.6
+  },
+  {
+    "constituency": "NA-173",
+    "winnerName": "Syed Mustafa Mehmood",
+    "winnerParty": "PPP",
+    "winnerVotes": 83120,
+    "runnerUpName": "Barrister Muhammad Nabeel Dahar",
+    "runnerUpVotes": 80304,
+    "totalVotesCast": 236797,
+    "turnoutPercent": 49.7
+  },
+  {
+    "constituency": "NA-174",
+    "winnerName": "Muhammad Azhar Khan Leghari",
+    "winnerParty": "PML-N",
+    "winnerVotes": 78680,
+    "runnerUpName": "Syed Usman Mehmood",
+    "runnerUpVotes": 71559,
+    "totalVotesCast": 255122,
+    "turnoutPercent": 52.2
+  },
+  {
+    "constituency": "NA-175",
+    "winnerName": "Jamshed Ahmad Khan Dasti",
+    "winnerParty": "Independent",
+    "winnerVotes": 113391,
+    "runnerUpName": "Mehar Irshad Ahmad Khan Sial",
+    "runnerUpVotes": 72058,
+    "totalVotesCast": 266977,
+    "turnoutPercent": 52.7
+  },
+  {
+    "constituency": "NA-176",
+    "winnerName": "Nawabzada Iftikhar Ahmed Khan Babar",
+    "winnerParty": "PPP",
+    "winnerVotes": 53944,
+    "runnerUpName": "Makhdoomzada Syed Basit Ahmad Sultan Bukhari",
+    "runnerUpVotes": 43711,
+    "totalVotesCast": 228204,
+    "turnoutPercent": 45.4
+  },
+  {
+    "constituency": "NA-177",
+    "winnerName": "Muhammad Muazzam Ali Khan Jatoi",
+    "winnerParty": "Independent",
+    "winnerVotes": 114057,
+    "runnerUpName": "Syeda Shehr Bano Bokhari",
+    "runnerUpVotes": 68333,
+    "totalVotesCast": 223877,
+    "turnoutPercent": 47.7
+  },
+  {
+    "constituency": "NA-178",
+    "winnerName": "Amir Talal Gopang",
+    "winnerParty": "PML-N",
+    "winnerVotes": 114678,
+    "runnerUpName": "Abdul Qayyom Khan Jatoi",
+    "runnerUpVotes": 88404,
+    "totalVotesCast": 225126,
+    "turnoutPercent": 52.6
+  },
+  {
+    "constituency": "NA-179",
+    "winnerName": "Mian Muhammad Shabbir Ali Qureshi",
+    "winnerParty": "Independent",
+    "winnerVotes": 104329,
+    "runnerUpName": "Malik Ghulam Qasim Hanjra",
+    "runnerUpVotes": 83851,
+    "totalVotesCast": 215554,
+    "turnoutPercent": 40.4
+  },
+  {
+    "constituency": "NA-180",
+    "winnerName": "Mian Fiaz Hussain",
+    "winnerParty": "Independent",
+    "winnerVotes": 96275,
+    "runnerUpName": "Malik Raza Rabani Khar",
+    "runnerUpVotes": 49515,
+    "totalVotesCast": 198818,
+    "turnoutPercent": 46.8
+  },
+  {
+    "constituency": "NA-181",
+    "winnerName": "Umber Majeed Niazi",
+    "winnerParty": "Independent",
+    "winnerVotes": 120544,
+    "runnerUpName": "Sahibzada Faiz ul Hassan Sewag",
+    "runnerUpVotes": 95109,
+    "totalVotesCast": 328481,
+    "turnoutPercent": 53.1
+  },
+  {
+    "constituency": "NA-182",
+    "winnerName": "Awais Haider Jhakkar",
+    "winnerParty": "Independent",
+    "winnerVotes": 141973,
+    "runnerUpName": "Pir Syed Muhammad Saqlain Bukhari",
+    "runnerUpVotes": 118686,
+    "totalVotesCast": 320788,
+    "turnoutPercent": 48.8
+  },
+  {
+    "constituency": "NA-183",
+    "winnerName": "Khawja Sheraz Mehmood",
+    "winnerParty": "Independent",
+    "winnerVotes": 134501,
+    "runnerUpName": "Sardar Muhammad Amjad Farooq Khan Khosa",
+    "runnerUpVotes": 88489,
+    "totalVotesCast": 262552,
+    "turnoutPercent": 45.2
+  },
+  {
+    "constituency": "NA-184",
+    "winnerName": "Abdul Qadir Khan Khosa",
+    "winnerParty": "PML-N",
+    "winnerVotes": 112296,
+    "runnerUpName": "Ali Muhammad",
+    "runnerUpVotes": 109856,
+    "totalVotesCast": 247719,
+    "turnoutPercent": 46.9
+  },
+  {
+    "constituency": "NA-185",
+    "winnerName": "Zartaj Gull",
+    "winnerParty": "Independent",
+    "winnerVotes": 94927,
+    "runnerUpName": "Mehmood Qadir Khan Leghari",
+    "runnerUpVotes": 39235,
+    "totalVotesCast": 184639,
+    "turnoutPercent": 53.9
+  },
+  {
+    "constituency": "NA-186",
+    "winnerName": "Sardar Awais Ahmad Khan Leghari",
+    "winnerParty": "PML-N",
+    "winnerVotes": 100252,
+    "runnerUpName": "Mehar Sajjad Hussain Cheena",
+    "runnerUpVotes": 97990,
+    "totalVotesCast": 212472,
+    "turnoutPercent": 47.2
+  },
+  {
+    "constituency": "NA-187",
+    "winnerName": "Ammar Ahmad Khan Leghari",
+    "winnerParty": "PML-N",
+    "winnerVotes": 79811,
+    "runnerUpName": "Atif Ali Khan Dareshak",
+    "runnerUpVotes": 67321,
+    "totalVotesCast": 188094,
+    "turnoutPercent": 54.4
+  },
+  {
+    "constituency": "NA-188",
+    "winnerName": "Hafeez Ur Rehman Khan Dreshak",
+    "winnerParty": "PML-N",
+    "winnerVotes": 85979,
+    "runnerUpName": "Sardar Ahmad Ali Khan Dreshak",
+    "runnerUpVotes": 70262,
+    "totalVotesCast": 181810,
+    "turnoutPercent": 41
+  },
+  {
+    "constituency": "NA-189",
+    "winnerName": "Shamsher Ali Mazari",
+    "winnerParty": "Independent",
+    "winnerVotes": 83628,
+    "runnerUpName": "Sardar Riaz Mehmood Khan Mazari",
+    "runnerUpVotes": 73394,
+    "totalVotesCast": 185819,
+    "turnoutPercent": 51.9
+  },
+  {
+    "constituency": "NA-190",
+    "winnerName": "Mir Aijaz Hussain Jakhrani",
+    "winnerParty": "PPP",
+    "winnerVotes": 126411,
+    "runnerUpName": "Muhammad Mian Soomro",
+    "runnerUpVotes": 61555,
+    "totalVotesCast": 199255,
+    "turnoutPercent": 45.5
+  },
+  {
+    "constituency": "NA-191",
+    "winnerName": "Ali Jan Mazari",
+    "winnerParty": "PPP",
+    "winnerVotes": 103548,
+    "runnerUpName": "Mir Shah Zain Khan Bijarani",
+    "runnerUpVotes": 101874,
+    "totalVotesCast": 214998,
+    "turnoutPercent": 44.8
+  },
+  {
+    "constituency": "NA-192",
+    "winnerName": "Mir Shabir Ali Bijarani",
+    "winnerParty": "PPP",
+    "winnerVotes": 124979,
+    "runnerUpName": "Muhammad Ibrahim Jatoi",
+    "runnerUpVotes": 76970,
+    "totalVotesCast": 211959,
+    "turnoutPercent": 40.9
+  },
+  {
+    "constituency": "NA-193",
+    "winnerName": "Muhammad Shahryar Khan Mahar",
+    "winnerParty": "PPP",
+    "winnerVotes": 138634,
+    "runnerUpName": "Maulana Rashid Mehmood Soomro",
+    "runnerUpVotes": 59519,
+    "totalVotesCast": 216458,
+    "turnoutPercent": 40.8
+  },
+  {
+    "constituency": "NA-194",
+    "winnerName": "Bilawal Bhutto Zardari",
+    "winnerParty": "PPP",
+    "winnerVotes": 136167,
+    "runnerUpName": "Rashid Mahmood Soomro",
+    "runnerUpVotes": 35526,
+    "totalVotesCast": 181924,
+    "turnoutPercent": 52.4
+  },
+  {
+    "constituency": "NA-195",
+    "winnerName": "Nazir Ahmed Bughio",
+    "winnerParty": "PPP",
+    "winnerVotes": 133830,
+    "runnerUpName": "Safdar Ali Abbasi",
+    "runnerUpVotes": 48893,
+    "totalVotesCast": 189235,
+    "turnoutPercent": 48.5
+  },
+  {
+    "constituency": "NA-196",
+    "winnerName": "Bilawal Bhutto Zardari",
+    "winnerParty": "PPP",
+    "winnerVotes": 85370,
+    "runnerUpName": "Nasir Mahmood Somro",
+    "runnerUpVotes": 34499,
+    "totalVotesCast": 135379,
+    "turnoutPercent": 47.9
+  },
+  {
+    "constituency": "NA-197",
+    "winnerName": "Mir Amir Ali Khan Magsi",
+    "winnerParty": "PPP",
+    "winnerVotes": 88130,
+    "runnerUpName": "Muhammad Uzair Jagirani",
+    "runnerUpVotes": 24199,
+    "totalVotesCast": 124872,
+    "turnoutPercent": 47.2
+  },
+  {
+    "constituency": "NA-198",
+    "winnerName": "Khalid Ahmad Khan Lund",
+    "winnerParty": "PPP",
+    "winnerVotes": 120259,
+    "runnerUpName": "Abdul Haque Alias Mian Mitha",
+    "runnerUpVotes": 90629,
+    "totalVotesCast": 235322,
+    "turnoutPercent": 52.2
+  },
+  {
+    "constituency": "NA-199",
+    "winnerName": "Ali Gohar Khan Mahar",
+    "winnerParty": "PPP",
+    "winnerVotes": 154832,
+    "runnerUpName": "Abdul Qayyum",
+    "runnerUpVotes": 40204,
+    "totalVotesCast": 205747,
+    "turnoutPercent": 49.7
+  },
+  {
+    "constituency": "NA-200",
+    "winnerName": "Nauman Islam Shaikh",
+    "winnerParty": "PPP",
+    "winnerVotes": 98244,
+    "runnerUpName": "Deedar Ali Jatoi",
+    "runnerUpVotes": 41970,
+    "totalVotesCast": 173642,
+    "turnoutPercent": 49.2
+  },
+  {
+    "constituency": "NA-201",
+    "winnerName": "Syed Khursheed Ahmed Shah",
+    "winnerParty": "PPP",
+    "winnerVotes": 121556,
+    "runnerUpName": "Maulana Muhammad Saleh Indhar",
+    "runnerUpVotes": 53625,
+    "totalVotesCast": 181895,
+    "turnoutPercent": 49.5
+  },
+  {
+    "constituency": "NA-202",
+    "winnerName": "Nafisa Shah",
+    "winnerParty": "PPP",
+    "winnerVotes": 152511,
+    "runnerUpName": "Syed Ghous Ali Shah",
+    "runnerUpVotes": 30026,
+    "totalVotesCast": 197915,
+    "turnoutPercent": 46.5
+  },
+  {
+    "constituency": "NA-203",
+    "winnerName": "Pir Syed Fazal Ali Shah Jillani",
+    "winnerParty": "PPP",
+    "winnerVotes": 128830,
+    "runnerUpName": "Pir Syed Sadaruddin Shah Rashidi",
+    "runnerUpVotes": 98236,
+    "totalVotesCast": 234727,
+    "turnoutPercent": 52.7
+  },
+  {
+    "constituency": "NA-204",
+    "winnerName": "Syed Javed Ali Shah",
+    "winnerParty": "PPP",
+    "winnerVotes": 113022,
+    "runnerUpName": "Mozzam Ali Khan Abbasi",
+    "runnerUpVotes": 87501,
+    "totalVotesCast": 207428,
+    "turnoutPercent": 52.8
+  },
+  {
+    "constituency": "NA-205",
+    "winnerName": "Syed Abrar Ali Shah",
+    "winnerParty": "PPP",
+    "winnerVotes": 126056,
+    "runnerUpName": "Asghar Ali Shah",
+    "runnerUpVotes": 55001,
+    "totalVotesCast": 218352,
+    "turnoutPercent": 50.2
+  },
+  {
+    "constituency": "NA-206",
+    "winnerName": "Zulfiqar Ali Behan",
+    "winnerParty": "PPP",
+    "winnerVotes": 135864,
+    "runnerUpName": "Ghulam Murtaza Khan Jatoi",
+    "runnerUpVotes": 77202,
+    "totalVotesCast": 223108,
+    "turnoutPercent": 45.8
+  },
+  {
+    "constituency": "NA-207",
+    "winnerName": "Asif Ali Zardari",
+    "winnerParty": "PPP",
+    "winnerVotes": 147465,
+    "runnerUpName": "Sardar Sher Muhammad Rind",
+    "runnerUpVotes": 51925,
+    "totalVotesCast": 215211,
+    "turnoutPercent": 51.1
+  },
+  {
+    "constituency": "NA-208",
+    "winnerName": "Syed Ghulam Mustafa Shah",
+    "winnerParty": "PPP",
+    "winnerVotes": 127181,
+    "runnerUpName": "Syed Zain Ul Abdin",
+    "runnerUpVotes": 59402,
+    "totalVotesCast": 207222,
+    "turnoutPercent": 47.2
+  },
+  {
+    "constituency": "NA-209",
+    "winnerName": "Shazia Jannat Marri",
+    "winnerParty": "PPP",
+    "winnerVotes": 156723,
+    "runnerUpName": "Muhammad Khan Junejo",
+    "runnerUpVotes": 140370,
+    "totalVotesCast": 305978,
+    "turnoutPercent": 52.8
+  },
+  {
+    "constituency": "NA-210",
+    "winnerName": "Salahuddin Junejo",
+    "winnerParty": "PPP",
+    "winnerVotes": 150196,
+    "runnerUpName": "Saira Bano",
+    "runnerUpVotes": 108194,
+    "totalVotesCast": 275071,
+    "turnoutPercent": 52.1
+  },
+  {
+    "constituency": "NA-211",
+    "winnerName": "Pir Aftab Hussain Shah Jeelani",
+    "winnerParty": "PPP",
+    "winnerVotes": 84512,
+    "runnerUpName": "Ali Nawaz Shah",
+    "runnerUpVotes": 53881,
+    "totalVotesCast": 181812,
+    "turnoutPercent": 41.2
+  },
+  {
+    "constituency": "NA-212",
+    "winnerName": "Mir Munwar Ali Talpur",
+    "winnerParty": "PPP",
+    "winnerVotes": 122291,
+    "runnerUpName": "Ali Nawaz Shah",
+    "runnerUpVotes": 45359,
+    "totalVotesCast": 196881,
+    "turnoutPercent": 48.1
+  },
+  {
+    "constituency": "NA-213",
+    "winnerName": "Nawab Muhammad Yousif Talpur",
+    "winnerParty": "PPP",
+    "winnerVotes": 179188,
+    "runnerUpName": "Mir Amanullah Khan Talpur",
+    "runnerUpVotes": 44961,
+    "totalVotesCast": 285229,
+    "turnoutPercent": 47.9
+  },
+  {
+    "constituency": "NA-214",
+    "winnerName": "Pir Ameer Ali Shah Jellani",
+    "winnerParty": "PPP",
+    "winnerVotes": 132365,
+    "runnerUpName": "Abdul Razzaque Rahimoon",
+    "runnerUpVotes": 60829,
+    "totalVotesCast": 214454,
+    "turnoutPercent": 50.4
+  },
+  {
+    "constituency": "NA-215",
+    "winnerName": "Mahesh Kumar Malani",
+    "winnerParty": "PPP",
+    "winnerVotes": 135287,
+    "runnerUpName": "Arbab Ghulam Rahim",
+    "runnerUpVotes": 114329,
+    "totalVotesCast": 270199,
+    "turnoutPercent": 44.9
+  },
+  {
+    "constituency": "NA-216",
+    "winnerName": "Makhdoom Jamil uz Zaman",
+    "winnerParty": "PPP",
+    "winnerVotes": 124536,
+    "runnerUpName": "Bashir Ahmad",
+    "runnerUpVotes": 80439,
+    "totalVotesCast": 216314,
+    "turnoutPercent": 41.4
+  },
+  {
+    "constituency": "NA-217",
+    "winnerName": "Zulfiqar Bachani",
+    "winnerParty": "PPP",
+    "winnerVotes": 119530,
+    "runnerUpName": "Raheela Magsi",
+    "runnerUpVotes": 73778,
+    "totalVotesCast": 208523,
+    "turnoutPercent": 42.3
+  },
+  {
+    "constituency": "NA-218",
+    "winnerName": "Syed Hussain Tariq",
+    "winnerParty": "PPP",
+    "winnerVotes": 108598,
+    "runnerUpName": "Muhammad Rizwan",
+    "runnerUpVotes": 7942,
+    "totalVotesCast": 133403,
+    "turnoutPercent": 45.3
+  },
+  {
+    "constituency": "NA-219",
+    "winnerName": "Abdul Aleam Khan",
+    "winnerParty": "MQM",
+    "winnerVotes": 55050,
+    "runnerUpName": "Mustansar Billah",
+    "runnerUpVotes": 38316,
+    "totalVotesCast": 145152,
+    "turnoutPercent": 50.2
+  },
+  {
+    "constituency": "NA-220",
+    "winnerName": "Syed Waseem Hussain",
+    "winnerParty": "MQM",
+    "winnerVotes": 64531,
+    "runnerUpName": "Faisal Mughal",
+    "runnerUpVotes": 52025,
+    "totalVotesCast": 175282,
+    "turnoutPercent": 48.2
+  },
+  {
+    "constituency": "NA-221",
+    "winnerName": "Syed Naveed Qamar",
+    "winnerParty": "PPP",
+    "winnerVotes": 111738,
+    "runnerUpName": "Dr. Muhammad Irfan Nizamani",
+    "runnerUpVotes": 23840,
+    "totalVotesCast": 162938,
+    "turnoutPercent": 43.8
+  },
+  {
+    "constituency": "NA-222",
+    "winnerName": "Mir Ghulam Ali Talpur",
+    "winnerParty": "PPP",
+    "winnerVotes": 113989,
+    "runnerUpName": "Mir Hussain Bux Talpur",
+    "runnerUpVotes": 67011,
+    "totalVotesCast": 199827,
+    "turnoutPercent": 42.7
+  },
+  {
+    "constituency": "NA-223",
+    "winnerName": "Haji Rasool Bakhsh Chandio",
+    "winnerParty": "PPP",
+    "winnerVotes": 115299,
+    "runnerUpName": "Muhammad Hassam Mirza",
+    "runnerUpVotes": 78711,
+    "totalVotesCast": 220539,
+    "turnoutPercent": 43.9
+  },
+  {
+    "constituency": "NA-224",
+    "winnerName": "Syed Ayaz Ali Shah Sheerazi",
+    "winnerParty": "PPP",
+    "winnerVotes": 134056,
+    "runnerUpName": "Molvi Muhammad Saleh Alhadad",
+    "runnerUpVotes": 15314,
+    "totalVotesCast": 186049,
+    "turnoutPercent": 44.9
+  },
+  {
+    "constituency": "NA-225",
+    "winnerName": "Sadiq Ali Memon",
+    "winnerParty": "PPP",
+    "winnerVotes": 140773,
+    "runnerUpName": "Rasool Bux Jakhro",
+    "runnerUpVotes": 28899,
+    "totalVotesCast": 186701,
+    "turnoutPercent": 50.1
+  },
+  {
+    "constituency": "NA-226",
+    "winnerName": "Malik Asad Sikandar",
+    "winnerParty": "PPP",
+    "winnerVotes": 165044,
+    "runnerUpName": "Syed Muneer Haider Shah",
+    "runnerUpVotes": 30876,
+    "totalVotesCast": 222339,
+    "turnoutPercent": 43.9
+  },
+  {
+    "constituency": "NA-227",
+    "winnerName": "Irfan Ali Leghari",
+    "winnerParty": "PPP",
+    "winnerVotes": 104141,
+    "runnerUpName": "Liaquat Ali Jatoi",
+    "runnerUpVotes": 94877,
+    "totalVotesCast": 205226,
+    "turnoutPercent": 42.6
+  },
+  {
+    "constituency": "NA-228",
+    "winnerName": "Rafiq Ahmad Jamali",
+    "winnerParty": "PPP",
+    "winnerVotes": 98873,
+    "runnerUpName": "Karim Ali Jatoi",
+    "runnerUpVotes": 49302,
+    "totalVotesCast": 169733,
+    "turnoutPercent": 48.3
+  },
+  {
+    "constituency": "NA-229",
+    "winnerName": "Jam Abdul Karim Bijar",
+    "winnerParty": "PPP",
+    "winnerVotes": 55730,
+    "runnerUpName": "Qadir Bux",
+    "runnerUpVotes": 21841,
+    "totalVotesCast": 103711,
+    "turnoutPercent": 46.1
+  },
+  {
+    "constituency": "NA-230",
+    "winnerName": "Syed Rafi Ullah",
+    "winnerParty": "PPP",
+    "winnerVotes": 32099,
+    "runnerUpName": "Masroor Ali",
+    "runnerUpVotes": 23370,
+    "totalVotesCast": 99546,
+    "turnoutPercent": 49.6
+  },
+  {
+    "constituency": "NA-231",
+    "winnerName": "Abdul Hakeem Baloch",
+    "winnerParty": "PPP",
+    "winnerVotes": 43634,
+    "runnerUpName": "Khalid Mehmood Ali",
+    "runnerUpVotes": 43245,
+    "totalVotesCast": 130081,
+    "turnoutPercent": 43.1
+  },
+  {
+    "constituency": "NA-232",
+    "winnerName": "Aasia Ishaq Siddique",
+    "winnerParty": "MQM",
+    "winnerVotes": 84592,
+    "runnerUpName": "Adeel Ahmad",
+    "runnerUpVotes": 66753,
+    "totalVotesCast": 252047,
+    "turnoutPercent": 44.7
+  },
+  {
+    "constituency": "NA-233",
+    "winnerName": "Muhammad Javed Haneef Khan",
+    "winnerParty": "MQM-P",
+    "winnerVotes": 103967,
+    "runnerUpName": "Muhammad Haris",
+    "runnerUpVotes": 58753,
+    "totalVotesCast": 246391,
+    "turnoutPercent": 49.1
+  },
+  {
+    "constituency": "NA-234",
+    "winnerName": "Muhammad Moin Aamir Pirzada",
+    "winnerParty": "MQM-P",
+    "winnerVotes": 72009,
+    "runnerUpName": "Faheem Khan",
+    "runnerUpVotes": 44487,
+    "totalVotesCast": 173087,
+    "turnoutPercent": 53.7
+  },
+  {
+    "constituency": "NA-235",
+    "winnerName": "Muhammad Iqbal Khan",
+    "winnerParty": "MQM-P",
+    "winnerVotes": 20185,
+    "runnerUpName": "Saif Ur Rehman S/O Taj Alam Khan",
+    "runnerUpVotes": 14167,
+    "totalVotesCast": 67260,
+    "turnoutPercent": 46
+  },
+  {
+    "constituency": "NA-236",
+    "winnerName": "Hassan Shabbir",
+    "winnerParty": "MQM-P",
+    "winnerVotes": 38871,
+    "runnerUpName": "Muhammad Muzammil Qureshi",
+    "runnerUpVotes": 32231,
+    "totalVotesCast": 135164,
+    "turnoutPercent": 41.4
+  },
+  {
+    "constituency": "NA-237",
+    "winnerName": "Asad Asam Niazi",
+    "winnerParty": "PPP",
+    "winnerVotes": 40840,
+    "runnerUpName": "Zahoor Ud Din",
+    "runnerUpVotes": 33322,
+    "totalVotesCast": 144715,
+    "turnoutPercent": 51.5
+  },
+  {
+    "constituency": "NA-238",
+    "winnerName": "Sadiq Iftikhar",
+    "winnerParty": "MQM-P",
+    "winnerVotes": 54885,
+    "runnerUpName": "Haleem Adil Shaikh",
+    "runnerUpVotes": 36885,
+    "totalVotesCast": 168005,
+    "turnoutPercent": 40.5
+  },
+  {
+    "constituency": "NA-239",
+    "winnerName": "Nabeel Ahmad Gabool",
+    "winnerParty": "PPP",
+    "winnerVotes": 40027,
+    "runnerUpName": "Muhammad Yasir",
+    "runnerUpVotes": 37285,
+    "totalVotesCast": 129222,
+    "turnoutPercent": 47.2
+  },
+  {
+    "constituency": "NA-240",
+    "winnerName": "Arshad Abdullah Vohra",
+    "winnerParty": "MQM-P",
+    "winnerVotes": 30573,
+    "runnerUpName": "Ramzan",
+    "runnerUpVotes": 27318,
+    "totalVotesCast": 114982,
+    "turnoutPercent": 48.2
+  },
+  {
+    "constituency": "NA-241",
+    "winnerName": "Dr. Mirza Ikhtiar Baig",
+    "winnerParty": "PPP",
+    "winnerVotes": 52456,
+    "runnerUpName": "Khurram Sher Zaman",
+    "runnerUpVotes": 48610,
+    "totalVotesCast": 110230,
+    "turnoutPercent": 53
+  },
+  {
+    "constituency": "NA-242",
+    "winnerName": "Syed Mustafa Kamal",
+    "winnerParty": "MQM-P",
+    "winnerVotes": 71727,
+    "runnerUpName": "Dawa Khan Sabir",
+    "runnerUpVotes": 53770,
+    "totalVotesCast": 189035,
+    "turnoutPercent": 43.5
+  },
+  {
+    "constituency": "NA-243",
+    "winnerName": "Abdul Qadir Patel",
+    "winnerParty": "PPP",
+    "winnerVotes": 60266,
+    "runnerUpName": "Shujaat Ali",
+    "runnerUpVotes": 48690,
+    "totalVotesCast": 167013,
+    "turnoutPercent": 46.3
+  },
+  {
+    "constituency": "NA-244",
+    "winnerName": "Dr. Muhammad Farooq Sattar",
+    "winnerParty": "MQM-P",
+    "winnerVotes": 20048,
+    "runnerUpName": "Aftab Jehangir",
+    "runnerUpVotes": 14073,
+    "totalVotesCast": 59391,
+    "turnoutPercent": 54.1
+  },
+  {
+    "constituency": "NA-245",
+    "winnerName": "Syed Hafeez Uddin",
+    "winnerParty": "MQM-P",
+    "winnerVotes": 57356,
+    "runnerUpName": "Atta Ullah",
+    "runnerUpVotes": 36788,
+    "totalVotesCast": 159103,
+    "turnoutPercent": 50.3
+  },
+  {
+    "constituency": "NA-246",
+    "winnerName": "Syed Amin ul Haq",
+    "winnerParty": "MQM-P",
+    "winnerVotes": 74177,
+    "runnerUpName": "Hafiz Naeem Ur Rehman",
+    "runnerUpVotes": 32011,
+    "totalVotesCast": 183732,
+    "turnoutPercent": 53.2
+  },
+  {
+    "constituency": "NA-247",
+    "winnerName": "Khawaja Izhar Ul Hassan",
+    "winnerParty": "MQM-P",
+    "winnerVotes": 65050,
+    "runnerUpName": "Syed Abbas Husnain",
+    "runnerUpVotes": 52058,
+    "totalVotesCast": 186953,
+    "turnoutPercent": 45.3
+  },
+  {
+    "constituency": "NA-248",
+    "winnerName": "Dr. Khalid Maqbool Siddique",
+    "winnerParty": "MQM-P",
+    "winnerVotes": 103082,
+    "runnerUpName": "Arsalan Khalid",
+    "runnerUpVotes": 86342,
+    "totalVotesCast": 265193,
+    "turnoutPercent": 54.3
+  },
+  {
+    "constituency": "NA-249",
+    "winnerName": "Ahmad Saleem Siddique",
+    "winnerParty": "MQM-P",
+    "winnerVotes": 77529,
+    "runnerUpName": "Uzair Ali Khan",
+    "runnerUpVotes": 51152,
+    "totalVotesCast": 200433,
+    "turnoutPercent": 43.3
+  },
+  {
+    "constituency": "NA-250",
+    "winnerName": "Farhan Chishti",
+    "winnerParty": "MQM-P",
+    "winnerVotes": 79925,
+    "runnerUpName": "Hafiz Naeem Ur Rehman",
+    "runnerUpVotes": 43659,
+    "totalVotesCast": 188364,
+    "turnoutPercent": 51.4
+  },
+  {
+    "constituency": "NA-251",
+    "winnerName": "Maulana Syed Sami Ullah",
+    "winnerParty": "JUI-F",
+    "winnerVotes": 46210,
+    "runnerUpName": "Khushal Khan Kakar",
+    "runnerUpVotes": 46117,
+    "totalVotesCast": 140471,
+    "turnoutPercent": 47.1
+  },
+  {
+    "constituency": "NA-252",
+    "winnerName": "Sardar Yaqoob Khan Nasir",
+    "winnerParty": "PML-N",
+    "winnerVotes": 55003,
+    "runnerUpName": "Sardar Babar Khan Musakhel",
+    "runnerUpVotes": 53125,
+    "totalVotesCast": 193299,
+    "turnoutPercent": 49.9
+  },
+  {
+    "constituency": "NA-253",
+    "winnerName": "Mian Khan Mandrani Bugti",
+    "winnerParty": "Independent",
+    "winnerVotes": 54506,
+    "runnerUpName": "Mir Dostain Khan Domki",
+    "runnerUpVotes": 45532,
+    "totalVotesCast": 233092,
+    "turnoutPercent": 54.2
+  },
+  {
+    "constituency": "NA-254",
+    "winnerName": "Khalid Hussain Magsi",
+    "winnerParty": "BAP",
+    "winnerVotes": 79304,
+    "runnerUpName": "Meer Nizam ud Din Lehri",
+    "runnerUpVotes": 44814,
+    "totalVotesCast": 144930,
+    "turnoutPercent": 43
+  },
+  {
+    "constituency": "NA-255",
+    "winnerName": "Mir Khan Muhammad Jamali",
+    "winnerParty": "PML-N",
+    "winnerVotes": 45404,
+    "runnerUpName": "Mir Changez Khan Jamali",
+    "runnerUpVotes": 39398,
+    "totalVotesCast": 182653,
+    "turnoutPercent": 50.3
+  },
+  {
+    "constituency": "NA-256",
+    "winnerName": "Muhammad Akhtar Mengal",
+    "winnerParty": "BNP",
+    "winnerVotes": 65952,
+    "runnerUpName": "Mir Abdul Rehman Zehri",
+    "runnerUpVotes": 29074,
+    "totalVotesCast": 136648,
+    "turnoutPercent": 54.8
+  },
+  {
+    "constituency": "NA-257",
+    "winnerName": "Jam Kamal Khan",
+    "winnerParty": "PML-N",
+    "winnerVotes": 78649,
+    "runnerUpName": "Muhammad Aslam Bhotani",
+    "runnerUpVotes": 59350,
+    "totalVotesCast": 178862,
+    "turnoutPercent": 46.2
+  },
+  {
+    "constituency": "NA-258",
+    "winnerName": "Phullain",
+    "winnerParty": "NP",
+    "winnerVotes": 22318,
+    "runnerUpName": "Noor Ahmad Adil Baloch",
+    "runnerUpVotes": 13798,
+    "totalVotesCast": 59562,
+    "turnoutPercent": 41.2
+  },
+  {
+    "constituency": "NA-259",
+    "winnerName": "Haji Malik Shah Gorgaij",
+    "winnerParty": "PPP",
+    "winnerVotes": 40778,
+    "runnerUpName": "Dr. Abdul Malik Baloch",
+    "runnerUpVotes": 22313,
+    "totalVotesCast": 113577,
+    "turnoutPercent": 42.7
+  },
+  {
+    "constituency": "NA-260",
+    "winnerName": "Muhammad Usman Badini",
+    "winnerParty": "JUI-F",
+    "winnerVotes": 42800,
+    "runnerUpName": "Sardar Fateh Muhammad Mohammad Hassni",
+    "runnerUpVotes": 35629,
+    "totalVotesCast": 170177,
+    "turnoutPercent": 47.7
+  },
+  {
+    "constituency": "NA-261",
+    "winnerName": "Maulana Abdul Ghafoor Haidari",
+    "winnerParty": "JUI-F",
+    "winnerVotes": 31713,
+    "runnerUpName": "Sardar Muhammad Akhtar Mengal",
+    "runnerUpVotes": 27465,
+    "totalVotesCast": 113697,
+    "turnoutPercent": 54.7
+  },
+  {
+    "constituency": "NA-262",
+    "winnerName": "Adil Khan Bazai",
+    "winnerParty": "Independent",
+    "winnerVotes": 20278,
+    "runnerUpName": "Malik Sikandar Khan",
+    "runnerUpVotes": 12887,
+    "totalVotesCast": 78056,
+    "turnoutPercent": 45.6
+  },
+  {
+    "constituency": "NA-263",
+    "winnerName": "Haji Jamal Shah Kakar",
+    "winnerParty": "PML-N",
+    "winnerVotes": 27175,
+    "runnerUpName": "Sallar Khan Kakar",
+    "runnerUpVotes": 25372,
+    "totalVotesCast": 121373,
+    "turnoutPercent": 42.3
+  },
+  {
+    "constituency": "NA-264",
+    "winnerName": "Nawabzada Mir Jamal Khan Raisani",
+    "winnerParty": "PPP",
+    "winnerVotes": 14977,
+    "runnerUpName": "Muhammad Akhtar Mengal",
+    "runnerUpVotes": 10057,
+    "totalVotesCast": 60154,
+    "turnoutPercent": 40.4
+  },
+  {
+    "constituency": "NA-265",
+    "winnerName": "Moulana Fazal ur Rehman",
+    "winnerParty": "JUI-F",
+    "winnerVotes": 52436,
+    "runnerUpName": "Khushal Khan Kakar",
+    "runnerUpVotes": 31438,
+    "totalVotesCast": 124378,
+    "turnoutPercent": 42.8
+  },
+  {
+    "constituency": "NA-266",
+    "winnerName": "Mehmood Khan Achakzai",
+    "winnerParty": "PKMAP",
+    "winnerVotes": 67028,
+    "runnerUpName": "Maulana Salahuddin",
+    "runnerUpVotes": 58439,
+    "totalVotesCast": 201394,
+    "turnoutPercent": 49.4
+  }
+]

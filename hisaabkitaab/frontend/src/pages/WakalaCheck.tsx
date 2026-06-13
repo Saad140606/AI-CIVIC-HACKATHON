@@ -96,6 +96,17 @@ const MNAProfileCard: React.FC<{
                   {isUrdu ? (profile.roleUrdu || profile.role) : profile.role}
                 </div>
               )}
+              <div className="mt-1.5 text-[10px] text-gray-400 flex items-center gap-1.5">
+                <span>📡</span>
+                <span>
+                  {isUrdu ? 'ڈیٹا: ' : 'Data: '}
+                  {profile.dataSource?.name === 'wikipedia' 
+                    ? (isUrdu ? 'ویکیپیڈیا تصدیق شدہ' : 'Wikipedia verified') 
+                    : (isUrdu ? 'پیلڈاٹ تخمینہ' : 'PILDAT estimated')}
+                </span>
+                <span>·</span>
+                <span>{isUrdu ? 'آخری اپڈیٹ: ' : 'Last updated: '}{new Date(profile.lastUpdated || Date.now()).toLocaleDateString('en-PK')}</span>
+              </div>
             </div>
           </div>
 

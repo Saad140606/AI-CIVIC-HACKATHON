@@ -1,0 +1,44 @@
+{
+  "wikipedia": {
+    "timestamp": "2026-06-13T06:12:00.000Z",
+    "status": "success",
+    "recordCount": 313,
+    "error": null
+  },
+  "geo_karachi": {
+    "timestamp": "2026-06-13T06:12:05.000Z",
+    "status": "success",
+    "recordCount": 20,
+    "error": null
+  },
+  "pildat": {
+    "timestamp": "2026-06-13T06:12:10.000Z",
+    "status": "success",
+    "recordCount": 7,
+    "error": null
+  },
+  "na_questions": {
+    "timestamp": "2026-06-13T06:12:15.000Z",
+    "status": "success",
+    "recordCount": 313,
+    "error": null
+  },
+  "na_bills": {
+    "timestamp": "2026-06-13T06:12:20.000Z",
+    "status": "success",
+    "recordCount": 11,
+    "error": null
+  },
+  "election2024": {
+    "timestamp": "2026-06-13T06:14:15.000Z",
+    "status": "success",
+    "recordCount": 266,
+    "error": null
+  },
+  "hydration": {
+    "timestamp": "2026-06-13T06:14:30.000Z",
+    "status": "success",
+    "recordCount": 313,
+    "error": null
+  }
+}

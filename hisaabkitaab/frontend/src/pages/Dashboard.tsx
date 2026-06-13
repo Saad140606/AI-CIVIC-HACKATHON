@@ -53,30 +53,30 @@ function FloatingParticles() {
 }
 
 const CNIC_LOOKUP_DB = [
-  { inputs: ['422', '421', '423', '424', '425', '420', 'karachi', 'keamari'], constituency: 'NA-242' },
-  { inputs: ['352', 'lahore'], constituency: 'NA-132' },
-  { inputs: ['432', 'larkana'], constituency: 'NA-194' },
-  { inputs: ['131', 'haripur'], constituency: 'NA-19' },
-  { inputs: ['346', 'sialkot'], constituency: 'NA-73' },
-  { inputs: ['345', 'narowal'], constituency: 'NA-108' },
-  { inputs: ['152', 'chitral'], constituency: 'NA-10' },
-  { inputs: ['374', 'rawalpindi'], constituency: 'NA-52' },
-  { inputs: ['351', 'kasur'], constituency: 'NA-140' },
-  { inputs: ['455', '452', 'sukkur', 'khairpur'], constituency: 'NA-200' },
-  { inputs: ['162', 'swabi'], constituency: 'NA-31' },
-  { inputs: ['173', 'peshawar'], constituency: 'NA-44' },
-  { inputs: ['443', 'tharparkar'], constituency: 'NA-222' },
-  { inputs: ['341', 'gujrat'], constituency: 'NA-69' },
-  { inputs: ['156', 'swat'], constituency: 'NA-22' },
-  { inputs: ['453', 'nawabshah'], constituency: 'NA-208' },
-  { inputs: ['542', 'khuzdar'], constituency: 'NA-259' },
-  { inputs: ['135', 'mansehra'], constituency: 'NA-30' },
-  { inputs: ['331', 'faisalabad'], constituency: 'NA-97' },
-  { inputs: ['363', 'multan'], constituency: 'NA-148' },
-  { inputs: ['501', 'quetta'], constituency: 'NA-263' },
-  { inputs: ['413', 'hyderabad'], constituency: 'NA-220' },
-  { inputs: ['322', 'gujranwala'], constituency: 'NA-79' },
-  { inputs: ['611', 'islamabad'], constituency: 'NA-49' }
+  { inputs: ['422', '421', '423', '424', '425', '420', 'karachi', 'keamari', 'کراچی'], constituency: 'NA-242 (Karachi Keamari-I)', mnaId: '2001' },
+  { inputs: ['352', 'lahore', 'لاہور'], constituency: 'NA-132 (Lahore-X)', mnaId: '1132' },
+  { inputs: ['432', 'larkana', 'لاڑکانہ'], constituency: 'NA-194 (Larkana-I)', mnaId: '1194' },
+  { inputs: ['131', 'haripur', 'ہری پور'], constituency: 'NA-19 (Haripur)', mnaId: '1019' },
+  { inputs: ['346', 'sialkot', 'سیالکوٹ'], constituency: 'NA-73 (Sialkot-IV)', mnaId: '1073' },
+  { inputs: ['345', 'narowal', 'نارووال'], constituency: 'NA-108 (Narowal-V)', mnaId: '1108' },
+  { inputs: ['152', 'chitral', 'چترال'], constituency: 'NA-10 (Chitral)', mnaId: '1010' },
+  { inputs: ['374', 'rawalpindi', 'راولپنڈی'], constituency: 'NA-52 (Rawalpindi-I)', mnaId: '1052' },
+  { inputs: ['351', 'kasur', 'قصور'], constituency: 'NA-140 (Kasur-IV)', mnaId: '1140' },
+  { inputs: ['455', '452', 'sukkur', 'khairpur', 'سکھر', 'خیرپور'], constituency: 'NA-200 (Sukkur-I)', mnaId: '1200' },
+  { inputs: ['162', 'swabi', 'صوابی'], constituency: 'NA-31 (Swabi-I)', mnaId: '1031' },
+  { inputs: ['173', 'peshawar', 'پشاور', '17'], constituency: 'NA-44 (Peshawar-III)', mnaId: '1044' },
+  { inputs: ['443', 'tharparkar', 'تھرپارکر'], constituency: 'NA-222 (Tharparkar-I)', mnaId: '1222' },
+  { inputs: ['341', 'gujrat', 'گجرات'], constituency: 'NA-69 (Gujrat-IV)', mnaId: '1069' },
+  { inputs: ['156', 'swat', 'سوات'], constituency: 'NA-22 (Swat-III)', mnaId: '1022' },
+  { inputs: ['453', 'nawabshah', 'نوابشاہ'], constituency: 'NA-208 (Nawabshah-II)', mnaId: '1208' },
+  { inputs: ['542', 'khuzdar', 'خضدار'], constituency: 'NA-259 (Khuzdar)', mnaId: '1259' },
+  { inputs: ['135', 'mansehra', 'مانسہرہ'], constituency: 'NA-30 (Mansehra-I)', mnaId: '1030' },
+  { inputs: ['331', 'faisalabad', 'فیصل آباد', '33'], constituency: 'NA-97 (Faisalabad-III)', mnaId: '1097' },
+  { inputs: ['363', 'multan', 'ملتان', '36'], constituency: 'NA-148 (Multan-I)', mnaId: '1148' },
+  { inputs: ['501', 'quetta', 'کوئٹہ', '50'], constituency: 'NA-263 (Quetta-II)', mnaId: '1263' },
+  { inputs: ['413', 'hyderabad', 'حیدرآباد', '41'], constituency: 'NA-220 (Hyderabad-III)', mnaId: '1220' },
+  { inputs: ['322', 'gujranwala', 'گوجرانوالہ', '34'], constituency: 'NA-79 (Gujranwala-V)', mnaId: '1079' },
+  { inputs: ['611', 'islamabad', 'اسلام آباد'], constituency: 'NA-49 (Islamabad-III)', mnaId: '1049' }
 ];
 
 export default function Dashboard() {
@@ -134,6 +134,7 @@ export default function Dashboard() {
     // First try to match directly by constituency code (e.g. "NA-242")
     const naMatch = cleaned.match(/na-\d+/i);
     let constituencyCode = naMatch ? naMatch[0].toUpperCase() : '';
+    let matchedItem: any = null;
 
     if (!constituencyCode) {
       // Try to find matching item in CNIC_LOOKUP_DB
@@ -141,7 +142,16 @@ export default function Dashboard() {
         item.inputs.some(inp => cleaned.includes(inp) || inp.includes(cleaned))
       );
       if (match) {
-        constituencyCode = match.constituency;
+        matchedItem = match;
+        constituencyCode = match.constituency.split(' ')[0].toUpperCase();
+      }
+    }
+
+    if (matchedItem && matchedItem.mnaId) {
+      const mna = allMNAs.find(m => m.id === matchedItem.mnaId);
+      if (mna) {
+        setMatchedMNA(mna);
+        return;
       }
     }
 

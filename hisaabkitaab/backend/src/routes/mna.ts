@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { searchMNAs, getMNAById, getAllMNAs } from '../lib/naScraper';
+import { searchMNAs, getMNAById, getAllMNAs, scrapeProgress, runBackgroundScrape } from '../lib/naScraper';
 
 const router = Router();
 
@@ -74,6 +74,55 @@ router.get('/:id', async (req, res) => {
     console.error('MNA profile error:', err);
     return res.status(500).json({ success: false, error: 'Failed to load member profile' });
   }
+});
+
+// GET/POST /api/mna/refresh-data
+router.all('/refresh-data', async (req, res) => {
+  try {
+    if (scrapeProgress.running) {
+      return res.json({
+        success: true,
+        message: 'Scrape already running',
+        progress: { stage: scrapeProgress.stage, count: scrapeProgress.count }
+      });
+    }
+
+    // Rate limit check: only once every 24 hours
+    const lastRun = scrapeProgress.lastRunTime;
+    const diffMs = Date.now() - lastRun;
+    if (lastRun > 0 && diffMs < 24 * 60 * 60 * 1000) {
+      return res.status(429).json({
+        success: false,
+        error: 'Refresh allowed only once per 24 hours',
+        nextAllowedTime: new Date(lastRun + 24 * 60 * 60 * 1000).toISOString()
+      });
+    }
+
+    // Trigger in the background
+    runBackgroundScrape().catch(err => console.error('Error in background refresh:', err));
+
+    return res.json({
+      success: true,
+      message: 'Background scrape started',
+      progress: { stage: 'started', count: 0 }
+    });
+  } catch (err) {
+    console.error('Refresh data error:', err);
+    return res.status(500).json({ success: false, error: 'Failed to start refresh' });
+  }
+});
+
+// GET /api/mna/refresh-status
+router.get('/refresh-status', (req, res) => {
+  res.json({
+    success: true,
+    progress: {
+      running: scrapeProgress.running,
+      stage: scrapeProgress.stage,
+      count: scrapeProgress.count,
+      lastRunTime: scrapeProgress.lastRunTime ? new Date(scrapeProgress.lastRunTime).toISOString() : null
+    }
+  });
 });
 
 export default router;
