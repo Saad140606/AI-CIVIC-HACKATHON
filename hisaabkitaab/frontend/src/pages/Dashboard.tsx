@@ -6,6 +6,7 @@ import MinistryCard from '../components/MinistryCard';
 import ProvinceMap from '../components/ProvinceMap';
 import { useLanguage } from '../context/LanguageContext';
 import { motion, AnimatePresence } from 'framer-motion';
+import MnaCard from '../components/MnaCard';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -409,75 +410,10 @@ export default function Dashboard() {
           )}
 
           {/* Matched MNA Report Card */}
-          <AnimatePresence>
-            {matchedMNA && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95, y: 10 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                className="p-5 rounded-2xl border border-red-500/30 bg-[#0c1322] space-y-4 max-w-xl relative overflow-hidden"
-              >
-                <div className="absolute top-0 right-0 w-24 h-24 rounded-full blur-2xl pointer-events-none"
-                  style={{ background: `radial-gradient(circle, ${matchedMNA.partyColor}15 0%, transparent 70%)` }}
-                />
-                
-                <div className="flex items-center gap-4">
-                  <div
-                    className="w-14 h-14 rounded-full flex-shrink-0 flex items-center justify-center text-lg font-black text-white"
-                    style={{ background: `linear-gradient(135deg, ${matchedMNA.partyColor}88, ${matchedMNA.partyColor})` }}
-                  >
-                    {matchedMNA.name.split(' ').map((w: string) => w[0]).join('').slice(0, 2)}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h4 className="text-base font-black text-white truncate">
-                      {isUrdu ? matchedMNA.nameUrdu : matchedMNA.name}
-                    </h4>
-                    <p className="text-xs text-red-400 font-semibold mt-0.5">
-                      {isUrdu ? matchedMNA.constituencyUrdu || matchedMNA.constituency : matchedMNA.constituency}
-                    </p>
-                    <span
-                      className="inline-block px-2 py-0.5 rounded text-[10px] font-bold text-white mt-1"
-                      style={{ background: matchedMNA.partyColor }}
-                    >
-                      {isUrdu ? matchedMNA.partyUrdu : matchedMNA.party}
-                    </span>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-[10px] text-[#7f8ea4] block">AI Grade</span>
-                    <span className="text-2xl font-black text-white bg-red-600/30 border border-red-500/40 px-3 py-1 rounded-xl block mt-0.5 text-center">
-                      {matchedMNA.attendancePercent >= 80 ? 'A' : matchedMNA.attendancePercent >= 65 ? 'B' : matchedMNA.attendancePercent >= 50 ? 'C' : 'D'}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-3 gap-2 py-2 border-y border-white/5">
-                  <div className="text-center">
-                    <div className="text-[10px] text-[#7f8ea4]">{isUrdu ? 'حاضری' : 'Attendance'}</div>
-                    <div className="text-sm font-bold text-white mt-0.5">{matchedMNA.attendancePercent}%</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-[10px] text-[#7f8ea4]">{isUrdu ? 'بل پیش کیے' : 'Bills Sponsored'}</div>
-                    <div className="text-sm font-bold text-white mt-0.5">{matchedMNA.billsSponsored || 0}</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-[10px] text-[#7f8ea4]">{isUrdu ? 'سوالات' : 'Questions'}</div>
-                    <div className="text-sm font-bold text-white mt-0.5">{matchedMNA.questionsRaised || 0}</div>
-                  </div>
-                </div>
-
-                <div className="flex justify-between items-center pt-2">
-                  <span className="text-[10px] text-[#7f8ea4]">{isUrdu ? 'تنخواہ کی حیثیت:' : 'Salary Status:'} {isUrdu ? matchedMNA.salaryReceivedUrdu : matchedMNA.salaryReceived}</span>
-                  <a
-                    href={`/wakala?id=${matchedMNA.id}`}
-                    className="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#1e293b] hover:bg-[#334155] text-white transition-colors"
-                  >
-                    {isUrdu ? 'مکمل رپورٹ اور ووٹنگ ریکارڈ دیکھیں ➔' : 'View Full Profile & Voting ➔'}
-                  </a>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
+          {matchedMNA && (
+            <MnaCard mna={matchedMNA} isUrdu={isUrdu} />
+          )}
+          </div>
       </motion.div>
 
       {/* ─── Hero Stats ───────────────────────────────────────────────── */}

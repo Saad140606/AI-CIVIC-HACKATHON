@@ -226,9 +226,10 @@ export async function hydrateAllMnas(): Promise<MNAProfile[]> {
     
     // Assign stable ID
     let mnaId = seedMna ? seedMna.id : (1000 + naNumber).toString();
+    // Ensure reserved‑seat MNAs have a deterministic unique ID based on constituency and a random suffix
     if (wikiMna.isReserved) {
-      // For reserved seats, generate a unique ID
-      mnaId = seedMna ? seedMna.id : `res-${Math.random().toString(36).substr(2, 6)}`;
+      const suffix = Math.random().toString(36).substr(2, 4);
+      mnaId = seedMna ? seedMna.id : `res-${naNumber}-${suffix}`;
     }
 
     // Match election result
@@ -265,13 +266,20 @@ export async function hydrateAllMnas(): Promise<MNAProfile[]> {
       wikiMna.name.toLowerCase().includes(b.introducedBy.toLowerCase())
     );
     
-    const recentBills: RecentBill[] = sponsorBills.map(b => ({
+    let recentBills: RecentBill[] = sponsorBills.map(b => ({
       title: b.title,
       titleUrdu: b.title, // fallback
       date: b.dateIntroduced,
       status: (b.status === 'withdrawn' ? 'rejected' : b.status) as 'passed' | 'pending' | 'rejected',
       type: (b.isPrivate ? 'private' : 'government') as 'government' | 'private'
-    })).slice(0, 5);
+    }));
+    // Deduplicate by title and limit to 5
+    const seen = new Set<string>();
+    recentBills = recentBills.filter(b => {
+      if (seen.has(b.title)) return false;
+      seen.add(b.title);
+      return true;
+    }).slice(0, 5);
 
     // If no recent bills, check seed or add dummy
     if (recentBills.length === 0 && seedMna && seedMna.recentBills) {
@@ -298,6 +306,8 @@ export async function hydrateAllMnas(): Promise<MNAProfile[]> {
       name: wikiMna.name,
       nameUrdu: seedMna ? seedMna.nameUrdu : wikiMna.name,
       constituency: wikiMna.constituency,
+      // Strip any stray HTML/CSS tags from constituencyFull
+      constituencyFull: wikiMna.constituency.replace(/<[^>]*>/g, '').trim(),
       constituencyUrdu: seedMna ? seedMna.constituencyUrdu : `حلقہ این اے-${naNumber}`,
       province: wikiMna.province,
       party: wikiMna.party,
@@ -312,6 +322,8 @@ export async function hydrateAllMnas(): Promise<MNAProfile[]> {
       billsPassed,
       questionsRaised,
       profileUrl: officialMna?.profileUrl || seedMna?.profileUrl || `https://na.gov.pk/en/member-profile.php?id=${mnaId}`,
++      // Prefer official memberId for profile URL if available
++      ...(officialMna?.memberId && { profileUrl: `https://na.gov.pk/en/member-profile.php?id=${officialMna.memberId}` }),
       imageUrl: officialMna?.imageUrl || seedMna?.imageUrl || wikiMna.imageUrl || `https://na.gov.pk/uploads/members/${mnaId}.jpg`,
       terms: seedMna ? seedMna.terms : 1,
       education: seedMna ? seedMna.education : 'Bachelors',
@@ -320,7 +332,8 @@ export async function hydrateAllMnas(): Promise<MNAProfile[]> {
       address: officialMna?.address || seedMna?.address || 'Parliament Lodges, Islamabad',
       committees: seedMna ? seedMna.committees : ['Standing Committee on Rules and Procedures'],
       recentBills,
-      votingRecord,
++      // If no official voting data, keep empty to avoid templated duplicates
++      votingRecord: officialMna?.votingRecord?.length ? officialMna.votingRecord : [],
       lastUpdated: new Date().toISOString(),
       nationalAverage: 62.5,
       dataSource: {

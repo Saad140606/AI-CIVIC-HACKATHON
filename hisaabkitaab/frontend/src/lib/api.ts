@@ -108,6 +108,10 @@ export interface MNASearchResult {
   billsPassed?: number;
   questionsRaised?: number;
   imageUrl?: string;
+  profileImageUrl?: string; // new field
+  address?: string; // new field
+  phone?: string; // new field
+  dataSource?: any;
 }
 
 export interface RecentBill {

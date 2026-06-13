@@ -34,6 +34,9 @@ router.get('/list', async (_req, res) => {
       billsSponsored: m.billsSponsored,
       billsPassed: m.billsPassed,
       questionsRaised: m.questionsRaised,
+      profileImageUrl: m.imageUrl, // expose image URL
+      address: m.address,
+      phone: m.phone
     }));
     res.json({ success: true, count: summary.length, members: summary });
   } catch (err) {
